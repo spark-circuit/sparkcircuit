@@ -29,39 +29,187 @@ body {
 }
 
 /* ============================================================
-   SVG LOGO STYLES
+   PREMIUM RAINBOW + NEON BLUE LOGO STYLES
    ============================================================ */
 .logo-link {
+    text-decoration: none;
     display: inline-block;
-    max-width: 320px;
-    width: 100%;
+}
+
+.logo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
     transition: var(--transition);
 }
 
-.logo-link:hover {
-    transform: scale(1.02);
+.logo-wrapper:hover {
+    transform: scale(1.03);
 }
 
-.logo-container {
+/* ---- Lightning Bolt ---- */
+.logo-bolt {
+    font-size: 2.2rem;
+    display: inline-block;
+    animation: boltPulse 1.8s ease-in-out infinite;
+    text-shadow: 0 0 20px rgba(255, 200, 0, 0.6);
+}
+
+@keyframes boltPulse {
+    0% { transform: scale(1) rotate(0deg); text-shadow: 0 0 20px rgba(255, 200, 0, 0.4); }
+    50% { transform: scale(1.15) rotate(10deg); text-shadow: 0 0 40px rgba(255, 200, 0, 0.8), 0 0 80px rgba(255, 200, 0, 0.3); }
+    100% { transform: scale(1) rotate(0deg); text-shadow: 0 0 20px rgba(255, 200, 0, 0.4); }
+}
+
+/* ---- RAINBOW GRADIENT TEXT (S P A R K) ---- */
+.logo-text-rainbow {
+    font-family: 'Orbitron', 'Segoe UI', sans-serif;
+    font-weight: 900;
+    font-size: 1.8rem;
+    letter-spacing: 6px;
+    background: linear-gradient(90deg, 
+        #FF0000, #FF7700, #FFDD00, 
+        #00FF00, #00AAFF, #8B00FF, #FF00FF
+    );
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: rainbowMove 4s ease-in-out infinite alternate;
+    display: inline-block;
+}
+
+@keyframes rainbowMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ---- Dot ---- */
+.logo-dot {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 1.8rem;
+    color: var(--neon-blue);
+    text-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+    display: inline-block;
+    animation: dotPulse 2s ease-in-out infinite;
+    margin: 0 2px;
+}
+
+@keyframes dotPulse {
+    0% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); text-shadow: 0 0 30px rgba(0, 242, 254, 0.8); }
+    100% { opacity: 0.6; transform: scale(1); }
+}
+
+/* ---- NEON BLUE TEXT (C I R C U I T) ---- */
+.logo-text-neon {
+    font-family: 'Orbitron', 'Segoe UI', sans-serif;
+    font-weight: 900;
+    font-size: 1.8rem;
+    letter-spacing: 6px;
+    background: linear-gradient(135deg, #00f2fe 20%, #4facfe 50%, #0066ff 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+    text-shadow: none;
+    filter: drop-shadow(0 0 15px rgba(0, 242, 254, 0.2));
+}
+
+/* ---- Glowing Underline ---- */
+.logo-underline {
     width: 100%;
-    transition: var(--transition);
+    height: 2px;
+    margin: 4px 0 3px 0;
+    background: linear-gradient(90deg, 
+        #FF0000, #FF7700, #FFDD00, 
+        #00FF00, #00AAFF, #8B00FF, #FF00FF,
+        #00f2fe
+    );
+    background-size: 300% 100%;
+    animation: rainbowMove 4s ease-in-out infinite alternate;
+    border-radius: 2px;
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
 }
 
-.logo-container:hover {
-    box-shadow: 0 0 30px rgba(255, 140, 0, 0.15);
+/* ---- Tagline ---- */
+.logo-tagline {
+    font-family: 'Orbitron', 'Segoe UI', sans-serif;
+    font-weight: 400;
+    font-size: 0.65rem;
+    letter-spacing: 4px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin-top: 3px;
+    opacity: 0.8;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.1);
 }
 
-.logo-container svg {
-    display: block;
-    width: 100%;
-    height: auto;
+/* ---- Footer Logo (Thoda Chhota) ---- */
+.footer-logo .logo-bolt {
+    font-size: 1.8rem;
 }
 
-/* Footer Logo */
-.footer-logo .logo-link {
-    max-width: 250px;
+.footer-logo .logo-text-rainbow,
+.footer-logo .logo-text-neon,
+.footer-logo .logo-dot {
+    font-size: 1.4rem;
+    letter-spacing: 4px;
 }
 
+.footer-logo .logo-tagline {
+    font-size: 0.55rem;
+    letter-spacing: 3px;
+}
+
+/* ---- Mobile Responsive ---- */
+@media (max-width: 768px) {
+    .logo-bolt {
+        font-size: 1.6rem;
+    }
+    .logo-text-rainbow,
+    .logo-text-neon,
+    .logo-dot {
+        font-size: 1.2rem;
+        letter-spacing: 3px;
+    }
+    .logo-tagline {
+        font-size: 0.5rem;
+        letter-spacing: 2px;
+    }
+    .footer-logo .logo-bolt {
+        font-size: 1.4rem;
+    }
+    .footer-logo .logo-text-rainbow,
+    .footer-logo .logo-text-neon,
+    .footer-logo .logo-dot {
+        font-size: 1rem;
+        letter-spacing: 2px;
+    }
+    .footer-logo .logo-tagline {
+        font-size: 0.45rem;
+        letter-spacing: 2px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-bolt {
+        font-size: 1.3rem;
+    }
+    .logo-text-rainbow,
+    .logo-text-neon,
+    .logo-dot {
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+    }
+    .logo-tagline {
+        font-size: 0.4rem;
+        letter-spacing: 1.5px;
+    }
+}
 /* ============================================================
    HERO SECTION WITH IMAGE + ANIMATED TECH BACKGROUND
    ============================================================ */
