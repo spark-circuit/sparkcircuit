@@ -29,6 +29,101 @@ body {
 }
 
 /* ============================================================
+   UNIQUE TEXT LOGO STYLES
+   ============================================================ */
+.logo-link {
+    text-decoration: none;
+    display: inline-block;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1;
+}
+
+.logo-main {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.bolt-icon {
+    font-size: 1.6rem;
+    color: #f5b042;
+    text-shadow: 0 0 20px rgba(245, 176, 66, 0.4);
+    animation: boltGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes boltGlow {
+    0% { text-shadow: 0 0 10px rgba(245, 176, 66, 0.3); }
+    100% { text-shadow: 0 0 30px rgba(245, 176, 66, 0.7), 0 0 60px rgba(245, 176, 66, 0.3); }
+}
+
+.logo-brand-text {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #ffffff 20%, #a5f3fc 50%, var(--neon-blue) 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.logo-underline {
+    width: 100%;
+    height: 2px;
+    margin: 4px 0 3px 0;
+    background: linear-gradient(90deg, var(--neon-blue), transparent);
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+    animation: underlinePulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes underlinePulse {
+    0% { opacity: 0.5; width: 60%; }
+    100% { opacity: 1; width: 100%; }
+}
+
+.logo-tagline-text {
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 2.5px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.8;
+}
+
+.logo-tagline-text .dot {
+    color: var(--neon-blue);
+    font-weight: 700;
+    font-size: 0.5rem;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+}
+
+/* Footer Logo */
+.footer-logo .logo-brand-text {
+    font-size: 1.8rem;
+}
+
+.footer-logo .bolt-icon {
+    font-size: 1.8rem;
+}
+
+.footer-logo .logo-tagline-text {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: #6a7a88;
+}
+
+.footer-logo .logo-underline {
+    background: linear-gradient(90deg, var(--neon-blue), #6a7a88, transparent);
+}
+
+/* ============================================================
    HERO SECTION WITH IMAGE + ANIMATED TECH BACKGROUND
    ============================================================ */
 .hero-section {
@@ -42,11 +137,9 @@ body {
     z-index: 1;
     overflow: hidden;
     isolation: isolate;
-    /* 🔹 BACKGROUND IMAGE - YAHAN CHANGE KAREIN 🔹 */
     background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80') center center / cover no-repeat;
 }
 
-/* Dark Overlay (taake text clear dikhe) */
 .hero-section::before {
     content: '';
     position: absolute;
@@ -55,7 +148,6 @@ body {
     z-index: 0;
 }
 
-/* ---- Animated Background (Image ke UPAR) ---- */
 .hero-bg-animation {
     position: absolute;
     inset: 0;
@@ -64,7 +156,6 @@ body {
     pointer-events: none;
 }
 
-/* ---- Grid Lines (Circuit Board Effect) ---- */
 .grid-lines {
     position: absolute;
     inset: 0;
@@ -80,7 +171,6 @@ body {
     100% { transform: translate(60px, 60px); }
 }
 
-/* ---- Glowing Tech Orbs ---- */
 .tech-orb {
     position: absolute;
     border-radius: 50%;
@@ -126,7 +216,6 @@ body {
     100% { transform: translate(40px, -20px) scale(1.05); }
 }
 
-/* ---- Floating Tech Particles ---- */
 .tech-particle {
     position: absolute;
     width: 4px;
@@ -152,7 +241,6 @@ body {
     100% { transform: translate(-10px, 30px) scale(1); opacity: 0.8; }
 }
 
-/* ---- Pulsing Glow Wave ---- */
 .glow-pulse {
     position: absolute;
     top: 50%;
@@ -188,7 +276,6 @@ body {
     100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
 }
 
-/* ---- Hero Content (on top of everything) ---- */
 .hero-container {
     max-width: 950px;
     width: 100%;
@@ -865,5 +952,25 @@ body {
     }
     .hero-container p {
         font-size: 1rem;
+    }
+    .logo-brand-text {
+        font-size: 1.2rem;
+    }
+    .bolt-icon {
+        font-size: 1.2rem;
+    }
+    .logo-tagline-text {
+        font-size: 0.5rem;
+        letter-spacing: 1.5px;
+        gap: 4px;
+    }
+    .footer-logo .logo-brand-text {
+        font-size: 1.4rem;
+    }
+    .footer-logo .bolt-icon {
+        font-size: 1.4rem;
+    }
+    .footer-logo .logo-tagline-text {
+        font-size: 0.55rem;
     }
 }
