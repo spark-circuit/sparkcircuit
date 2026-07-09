@@ -39,13 +39,20 @@ body {
 .logo-wrapper {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     line-height: 1;
     transition: var(--transition);
 }
 
 .logo-wrapper:hover {
-    transform: scale(1.03);
+    transform: scale(1.02);
+}
+
+.logo-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
 }
 
 /* ---- Lightning Bolt ---- */
@@ -57,9 +64,9 @@ body {
 }
 
 @keyframes boltPulse {
-    0% { transform: scale(1) rotate(0deg); text-shadow: 0 0 20px rgba(255, 200, 0, 0.4); }
+    0% { transform: scale(1) rotate(-5deg); text-shadow: 0 0 20px rgba(255, 200, 0, 0.4); }
     50% { transform: scale(1.15) rotate(10deg); text-shadow: 0 0 40px rgba(255, 200, 0, 0.8), 0 0 80px rgba(255, 200, 0, 0.3); }
-    100% { transform: scale(1) rotate(0deg); text-shadow: 0 0 20px rgba(255, 200, 0, 0.4); }
+    100% { transform: scale(1) rotate(-5deg); text-shadow: 0 0 20px rgba(255, 200, 0, 0.4); }
 }
 
 /* ---- RAINBOW GRADIENT TEXT (S P A R K) ---- */
@@ -72,7 +79,7 @@ body {
         #FF0000, #FF7700, #FFDD00, 
         #00FF00, #00AAFF, #8B00FF, #FF00FF
     );
-    background-size: 300% 100%;
+    background-size: 400% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -95,12 +102,11 @@ body {
     text-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
     display: inline-block;
     animation: dotPulse 2s ease-in-out infinite;
-    margin: 0 2px;
 }
 
 @keyframes dotPulse {
     0% { opacity: 0.6; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.2); text-shadow: 0 0 30px rgba(0, 242, 254, 0.8); }
+    50% { opacity: 1; transform: scale(1.3); text-shadow: 0 0 30px rgba(0, 242, 254, 0.8); }
     100% { opacity: 0.6; transform: scale(1); }
 }
 
@@ -115,7 +121,6 @@ body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     display: inline-block;
-    text-shadow: none;
     filter: drop-shadow(0 0 15px rgba(0, 242, 254, 0.2));
 }
 
@@ -129,7 +134,7 @@ body {
         #00FF00, #00AAFF, #8B00FF, #FF00FF,
         #00f2fe
     );
-    background-size: 300% 100%;
+    background-size: 400% 100%;
     animation: rainbowMove 4s ease-in-out infinite alternate;
     border-radius: 2px;
     box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
@@ -148,7 +153,7 @@ body {
     text-shadow: 0 0 10px rgba(0, 242, 254, 0.1);
 }
 
-/* ---- Footer Logo (Thoda Chhota) ---- */
+/* ---- Footer Logo ---- */
 .footer-logo .logo-bolt {
     font-size: 1.8rem;
 }
@@ -165,53 +170,8 @@ body {
     letter-spacing: 3px;
 }
 
-/* ---- Mobile Responsive ---- */
-@media (max-width: 768px) {
-    .logo-bolt {
-        font-size: 1.6rem;
-    }
-    .logo-text-rainbow,
-    .logo-text-neon,
-    .logo-dot {
-        font-size: 1.2rem;
-        letter-spacing: 3px;
-    }
-    .logo-tagline {
-        font-size: 0.5rem;
-        letter-spacing: 2px;
-    }
-    .footer-logo .logo-bolt {
-        font-size: 1.4rem;
-    }
-    .footer-logo .logo-text-rainbow,
-    .footer-logo .logo-text-neon,
-    .footer-logo .logo-dot {
-        font-size: 1rem;
-        letter-spacing: 2px;
-    }
-    .footer-logo .logo-tagline {
-        font-size: 0.45rem;
-        letter-spacing: 2px;
-    }
-}
-
-@media (max-width: 480px) {
-    .logo-bolt {
-        font-size: 1.3rem;
-    }
-    .logo-text-rainbow,
-    .logo-text-neon,
-    .logo-dot {
-        font-size: 0.9rem;
-        letter-spacing: 2px;
-    }
-    .logo-tagline {
-        font-size: 0.4rem;
-        letter-spacing: 1.5px;
-    }
-}
 /* ============================================================
-   HERO SECTION WITH IMAGE + ANIMATED TECH BACKGROUND
+   HERO SECTION
    ============================================================ */
 .hero-section {
     position: relative;
@@ -953,20 +913,34 @@ body {
     .hamburger {
         display: block;
     }
-    .logo-link {
-        max-width: 200px;
+    .logo-bolt {
+        font-size: 1.6rem;
     }
-    .footer-logo .logo-link {
-        max-width: 180px;
+    .logo-text-rainbow,
+    .logo-text-neon,
+    .logo-dot {
+        font-size: 1.2rem;
+        letter-spacing: 3px;
+    }
+    .logo-tagline {
+        font-size: 0.5rem;
+        letter-spacing: 2px;
     }
 }
 
 @media (max-width: 480px) {
-    .logo-link {
-        max-width: 160px;
+    .logo-bolt {
+        font-size: 1.3rem;
     }
-    .footer-logo .logo-link {
-        max-width: 150px;
+    .logo-text-rainbow,
+    .logo-text-neon,
+    .logo-dot {
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+    }
+    .logo-tagline {
+        font-size: 0.4rem;
+        letter-spacing: 1.5px;
     }
 }
 
