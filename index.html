@@ -8,31 +8,83 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Google Fonts (Montserrat for logo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    
     <!-- External CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <!-- ============================================================
-         HEADER with UNIQUE TEXT LOGO
+         HEADER with SVG LOGO
          ============================================================ -->
     <header class="header-section">
         <div class="header-container">
-            <!-- UNIQUE TEXT LOGO -->
-            <a href="#home" class="logo-link">
-                <div class="logo-text">
-                    <div class="logo-main">
-                        <span class="bolt-icon">⚡</span>
-                        <span class="logo-brand-text">SPARKCIRCUIT</span>
-                    </div>
-                    <div class="logo-underline"></div>
-                    <div class="logo-tagline-text">
-                        <span>IDEAS</span>
-                        <span class="dot">·</span>
-                        <span>CONNECTED</span>
-                        <span class="dot">·</span>
-                        <span>POWERED</span>
-                    </div>
+            <!-- YOUR SVG LOGO -->
+            <a href="#home" class="logo-link" style="display: inline-block; max-width: 280px; width: 100%;">
+                <div class="logo-container" style="width: 100%;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 150" width="100%" height="auto">
+                        <defs>
+                            <!-- Sparks Gradient (Orange to Red-Orange) -->
+                            <linearGradient id="sparkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#FF9900" />
+                                <stop offset="100%" stop-color="#FF3300" />
+                            </linearGradient>
+                            <!-- Circuit Gradient (Cyan to Deep Blue) -->
+                            <linearGradient id="circuitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#00E5FF" />
+                                <stop offset="100%" stop-color="#0066FF" />
+                            </linearGradient>
+                            <!-- Glow Filter for High-tech effect -->
+                            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="2" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
+                        </defs>
+
+                        <style>
+                            .text-spark { font-family: 'Montserrat', 'Arial Black', sans-serif; font-weight: 900; font-size: 58px; fill: url(#sparkGrad); letter-spacing: -1px; }
+                            .text-circuit { font-family: 'Montserrat', 'Segoe UI', sans-serif; font-weight: 800; font-size: 58px; fill: url(#circuitGrad); }
+                            .tagline { font-family: 'Arial', sans-serif; font-weight: 600; font-size: 14px; fill: #00E5FF; letter-spacing: 7px; opacity: 0.9; }
+                            .circuit-line { stroke: url(#circuitGrad); stroke-width: 3; fill: none; stroke-linecap: round; }
+                            .circuit-node { fill: #00E5FF; filter: url(#glow); }
+                        </style>
+
+                        <!-- Background layer (Matches dark theme) -->
+                        <rect width="100%" height="100%" fill="transparent" rx="10"/>
+
+                        <!-- LOGO TEXT & GRAPHICS -->
+                        <g transform="translate(35, 10)">
+                            <!-- SPARK TEXT with Bolt Integration -->
+                            <text x="10" y="80" class="text-spark">SP</text>
+                            
+                            <!-- Lightning Bolt Shape for 'A' area -->
+                            <path d="M102,32 L120,32 L105,58 L125,58 L92,98 L103,66 L90,66 Z" fill="url(#sparkGrad)" filter="url(#glow)" />
+                            
+                            <text x="122" y="80" class="text-spark">RK</text>
+
+                            <!-- CIRCUIT TEXT -->
+                            <text x="235" y="80" class="text-circuit">CIRCUIT</text>
+
+                            <!-- Tech Circuit Lines overlaying above 'CIRCUIT' -->
+                            <path d="M235,35 L320,35 L340,15 L450,15 L450,30" class="circuit-line" />
+                            <path d="M350,35 L400,35 L415,23 L480,23" class="circuit-line" />
+                            
+                            <!-- Circuit Nodes (Dots) -->
+                            <circle cx="450" cy="30" r="4" class="circuit-node" />
+                            <circle cx="480" cy="23" r="4" class="circuit-node" />
+                            <circle cx="320" cy="35" r="3" class="circuit-node" />
+
+                            <!-- Spark Particle dots near the center -->
+                            <circle cx="222" cy="40" r="3" fill="#FF9900" />
+                            <circle cx="228" cy="52" r="2" fill="#FF3300" />
+                            <circle cx="215" cy="60" r="2.5" fill="#FFCC00" />
+
+                            <!-- TAGLINE -->
+                            <text x="95" y="115" class="tagline">IGNITING INNOVATION</text>
+                        </g>
+                    </svg>
                 </div>
             </a>
 
@@ -232,26 +284,53 @@
     </section>
 
     <!-- ============================================================
-         FOOTER SECTION with UNIQUE TEXT LOGO
+         FOOTER SECTION with SVG LOGO
          ============================================================ -->
     <footer class="footer-section" id="contact">
         <div class="footer-grid">
             <div class="footer-brand footer-logo">
-                <!-- UNIQUE TEXT LOGO -->
-                <a href="#home" class="logo-link" style="display: inline-flex;">
-                    <div class="logo-text">
-                        <div class="logo-main">
-                            <span class="bolt-icon">⚡</span>
-                            <span class="logo-brand-text">SPARKCIRCUIT</span>
-                        </div>
-                        <div class="logo-underline"></div>
-                        <div class="logo-tagline-text">
-                            <span>IDEAS</span>
-                            <span class="dot">·</span>
-                            <span>CONNECTED</span>
-                            <span class="dot">·</span>
-                            <span>POWERED</span>
-                        </div>
+                <!-- YOUR SVG LOGO (Footer) -->
+                <a href="#home" class="logo-link" style="display: inline-block; max-width: 230px; width: 100%;">
+                    <div class="logo-container" style="width: 100%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 150" width="100%" height="auto">
+                            <defs>
+                                <linearGradient id="sparkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#FF9900" />
+                                    <stop offset="100%" stop-color="#FF3300" />
+                                </linearGradient>
+                                <linearGradient id="circuitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#00E5FF" />
+                                    <stop offset="100%" stop-color="#0066FF" />
+                                </linearGradient>
+                                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur stdDeviation="2" result="blur" />
+                                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                </filter>
+                            </defs>
+                            <style>
+                                .text-spark { font-family: 'Montserrat', 'Arial Black', sans-serif; font-weight: 900; font-size: 58px; fill: url(#sparkGrad); letter-spacing: -1px; }
+                                .text-circuit { font-family: 'Montserrat', 'Segoe UI', sans-serif; font-weight: 800; font-size: 58px; fill: url(#circuitGrad); }
+                                .tagline { font-family: 'Arial', sans-serif; font-weight: 600; font-size: 14px; fill: #00E5FF; letter-spacing: 7px; opacity: 0.9; }
+                                .circuit-line { stroke: url(#circuitGrad); stroke-width: 3; fill: none; stroke-linecap: round; }
+                                .circuit-node { fill: #00E5FF; filter: url(#glow); }
+                            </style>
+                            <rect width="100%" height="100%" fill="transparent" rx="10"/>
+                            <g transform="translate(35, 10)">
+                                <text x="10" y="80" class="text-spark">SP</text>
+                                <path d="M102,32 L120,32 L105,58 L125,58 L92,98 L103,66 L90,66 Z" fill="url(#sparkGrad)" filter="url(#glow)" />
+                                <text x="122" y="80" class="text-spark">RK</text>
+                                <text x="235" y="80" class="text-circuit">CIRCUIT</text>
+                                <path d="M235,35 L320,35 L340,15 L450,15 L450,30" class="circuit-line" />
+                                <path d="M350,35 L400,35 L415,23 L480,23" class="circuit-line" />
+                                <circle cx="450" cy="30" r="4" class="circuit-node" />
+                                <circle cx="480" cy="23" r="4" class="circuit-node" />
+                                <circle cx="320" cy="35" r="3" class="circuit-node" />
+                                <circle cx="222" cy="40" r="3" fill="#FF9900" />
+                                <circle cx="228" cy="52" r="2" fill="#FF3300" />
+                                <circle cx="215" cy="60" r="2.5" fill="#FFCC00" />
+                                <text x="95" y="115" class="tagline">IGNITING INNOVATION</text>
+                            </g>
+                        </svg>
                     </div>
                 </a>
                 <p style="margin-top: 15px; font-size: 0.9rem;">Innovative Electronics • Smart IoT Solutions • Premium Audio Systems</p>
