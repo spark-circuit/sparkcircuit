@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Admin panel block karo — Google search me na aaye
+Disallow: /admin.html
+
+# Sitemap location
+Sitemap: https://sparkcircuit.in/sitemap.xml

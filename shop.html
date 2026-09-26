@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop | SparkCircuit</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="brand">
+      <img src="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg" alt="SparkCircuit" class="brand-logo">
+      <div class="brand-text">
+        <span class="brand-name"><span class="orange">Spark</span>Circuit</span>
+        <span class="brand-tag">TECH / R&D STUDIO</span>
+      </div>
+    </a>
+
+   <div class="search-box-wrapper">
+  <div class="search-box">
+    <input type="text" id="searchInput" onkeyup="handleSearchInput()" onfocus="handleSearchFocus()" onblur="handleSearchBlur()" placeholder="Search Parts, Components, SKU..." autocomplete="off">
+    <i class="fas fa-search"></i>
+  </div>
+  <div id="searchSuggestions" class="search-suggestions"></div>
+</div>
+
+    <div class="nav-icons">
+      <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+      <div class="user-dropdown">
+        <div id="userNavContainer" onclick="toggleProfileMenu()" class="nav-item user-btn">
+          <i class="fas fa-circle-user"></i>
+          <span id="navUserText">Account</span>
+          <i class="fas fa-chevron-down mini"></i>
+        </div>
+        <div id="profileDropdown" class="dropdown">
+          <div id="loggedInOptions" style="display:none;">
+            <a href="javascript:void(0)" onclick="openMyOrdersModal(); closeProfileMenu();"><i class="fas fa-box"></i> My Orders</a>
+            <a href="javascript:void(0)" onclick="handleLogout(); closeProfileMenu();" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+          <div id="loggedOutOptions">
+            <a href="javascript:void(0)" onclick="openLoginModal(); closeProfileMenu();"><i class="fas fa-sign-in-alt"></i> Login / Register</a>
+          </div>
+        </div>
+      </div>
+  <a href="wishlist.html" class="nav-item wishlist-btn" style="text-decoration:none;">
+  <i class="fas fa-heart"></i>
+  <span>Wishlist</span>
+  <span id="wishlistCount" class="cart-badge">0</span>
+</a>
+      <div class="nav-item cart-btn" onclick="toggleCart()">
+        <i class="fas fa-shopping-cart"></i>
+        <span>Cart</span>
+        <span id="cartCount" class="cart-badge">0</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- CATEGORY STRIP -->
+<div class="cat-strip">
+  <div class="cat-strip-inner">
+    <a href="#products" onclick="filterCategory('All')">All Products</a>
+    <a href="#products" onclick="filterCategory('Microcontrollers')">Microcontrollers</a>
+    <a href="#products" onclick="filterCategory('Sensors')">Sensors</a>
+    <a href="#products" onclick="filterCategory('Power Supply')">Power Supply</a>
+    <a href="#products" onclick="filterCategory('Battery/BMS/Charger IC')">Battery/BMS</a>
+    <a href="#products" onclick="filterCategory('Interface Module')">Interface Module</a>
+    <a href="#products" onclick="filterCategory('Motor')">Motor</a>
+    <a href="#products" onclick="filterCategory('Servo & Stepper Motor')">Servo & Stepper</a>
+    <a href="#products" onclick="filterCategory('Display')">Display</a>
+    <a href="#products" onclick="filterCategory('Relay')">Relay</a>
+    <a href="#products" onclick="filterCategory('Wheels')">Wheels</a>
+    <a href="#products" onclick="filterCategory('Fan')">Fan</a>
+    <a href="#products" onclick="filterCategory('LEDs')">LEDs</a>
+    <a href="#products" onclick="filterCategory('Capacitor')">Capacitor</a>
+    <a href="#products" onclick="filterCategory('Resistor')">Resistor</a>
+    <a href="#products" onclick="filterCategory('Speakers')">Speakers</a>
+    <a href="#products" onclick="filterCategory('Audio & Amplifiers')">Audio & Amps</a>
+    <a href="#products" onclick="filterCategory('IoT Devices')">IoT Devices</a>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="banners">
+    <div class="banner dark">
+      <h2>⚡ Spark Your Creation</h2>
+      <p>Global Component Sourcing</p>
+    </div>
+    <div class="banner orange">
+      <h2>🚚 Express Delivery</h2>
+      <p>Free Shipping Above ₹499</p>
+    </div>
+  </div>
+
+  <h2 class="section-title" id="products">Trending Electronics & Hardware</h2>
+  <div id="dbProductGrid" class="product-grid">
+    <p style="text-align:center; grid-column:1/-1; color:#94a3b8;">Loading inventory...</p>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal-overlay" style="display:none;">
+  <div class="modal-dark">
+    <h3>🔐 Login / Register</h3>
+    <p class="muted">Enter email to receive OTP code</p>
+    <div id="otpStep1">
+      <input type="email" id="authEmail" placeholder="Enter your Email" class="input-dark">
+      <button onclick="sendEmailOTP()" id="btnSendOtp" class="btn-primary full">Send OTP →</button>
+    </div>
+    <div id="otpStep2" style="display:none;">
+      <p class="info">Enter 6-digit OTP sent to your Email:</p>
+      <input type="text" id="otpCode" maxlength="6" placeholder="123456" class="input-dark otp-input">
+      <button onclick="verifyEmailOTP()" id="btnVerifyOtp" class="btn-success full">Verify OTP & Login →</button>
+      <p onclick="resetOtpStep()" class="link-muted">Change Email</p>
+    </div>
+    <button onclick="closeLoginModal()" class="btn-close">Close</button>
+  </div>
+</div>
+
+<!-- MY ORDERS MODAL -->
+<div id="myOrdersModal" class="modal-overlay" style="display:none;">
+  <div class="modal-dark wide">
+    <div class="modal-head">
+      <h3>📦 My Orders History</h3>
+      <span onclick="closeMyOrdersModal()" class="close-x">&times;</span>
+    </div>
+    <div id="userOrdersList"><p class="muted center">Loading...</p></div>
+  </div>
+</div>
+
+<!-- CART MODAL -->
+<div id="cartModal" class="modal-overlay">
+  <div class="modal-light">
+    <div class="modal-head">
+      <h3 id="modalTitle">🛒 Shopping Cart</h3>
+      <span class="close-x" onclick="toggleCart()">&times;</span>
+    </div>
+
+    <div id="cartItemsContainer">
+      <p class="muted center">Your cart is empty.</p>
+    </div>
+
+    <!-- MINIMUM ORDER WARNING (Yahan sahi jagah hai) -->
+    <div id="minOrderWarning" style="display:none; background:linear-gradient(135deg,#fef3c7,#fde68a); border:1px solid #fcd34d; border-radius:10px; padding:12px 16px; margin-top:12px; font-size:0.85rem; color:#92400e;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <i class="fas fa-exclamation-triangle" style="font-size:1.2rem; color:#d97706;"></i>
+        <div>
+          <strong>Minimum order ₹99</strong>
+          <div id="minOrderText" style="margin-top:2px; font-weight:600;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="priceSummaryBox" class="price-summary" style="display:none;">
+      <div class="row"><span>Subtotal:</span><strong>₹<span id="subTotalAmt">0</span></strong></div>
+      <div class="row blue"><span>Delivery:</span><strong><span id="shippingAmt">₹50</span></strong></div>
+      <hr>
+      <div class="row total"><span>Grand Total:</span><strong>₹<span id="grandTotalAmt">0</span></strong></div>
+    </div>
+
+    <div id="checkoutForm" style="display:none;">
+      <h4>Shipping Details</h4>
+      <input type="text" id="custName" placeholder="Full Name *" class="form-input">
+      <input type="tel" id="custPhone" maxlength="10" placeholder="10-digit Mobile Number *" class="form-input">
+      <textarea id="custAddress" placeholder="Full Delivery Address *" class="form-input" rows="2"></textarea>
+     <input type="text" id="custPincode" maxlength="6" placeholder="6-digit Pincode *" class="form-input">
+   <div id="pincodeStatus" style="font-size:0.8rem;margin-top:5px;min-height:18px;"></div>
+      <div class="pay-box">
+        <label>Payment Method:</label>
+        <div class="pay-options">
+         <label><input type="radio" name="payType" value="UPI" checked onclick="togglePayOption('UPI')"> 💳 Online Payment (UPI/Card/NetBanking)</label>
+          <label><input type="radio" name="payType" value="COD" onclick="togglePayOption('COD')"> Cash on Delivery</label>
+        </div>
+      </div>
+
+      <button onclick="processOrderToPayment()" class="btn-primary full">Place Order →</button>
+    </div>
+
+    <div id="orderSuccessBox" style="display:none;">
+  <div class="success-box">
+    <i class="fas fa-check-circle"></i>
+    <h3>Order Placed Successfully!</h3>
+    <p>Order ID: <strong id="placedOrderId">#SPC-0000</strong></p>
+  </div>
+
+  <div id="deliveryEstimate"></div>
+
+  <div id="upiBoxContainer" class="upi-box" style="display:none;">
+    <p>Scan & Pay: <strong id="finalPayAmt">₹0</strong></p>
+    <img id="dynamicQrImg" src="" alt="UPI QR" style="width:180px; height:180px;">
+    <p><strong>Account:</strong> Azad Kumar</p>
+    <p class="muted">UPI: <strong>6374017186-2@ybl</strong></p>
+  </div>
+
+  <button type="button" onclick="downloadInvoice()" class="btn-primary full" style="margin-top:12px; width:100%; padding:13px; border-radius:8px; border:none; background:linear-gradient(135deg,#0f172a,#1e293b); color:#fff; font-weight:700; cursor:pointer; font-size:0.95rem;">
+    <i class="fas fa-file-pdf"></i> Download Invoice
+  </button>
+
+     <button type="button" id="waConfirmBtn" onclick="confirmOnWhatsApp()" class="btn-success full" style="margin-top:10px; width:100%; padding:13px; border-radius:8px; border:none; background:#22c55e; color:#fff; font-weight:700; cursor:pointer; font-size:0.95rem;">
+      <i class="fab fa-whatsapp"></i> Confirm on WhatsApp
+    </button>
+  </div>
+
+  <div id="cartFooter" class="modal-foot">
+    <button onclick="showCheckout()" id="proceedBtn" class="btn-primary full">Proceed to Shipping →</button>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-bottom" style="border:none;padding-top:0;">
+    <p>&copy; 2026 SparkCircuit | All Rights Reserved</p>
+  </div>
+</footer>
+
+<a href="https://wa.me/916374017186" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>(function(){ emailjs.init("Pn5FLfmBN3qPp5xg7"); })();</script>
+<script src="script.js"></script>
+</body>
+</html>

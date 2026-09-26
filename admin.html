@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f97316">
+
+<title>Admin Panel | SparkCircuit</title>
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="icon" type="image/jpeg" href="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg">
+
+<link rel="preconnect" href="https://mrqvzmtdsohvzsnryogp.supabase.co">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:#0f172a; color:#fff; padding:20px; max-width:900px; margin:0 auto; min-height:100vh; }
+
+.admin-head { display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:25px; padding-bottom:20px; border-bottom:1px solid #334155; }
+.admin-head img { width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid #f97316; }
+.admin-head .name { font-family:'Poppins',sans-serif; font-size:1.6rem; font-weight:800; line-height:1; color:#fff; }
+.admin-head .name .o { color:#f97316; }
+.admin-head .tag { color:#94a3b8; font-size:0.65rem; letter-spacing:2px; margin-top:4px; display:block; font-weight:600; }
+
+.tab-bar { display:flex; gap:10px; margin-bottom:25px; border-bottom:2px solid #334155; padding-bottom:12px; flex-wrap:wrap; }
+.tab-btn { flex:1; min-width:140px; padding:12px; background:#1e293b; color:#94a3b8; border:1px solid #334155; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.9rem; transition:0.2s; font-family:'Inter',sans-serif; }
+.tab-btn:hover { background:#334155; color:#fff; }
+.tab-btn.active { background:#f97316; color:#fff; border-color:#f97316; }
+
+.form-group { margin-bottom:15px; }
+label { display:block; margin-bottom:6px; color:#94a3b8; font-size:0.85rem; font-weight:600; }
+input, select, textarea { width:100%; padding:12px; background:#1e293b; border:1px solid #334155; color:#fff; border-radius:8px; outline:none; font-size:0.95rem; font-family:'Inter',sans-serif; }
+input:focus, select:focus, textarea:focus { border-color:#f97316; box-shadow:0 0 0 3px rgba(249,115,22,0.1); }
+
+.btn-container { display:flex; gap:10px; margin-top:15px; }
+button.action-btn { flex:1; padding:14px; background:#f97316; color:#fff; font-weight:700; border:none; border-radius:8px; cursor:pointer; font-size:1rem; transition:0.2s; font-family:'Inter',sans-serif; }
+button.action-btn:hover { background:#ea580c; }
+#cancelEditBtn { background:#64748b; display:none; }
+
+.filter-bar { display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap; }
+.filter-bar input { flex:2; min-width:200px; }
+.filter-bar select { flex:1; min-width:180px; }
+
+.product-item { display:flex; align-items:center; justify-content:space-between; background:#1e293b; padding:12px 15px; border-radius:8px; margin-bottom:10px; border:1px solid #334155; gap:10px; }
+.product-info { display:flex; align-items:center; gap:12px; flex:1; min-width:0; }
+.product-info img { width:50px; height:50px; object-fit:cover; border-radius:6px; flex-shrink:0; }
+.product-info .pname { font-weight:600; font-size:0.92rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.product-info .pmeta { font-size:0.78rem; color:#f97316; margin-top:2px; }
+.action-btns { display:flex; gap:8px; flex-shrink:0; }
+.edit-btn { padding:8px 12px; background:#2563eb; border:none; color:#fff; border-radius:6px; cursor:pointer; font-size:0.8rem; font-weight:600; }
+.delete-btn { padding:8px 12px; background:#ef4444; border:none; color:#fff; border-radius:6px; cursor:pointer; font-size:0.8rem; font-weight:600; }
+
+.tab-content { display:none; }
+.tab-content.active { display:block; }
+
+.order-card { background:#1e293b; padding:15px; border-radius:10px; margin-bottom:12px; border:1px solid #334155; }
+.order-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px; }
+.order-id { color:#f97316; font-weight:700; font-size:1.05rem; }
+.order-status { background:#0f172a; color:#38bdf8; padding:4px 10px; border-radius:6px; font-size:0.78rem; }
+.order-line { margin:5px 0; font-size:0.88rem; color:#cbd5e1; }
+.order-items { background:#0f172a; padding:10px; border-radius:8px; margin:10px 0; font-size:0.85rem; color:#94a3b8; }
+.order-total { display:flex; justify-content:space-between; align-items:center; margin-top:10px; flex-wrap:wrap; gap:8px; }
+.order-total .amount { font-size:1.05rem; font-weight:700; color:#22c55e; }
+.wa-link { background:#22c55e; color:#fff; padding:7px 14px; border-radius:6px; text-decoration:none; font-size:0.82rem; font-weight:600; }
+
+h3.section-h { color:#cbd5e1; margin-bottom:15px; font-family:'Poppins',sans-serif; }
+
+@media(max-width:600px) {
+  .product-item { flex-direction:column; align-items:stretch; }
+  .action-btns { justify-content:flex-end; }
+}
+</style>
+</head>
+<body>
+
+<!-- 🔐 ADMIN LOGIN SCREEN -->
+<div id="adminLoginScreen" style="position:fixed; inset:0; background:#0f172a; z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:#1e293b; border:1px solid #334155; border-radius:16px; padding:35px; max-width:400px; width:100%; text-align:center;">
+    <img src="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg" alt="SparkCircuit" style="width:70px; height:70px; border-radius:50%; object-fit:cover; border:2px solid #f97316; margin-bottom:15px;">
+    <h2 style="color:#fff; font-family:'Poppins',sans-serif; margin-bottom:8px;">🔐 Admin Login</h2>
+    <p style="color:#94a3b8; font-size:0.85rem; margin-bottom:25px;">Enter your credentials to access admin panel</p>
+    
+    <input type="email" id="adminEmail" placeholder="Admin Email" style="width:100%; padding:12px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; margin-bottom:12px; outline:none; font-size:0.95rem; box-sizing:border-box;">
+    
+    <input type="password" id="adminPassword" placeholder="Password" style="width:100%; padding:12px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; margin-bottom:18px; outline:none; font-size:0.95rem; box-sizing:border-box;">
+    
+    <button onclick="adminLogin()" id="adminLoginBtn" style="width:100%; padding:14px; background:linear-gradient(135deg,#f97316,#ea580c); color:#fff; font-weight:700; border:none; border-radius:8px; cursor:pointer; font-size:1rem; font-family:'Inter',sans-serif;">
+      🔓 Login →
+    </button>
+    
+    <p id="adminLoginError" style="color:#ef4444; font-size:0.85rem; margin-top:15px; display:none;"></p>
+    
+    <p style="color:#64748b; font-size:0.75rem; margin-top:20px;">🔒 Only authorized users can access</p>
+  </div>
+</div>
+
+<!-- MAIN ADMIN CONTENT -->
+<div id="adminMainContent" style="display:none;">
+
+  <!-- LOGOUT BUTTON -->
+  <div style="position:fixed; top:20px; right:20px; z-index:100;">
+    <button onclick="adminLogout()" style="background:#ef4444; color:#fff; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:600; font-size:0.85rem; font-family:'Inter',sans-serif;">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </div>
+
+  <div class="admin-head">
+    <img src="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg" alt="SparkCircuit">
+    <div>
+      <div class="name"><span class="o">Spark</span>Circuit</div>
+      <span class="tag">ADMIN & INVENTORY STUDIO</span>
+    </div>
+  </div>
+
+ <div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('dashboardTab', this)">📊 Dashboard</button>
+  <button class="tab-btn" onclick="switchTab('addTab', this)">➕ Add Product</button>
+  <button class="tab-btn" onclick="switchTab('ordersTab', this)">🛒 Orders</button>
+  <button class="tab-btn" onclick="switchTab('inventoryTab', this)">📦 Inventory</button>
+  <button class="tab-btn" onclick="switchTab('blogTab', this)">📝 Blog</button>
+  <button class="tab-btn" onclick="switchTab('newsletterTab', this)">📧 Newsletter</button>
+</div>
+
+  <!-- DASHBOARD TAB -->
+  <div id="dashboardTab" class="tab-content active">
+    <h3 class="section-h">📊 Business Dashboard</h3>
+    
+    <div id="statsGrid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:20px;">
+      <p style="color:#94a3b8; text-align:center; grid-column:1/-1;">Loading stats...</p>
+    </div>
+    
+    <h3 class="section-h" style="margin-top:25px;">📈 Last 7 Days Sales</h3>
+    <div id="salesChart" style="background:#1e293b; padding:20px; border-radius:12px; border:1px solid #334155; margin-bottom:20px;">
+      <p style="color:#94a3b8; text-align:center;">Loading chart...</p>
+    </div>
+    
+    <h3 class="section-h" style="margin-top:25px;">🔥 Top 5 Selling Products</h3>
+    <div id="topProducts" style="background:#1e293b; padding:15px; border-radius:12px; border:1px solid #334155; margin-bottom:20px;">
+      <p style="color:#94a3b8; text-align:center;">Loading products...</p>
+    </div>
+    
+    <h3 class="section-h" style="margin-top:25px;">📅 Recent Orders</h3>
+    <div id="recentOrders" style="background:#1e293b; padding:15px; border-radius:12px; border:1px solid #334155;">
+      <p style="color:#94a3b8; text-align:center;">Loading orders...</p>
+    </div>
+  </div>
+
+  <!-- ADD / EDIT TAB -->
+  <div id="addTab" class="tab-content">
+    <h3 class="section-h" id="formTitle">➕ Add New Product</h3>
+    <input type="hidden" id="editProductId">
+
+    <div class="form-group"><label>Product Name</label><input type="text" id="pName" placeholder="e.g. ESP32 Development Board"></div>
+    <div class="form-group">
+      <label>Category</label>
+      <select id="pCat">
+        <option>Microcontrollers</option><option>Sensors</option><option>Power Supply</option>
+        <option>Battery/BMS/Charger IC</option><option>Interface Module</option><option>Motor</option>
+        <option>Servo & Stepper Motor</option><option>Display</option><option>Relay</option>
+        <option>Wheels</option><option>Fan</option><option>LEDs</option>
+        <option>Capacitor</option><option>Resistor</option><option>Speakers</option>
+        <option>Audio & Amplifiers</option><option>IoT Devices</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Selling Price (₹)</label><input type="number" id="pPrice" placeholder="499"></div>
+    <div class="form-group"><label>Original Price / MRP (₹)</label><input type="number" id="pOldPrice" placeholder="799"></div>
+    <div class="form-group"><label>Stock Quantity (Pieces)</label>
+      <input type="number" id="pStockQty" placeholder="e.g. 50" min="0" value="10">
+    </div>
+    <div class="form-group"><label>Stock Status</label>
+      <select id="pStock"><option value="true">In Stock</option><option value="false">Out of Stock</option></select>
+    </div>
+    <div class="form-group">
+  <label>Main Image URL</label>
+  <input type="text" id="pImg" placeholder="https://... (main image)">
+</div>
+<div class="form-group">
+  <label>Additional Images (one URL per line)</label>
+  <textarea id="pImages" rows="4" placeholder="https://... (image 1)&#10;https://... (image 2)&#10;https://... (image 3)"></textarea>
+  <small style="color:#64748b; font-size:0.75rem; display:block; margin-top:4px;">Optional — for image gallery</p>
+</div>
+    <div class="form-group"><label>Description</label><textarea id="pDesc" rows="3" placeholder="Product details..."></textarea></div>
+
+    <div class="btn-container">
+      <button id="saveBtn" class="action-btn" onclick="saveProduct()">➕ Add Product</button>
+      <button id="cancelEditBtn" class="action-btn" onclick="resetForm()">❌ Cancel</button>
+    </div>
+  </div>
+
+  <!-- ORDERS TAB -->
+  <div id="ordersTab" class="tab-content">
+    <h3 class="section-h">🛒 Recent Customer Orders</h3>
+    <div id="adminOrderList"><p style="color:#94a3b8;text-align:center;">Loading orders...</p></div>
+  </div>
+
+  <!-- INVENTORY TAB -->
+  <div id="inventoryTab" class="tab-content">
+    <h3 class="section-h">📦 Inventory Management</h3>
+    <div class="filter-bar">
+      <input type="text" id="adminSearchInput" onkeyup="filterAdminProducts()" placeholder="🔍 Search product...">
+      <select id="adminCatFilter" onchange="filterAdminProducts()">
+        <option value="All">All Categories</option>
+        <option>Microcontrollers</option><option>Sensors</option><option>Power Supply</option>
+        <option>Battery/BMS/Charger IC</option><option>Interface Module</option><option>Motor</option>
+        <option>Servo & Stepper Motor</option><option>Display</option><option>Relay</option>
+        <option>IoT Devices</option>
+      </select>
+    </div>
+    <div id="adminProductList"><p style="color:#94a3b8;text-align:center;">Loading inventory...</p></div>
+  </div>
+
+<!-- BLOG TAB -->
+<div id="blogTab" class="tab-content">
+  <h3 class="section-h" id="blogFormTitle">➕ Add New Blog Post</h3>
+  <input type="hidden" id="editPostId">
+
+  <div class="form-group">
+    <label>Post Title *</label>
+    <input type="text" id="bTitle" placeholder="e.g. Top 10 ESP32 Projects for Beginners">
+  </div>
+  <div class="form-group">
+    <label>URL Slug (auto-generated if empty)</label>
+    <input type="text" id="bSlug" placeholder="top-10-esp32-projects">
+  </div>
+  <div class="form-group">
+    <label>Category</label>
+    <select id="bCategory">
+      <option>Microcontrollers</option>
+      <option>IoT</option>
+      <option>Audio</option>
+      <option>PCB Design</option>
+      <option>Tutorials</option>
+      <option>Projects</option>
+      <option>General</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Author</label>
+    <input type="text" id="bAuthor" placeholder="SparkCircuit Team" value="SparkCircuit Team">
+  </div>
+  <div class="form-group">
+    <label>Cover Image URL</label>
+    <input type="text" id="bImage" placeholder="https://...">
+  </div>
+  <div class="form-group">
+    <label>Short Excerpt (for listing page)</label>
+    <textarea id="bExcerpt" rows="2" placeholder="Brief summary of the article..."></textarea>
+  </div>
+  <div class="form-group">
+    <label>Full Content * (supports **bold**, ## heading, > quote, line breaks)</label>
+    <textarea id="bContent" rows="12" placeholder="Write your article content here..."></textarea>
+  </div>
+  <div class="form-group">
+    <label>Meta Title (SEO)</label>
+    <input type="text" id="bMetaTitle" placeholder="For Google search — leave empty to use post title">
+  </div>
+  <div class="form-group">
+    <label>Meta Description (SEO)</label>
+    <textarea id="bMetaDesc" rows="2" placeholder="155 characters max — for Google snippet"></textarea>
+  </div>
+  <div class="form-group">
+    <label>Status</label>
+    <select id="bStatus">
+      <option value="published">Published</option>
+      <option value="draft">Draft</option>
+    </select>
+  </div>
+
+  <div class="btn-container">
+    <button id="saveBlogBtn" class="action-btn" onclick="saveBlogPost()">➕ Publish Post</button>
+    <button id="cancelBlogEditBtn" class="action-btn" onclick="resetBlogForm()" style="display:none;">❌ Cancel</button>
+  </div>
+
+  <h3 class="section-h" style="margin-top:35px;">📚 All Blog Posts</h3>
+  <div id="adminBlogList"><p style="color:#94a3b8;text-align:center;">Loading posts...</p></div>
+</div>
+
+   <!-- NEWSLETTER TAB -->
+<div id="newsletterTab" class="tab-content">
+  <h3 class="section-h">📧 Newsletter Subscribers</h3>
+  
+  <!-- Stats -->
+  <div id="newsletterStats" style="background:linear-gradient(135deg,#9333ea,#7e22ce); padding:20px; border-radius:12px; margin-bottom:20px; text-align:center;">
+    <div style="font-size:0.9rem; opacity:0.9; margin-bottom:5px;">📊 Total Subscribers</div>
+    <div id="newsletterCount" style="font-size:2.5rem; font-weight:800;">0</div>
+  </div>
+  
+  <!-- Search -->
+  <div class="filter-bar">
+    <input type="text" id="newsletterSearch" onkeyup="filterNewsletter()" placeholder="🔍 Search by email...">
+    <button onclick="exportNewsletterCSV()" style="background:#16a34a; color:#fff; border:none; padding:12px 20px; border-radius:8px; cursor:pointer; font-weight:600; font-size:0.85rem;">
+      <i class="fas fa-download"></i> Export CSV
+    </button>
+  </div>
+  
+  <!-- List -->
+  <div id="newsletterList" style="background:#1e293b; border-radius:12px; border:1px solid #334155; padding:15px;">
+    <p style="color:#94a3b8; text-align:center; padding:20px;">Loading subscribers...</p>
+  </div>
+</div>
+
+</div><!-- END adminMainContent -->
+
+<script>
+const SUPABASE_URL = 'https://mrqvzmtdsohvzsnryogp.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z';
+const ADMIN_EMAIL = 'sparkcircuit.in@gmail.com';
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: {
+    storageKey: 'admin-auth-token',
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: false
+  }
+});
+let liveProducts = [];
+
+// ============================================================
+// 🔐 ADMIN LOGIN SYSTEM
+// ============================================================
+async function adminLogin() {
+  const email = document.getElementById('adminEmail').value.trim();
+  const password = document.getElementById('adminPassword').value;
+  const btn = document.getElementById('adminLoginBtn');
+  const errorEl = document.getElementById('adminLoginError');
+  
+  if (!email || !password) {
+    errorEl.style.display = 'block';
+    errorEl.innerText = '❌ Please enter email and password';
+    return;
+  }
+  
+  btn.innerText = 'Logging in...';
+  btn.disabled = true;
+  errorEl.style.display = 'none';
+  
+  try {
+    const { data, error } = await _supabase.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+    
+    if (error) throw error;
+    
+    // Check if logged in user is the admin
+    if (data.user.email !== ADMIN_EMAIL) {
+      await _supabase.auth.signOut();
+      throw new Error('Access denied. Only admin can login.');
+    }
+    
+    // Success
+    document.getElementById('adminLoginScreen').style.display = 'none';
+    document.getElementById('adminMainContent').style.display = 'block';
+    
+    // Load admin data
+    loadAdminProducts();
+    loadAdminOrders();
+    loadDashboard();
+    loadNewsletterSubscribers();
+    loadAdminBlogPosts(); 
+    console.log('✅ Admin logged in:', data.user.email);
+    
+  } catch (err) {
+    errorEl.style.display = 'block';
+    errorEl.innerText = '❌ ' + err.message;
+    btn.innerText = '🔓 Login →';
+    btn.disabled = false;
+  }
+}
+
+async function adminLogout() {
+  if (!confirm('Logout from admin panel?')) return;
+  await _supabase.auth.signOut();
+  location.reload();
+}
+
+async function checkAdminSession() {
+  const { data: { session } } = await _supabase.auth.getSession();
+
+  if (session && session.user.email === ADMIN_EMAIL) {
+    document.getElementById('adminLoginScreen').style.display = 'none';
+    document.getElementById('adminMainContent').style.display = 'block';
+    loadAdminProducts();
+    loadAdminOrders();
+    loadDashboard();
+    loadNewsletterSubscribers();
+    loadAdminBlogPosts();
+  } else {
+    document.getElementById('adminLoginScreen').style.display = 'flex';
+    document.getElementById('adminMainContent').style.display = 'none';
+  }
+}
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+function switchTab(tabId, el) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  el.classList.add('active');
+}
+
+// ============================================================
+// PRODUCTS — LOAD, RENDER, FILTER
+// ============================================================
+async function loadAdminProducts() {
+  const list = document.getElementById('adminProductList');
+  const { data, error } = await _supabase.from('products').select('*').order('id', { ascending: false });
+  if (error) { list.innerHTML = '<p style="color:#ef4444;">Failed to load.</p>'; return; }
+  liveProducts = data || [];
+  renderAdminProducts(liveProducts);
+}
+
+function renderAdminProducts(products) {
+  const list = document.getElementById('adminProductList');
+  if (products.length === 0) { list.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:15px;">No products found.</p>'; return; }
+  list.innerHTML = products.map(item => `
+    <div class="product-item">
+      <div class="product-info">
+        <img src="${item.image || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100'}" alt="${item.name}">
+        <div style="min-width:0;">
+          <div class="pname">${item.name}</div>
+          <div class="pmeta">₹${item.price} • ${item.category || 'General'} • ${item.stock_quantity > 0 ? `📦 ${item.stock_quantity} left` : '❌ Out of Stock'}</div>
+        </div>
+      </div>
+      <div class="action-btns">
+        <button class="edit-btn" onclick="startEditProduct(${item.id})">✏️ Edit</button>
+        <button class="delete-btn" onclick="deleteProduct(${item.id}, '${item.name.replace(/'/g, "\\'")}')">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterAdminProducts() {
+  const term = document.getElementById('adminSearchInput').value.toLowerCase();
+  const cat = document.getElementById('adminCatFilter').value;
+  const filtered = liveProducts.filter(p =>
+    p.name.toLowerCase().includes(term) && (cat === 'All' || p.category === cat)
+  );
+  renderAdminProducts(filtered);
+}
+
+function startEditProduct(id) {
+  const p = liveProducts.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('editProductId').value = p.id;
+  document.getElementById('pName').value = p.name;
+  document.getElementById('pCat').value = p.category || 'Microcontrollers';
+  document.getElementById('pPrice').value = p.price;
+  document.getElementById('pOldPrice').value = p.original_price || p.price;
+  document.getElementById('pStock').value = p.in_stock ? 'true' : 'false';
+  document.getElementById('pStockQty').value = p.stock_quantity || 0;
+  document.getElementById('pImg').value = p.image || '';
+  document.getElementById('pImages').value = Array.isArray(p.images) ? p.images.join('\n') : '';
+  document.getElementById('pDesc').value = p.description || '';
+  document.getElementById('formTitle').innerText = '✏️ Edit Product';
+  document.getElementById('saveBtn').innerText = '💾 Update Product';
+  document.getElementById('cancelEditBtn').style.display = 'block';
+  switchTab('addTab', document.querySelectorAll('.tab-btn')[1]);
+}
+
+async function saveProduct() {
+  const editId = document.getElementById('editProductId').value;
+  const name = document.getElementById('pName').value.trim();
+  const category = document.getElementById('pCat').value;
+  const price = parseFloat(document.getElementById('pPrice').value);
+  const original_price = parseFloat(document.getElementById('pOldPrice').value) || price;
+  const in_stock = document.getElementById('pStock').value === 'true';
+  const image = document.getElementById('pImg').value.trim();
+  const description = document.getElementById('pDesc').value.trim();
+  
+  // Parse additional images
+  const imagesText = document.getElementById('pImages').value.trim();
+  const images = imagesText ? imagesText.split('\n').map(u => u.trim()).filter(u => u) : [];
+
+  if (!name || !price) { alert('Enter Product Name and Price!'); return; }
+
+  const stock_quantity = parseInt(document.getElementById('pStockQty').value) || 0;
+  const payload = { name, category, price, original_price, in_stock, stock_quantity, image, images, description };
+  let error = null;
+
+  if (editId) {
+    const res = await _supabase.from('products').update(payload).eq('id', editId);
+    error = res.error;
+  } else {
+    const res = await _supabase.from('products').insert([payload]);
+    error = res.error;
+  }
+
+  if (error) alert('Error: ' + error.message);
+  else { alert(editId ? '🎉 Updated!' : '🎉 Product Added!'); resetForm(); loadAdminProducts(); }
+}
+
+function resetForm() {
+  document.getElementById('editProductId').value = '';
+  document.getElementById('pName').value = '';
+  document.getElementById('pPrice').value = '';
+  document.getElementById('pOldPrice').value = '';
+  document.getElementById('pImg').value = '';
+  document.getElementById('pImages').value = '';
+  document.getElementById('pDesc').value = '';
+  document.getElementById('pStockQty').value = '10';
+  document.getElementById('formTitle').innerText = '➕ Add New Product';
+  document.getElementById('saveBtn').innerText = '➕ Add Product';
+  document.getElementById('cancelEditBtn').style.display = 'none';
+}
+
+async function deleteProduct(id, name) {
+  if (!confirm(`Delete "${name}"?`)) return;
+  const { error } = await _supabase.from('products').delete().eq('id', id);
+  if (error) alert('Error: ' + error.message);
+  else { alert('🗑️ Deleted!'); loadAdminProducts(); }
+}
+
+// ============================================================
+// ORDERS — LOAD, RENDER, UPDATE STATUS
+// ============================================================
+async function loadAdminOrders() {
+  const c = document.getElementById('adminOrderList');
+  const { data, error } = await _supabase.from('orders').select('*').order('id', { ascending: false });
+  if (error) { c.innerHTML = `<p style="color:#ef4444;">Failed: ${error.message}</p>`; return; }
+  if (!data || data.length === 0) { c.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:15px;">No orders yet.</p>'; return; }
+  
+  c.innerHTML = data.map(o => {
+    const status = o.order_status || 'Pending';
+    const statusColors = {
+      'Pending': '#f97316',
+      'Processing': '#3b82f6',
+      'Shipped': '#8b5cf6',
+      'Delivered': '#22c55e',
+      'Confirmed': '#10b981',
+      'Cancelled': '#ef4444'
+    };
+    const statusColor = statusColors[status] || '#f97316';
+    
+    return `
+    <div class="order-card">
+      <div class="order-head">
+        <span class="order-id">Order #${o.order_code || 'SPC-' + o.id}</span>
+        <span class="order-status" style="background:${statusColor}20; color:${statusColor}; border:1px solid ${statusColor}50;">${status}</span>
+      </div>
+      <p class="order-line">👤 <strong>${o.customer_name}</strong> (${o.customer_phone})</p>
+      <p class="order-line">📧 ${o.user_email}</p>
+      <p class="order-line">📍 ${o.delivery_address} - ${o.pincode}</p>
+      
+      ${o.cancel_reason ? `
+        <div style="background:#7f1d1d20; border:1px solid #ef444450; border-radius:8px; padding:10px; margin:10px 0;">
+          <div style="color:#fca5a5; font-size:0.75rem; font-weight:700; margin-bottom:4px;">❌ Cancel Reason:</div>
+          <div style="color:#fecaca; font-size:0.85rem;">${o.cancel_reason}</div>
+        </div>
+      ` : ''}
+      
+      <div class="order-items">
+        <strong>Items:</strong><br>
+        ${Array.isArray(o.order_items) ? o.order_items.map(i => `• ${i.name} (x${i.qty || 1}) - ₹${i.price}`).join('<br>') : 'N/A'}
+      </div>
+      <div class="order-total">
+        <span class="amount">Total: ₹${o.grand_total}</span>
+      </div>
+      
+      <div style="margin-top:12px; padding-top:12px; border-top:1px solid #334155;">
+        <label style="font-size:0.8rem; color:#94a3b8; margin-bottom:6px; display:block;">Update Order Status:</label>
+        <select onchange="updateOrderStatus(${o.id}, this.value)" style="width:100%; padding:10px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:6px; font-size:0.9rem; cursor:pointer;">
+          <option value="Pending" ${status === 'Pending' ? 'selected' : ''}>🕐 Pending</option>
+          <option value="Processing" ${status === 'Processing' ? 'selected' : ''}>📦 Processing</option>
+          <option value="Shipped" ${status === 'Shipped' ? 'selected' : ''}>🚚 Shipped</option>
+          <option value="Delivered" ${status === 'Delivered' ? 'selected' : ''}>✅ Delivered</option>
+          <option value="Cancelled" ${status === 'Cancelled' ? 'selected' : ''}>❌ Cancelled</option>
+        </select>
+        
+        <a href="https://wa.me/91${o.customer_phone}?text=Hi%20${encodeURIComponent(o.customer_name)},%20regarding%20Order%20%23${o.order_code || 'SPC-' + o.id}" target="_blank" class="wa-link" style="display:inline-block; margin-top:10px;">💬 WhatsApp Customer</a>
+      </div>
+    </div>
+    `;
+  }).join('');
+}
+async function updateOrderStatus(orderId, newStatus) {
+  if (!confirm(`Change order status to "${newStatus}"?`)) {
+    loadAdminOrders();
+    return;
+  }
+  
+  const { error } = await _supabase
+    .from('orders')
+    .update({ order_status: newStatus })
+    .eq('id', orderId);
+  
+  if (error) {
+    alert('❌ Failed to update status: ' + error.message);
+    loadAdminOrders();
+  } else {
+    alert(`✅ Order status updated to "${newStatus}"`);
+    loadAdminOrders();
+  }
+}
+
+// ============================================================
+// 📊 DASHBOARD STATS
+// ============================================================
+async function loadDashboard() {
+  try {
+    const [productsRes, ordersRes] = await Promise.all([
+      _supabase.from('products').select('*'),
+      _supabase.from('orders').select('*').order('id', { ascending: false })
+    ]);
+    
+    const products = productsRes.data || [];
+    const orders = ordersRes.data || [];
+    
+    const totalRevenue = orders
+      .filter(o => o.payment_status !== 'Cancelled')
+      .reduce((sum, o) => sum + (parseFloat(o.grand_total) || 0), 0);
+    const totalOrders = orders.length;
+    const totalProducts = products.length;
+    const uniqueCustomers = new Set(orders.map(o => o.user_email)).size;
+    const pendingOrders = orders.filter(o => (o.order_status || 'Pending') === 'Pending').length;
+    const deliveredOrders = orders.filter(o => o.order_status === 'Delivered').length;
+    
+    document.getElementById('statsGrid').innerHTML = `
+      <div style="background:linear-gradient(135deg,#f97316,#ea580c); padding:18px; border-radius:12px; color:#fff;">
+        <div style="font-size:0.8rem; opacity:0.9; margin-bottom:5px;">💰 Total Revenue</div>
+        <div style="font-size:1.6rem; font-weight:800;">₹${totalRevenue.toFixed(0)}</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#2563eb,#1d4ed8); padding:18px; border-radius:12px; color:#fff;">
+        <div style="font-size:0.8rem; opacity:0.9; margin-bottom:5px;">📦 Total Orders</div>
+        <div style="font-size:1.6rem; font-weight:800;">${totalOrders}</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#16a34a,#15803d); padding:18px; border-radius:12px; color:#fff;">
+        <div style="font-size:0.8rem; opacity:0.9; margin-bottom:5px;">🛒 Products</div>
+        <div style="font-size:1.6rem; font-weight:800;">${totalProducts}</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#9333ea,#7e22ce); padding:18px; border-radius:12px; color:#fff;">
+        <div style="font-size:0.8rem; opacity:0.9; margin-bottom:5px;">👥 Customers</div>
+        <div style="font-size:1.6rem; font-weight:800;">${uniqueCustomers}</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#eab308,#ca8a04); padding:18px; border-radius:12px; color:#fff;">
+        <div style="font-size:0.8rem; opacity:0.9; margin-bottom:5px;">🕐 Pending</div>
+        <div style="font-size:1.6rem; font-weight:800;">${pendingOrders}</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#22c55e,#16a34a); padding:18px; border-radius:12px; color:#fff;">
+        <div style="font-size:0.8rem; opacity:0.9; margin-bottom:5px;">✅ Delivered</div>
+        <div style="font-size:1.6rem; font-weight:800;">${deliveredOrders}</div>
+      </div>
+    `;
+    
+    renderSalesChart(orders);
+    renderTopProducts(orders, products);
+    renderRecentOrders(orders.slice(0, 5));
+    
+  } catch (err) {
+    console.error('Dashboard error:', err);
+  }
+}
+
+ // ============================================================
+// 📧 NEWSLETTER FUNCTIONS
+// ============================================================
+let allSubscribers = [];
+
+async function loadNewsletterSubscribers() {
+  const list = document.getElementById('newsletterList');
+  const countEl = document.getElementById('newsletterCount');
+  
+  try {
+    const { data, error } = await _supabase
+      .from('newsletter')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    
+    allSubscribers = data || [];
+    
+    // Update count
+    if (countEl) countEl.innerText = allSubscribers.length;
+    
+    renderNewsletterList(allSubscribers);
+    
+  } catch (err) {
+    console.error('Newsletter load error:', err);
+    if (list) list.innerHTML = '<p style="color:#ef4444; text-align:center; padding:20px;">Failed to load subscribers</p>';
+  }
+}
+
+// ============================================================
+// 📝 BLOG MANAGEMENT
+// ============================================================
+let allBlogPosts = [];
+
+async function loadAdminBlogPosts() {
+  const list = document.getElementById('adminBlogList');
+  if (!list) return;
+  
+  try {
+    const { data, error } = await _supabase
+      .from('blog_posts')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    
+    allBlogPosts = data || [];
+    
+    if (allBlogPosts.length === 0) {
+      list.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:15px;">No blog posts yet.</p>';
+      return;
+    }
+    
+    list.innerHTML = allBlogPosts.map(post => `
+      <div class="product-item" style="align-items:flex-start;">
+        <div class="product-info" style="align-items:flex-start;">
+          <img src="${post.image || 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=100'}" alt="${post.title}" style="width:60px;height:60px;">
+          <div style="min-width:0;">
+            <div class="pname">${post.title}</div>
+            <div class="pmeta">
+              ${post.category || 'General'} • 
+              ${post.status === 'published' ? '✅ Published' : '📝 Draft'} • 
+              📅 ${new Date(post.created_at).toLocaleDateString('en-IN')}
+            </div>
+          </div>
+        </div>
+        <div class="action-btns" style="flex-direction:column;gap:6px;">
+          <button class="edit-btn" onclick="startEditBlogPost(${post.id})">✏️ Edit</button>
+          <button class="delete-btn" onclick="deleteBlogPost(${post.id}, '${post.title.replace(/'/g, "\\'")}')">🗑️ Delete</button>
+        </div>
+      </div>
+    `).join('');
+    
+  } catch (err) {
+    console.error('Blog load error:', err);
+    list.innerHTML = '<p style="color:#ef4444;text-align:center;">Failed to load posts</p>';
+  }
+}
+
+function generateSlug(text) {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .substring(0, 80);
+}
+
+async function saveBlogPost() {
+  const editId = document.getElementById('editPostId').value;
+  const title = document.getElementById('bTitle').value.trim();
+  const slugInput = document.getElementById('bSlug').value.trim();
+  const category = document.getElementById('bCategory').value;
+  const author = document.getElementById('bAuthor').value.trim() || 'SparkCircuit Team';
+  const image = document.getElementById('bImage').value.trim();
+  const excerpt = document.getElementById('bExcerpt').value.trim();
+  const content = document.getElementById('bContent').value.trim();
+  const meta_title = document.getElementById('bMetaTitle').value.trim();
+  const meta_description = document.getElementById('bMetaDesc').value.trim();
+  const status = document.getElementById('bStatus').value;
+  
+  if (!title || !content) {
+    alert('❌ Title and Content are required!');
+    return;
+  }
+  
+  // Auto-generate slug if empty
+  let slug = slugInput || generateSlug(title);
+  
+  const payload = {
+    title,
+    slug,
+    category,
+    author,
+    image,
+    excerpt: excerpt || content.substring(0, 150) + '...',
+    content,
+    meta_title: meta_title || title,
+    meta_description: meta_description || excerpt.substring(0, 155),
+    status,
+    updated_at: new Date().toISOString()
+  };
+  
+  const btn = document.getElementById('saveBlogBtn');
+  btn.innerText = '⏳ Saving...';
+  btn.disabled = true;
+  
+  try {
+    let error = null;
+    
+    if (editId) {
+      const res = await _supabase.from('blog_posts').update(payload).eq('id', editId);
+      error = res.error;
+    } else {
+      const res = await _supabase.from('blog_posts').insert([payload]);
+      error = res.error;
+    }
+    
+    if (error) throw error;
+    
+    alert(editId ? '🎉 Post Updated!' : '🎉 Post Published!');
+    resetBlogForm();
+    loadAdminBlogPosts();
+    
+  } catch (err) {
+    alert('❌ Error: ' + err.message);
+  } finally {
+    btn.innerText = editId ? '💾 Update Post' : '➕ Publish Post';
+    btn.disabled = false;
+  }
+}
+
+function startEditBlogPost(id) {
+  const post = allBlogPosts.find(p => p.id === id);
+  if (!post) return;
+  
+  document.getElementById('editPostId').value = post.id;
+  document.getElementById('bTitle').value = post.title || '';
+  document.getElementById('bSlug').value = post.slug || '';
+  document.getElementById('bCategory').value = post.category || 'General';
+  document.getElementById('bAuthor').value = post.author || 'SparkCircuit Team';
+  document.getElementById('bImage').value = post.image || '';
+  document.getElementById('bExcerpt').value = post.excerpt || '';
+  document.getElementById('bContent').value = post.content || '';
+  document.getElementById('bMetaTitle').value = post.meta_title || '';
+  document.getElementById('bMetaDesc').value = post.meta_description || '';
+  document.getElementById('bStatus').value = post.status || 'published';
+  
+  document.getElementById('blogFormTitle').innerText = '✏️ Edit Blog Post';
+  document.getElementById('saveBlogBtn').innerText = '💾 Update Post';
+  document.getElementById('cancelBlogEditBtn').style.display = 'block';
+  
+  // Scroll to form
+  document.getElementById('blogTab').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetBlogForm() {
+  document.getElementById('editPostId').value = '';
+  document.getElementById('bTitle').value = '';
+  document.getElementById('bSlug').value = '';
+  document.getElementById('bCategory').value = 'Microcontrollers';
+  document.getElementById('bAuthor').value = 'SparkCircuit Team';
+  document.getElementById('bImage').value = '';
+  document.getElementById('bExcerpt').value = '';
+  document.getElementById('bContent').value = '';
+  document.getElementById('bMetaTitle').value = '';
+  document.getElementById('bMetaDesc').value = '';
+  document.getElementById('bStatus').value = 'published';
+  
+  document.getElementById('blogFormTitle').innerText = '➕ Add New Blog Post';
+  document.getElementById('saveBlogBtn').innerText = '➕ Publish Post';
+  document.getElementById('cancelBlogEditBtn').style.display = 'none';
+}
+
+async function deleteBlogPost(id, title) {
+  if (!confirm(`Delete post "${title}"?`)) return;
+  
+  const { error } = await _supabase.from('blog_posts').delete().eq('id', id);
+  
+  if (error) {
+    alert('❌ Failed: ' + error.message);
+  } else {
+    alert('🗑️ Post deleted!');
+    loadAdminBlogPosts();
+  }
+}
+
+function renderNewsletterList(subscribers) {
+  const list = document.getElementById('newsletterList');
+  if (!list) return;
+  
+  if (subscribers.length === 0) {
+    list.innerHTML = '<p style="color:#94a3b8; text-align:center; padding:20px;">No subscribers yet.</p>';
+    return;
+  }
+  
+  list.innerHTML = subscribers.map((sub, idx) => `
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid #334155;">
+      <div style="display:flex; align-items:center; gap:12px; min-width:0;">
+        <span style="background:#9333ea; color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; flex-shrink:0;">${idx + 1}</span>
+        <div style="min-width:0;">
+          <div style="color:#fff; font-weight:600; font-size:0.9rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${sub.email}</div>
+          <div style="color:#94a3b8; font-size:0.72rem;">📅 ${new Date(sub.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+        </div>
+      </div>
+      <button onclick="deleteSubscriber(${sub.id}, '${sub.email.replace(/'/g, "\\'")}')" style="background:#ef4444; color:#fff; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-size:0.75rem; flex-shrink:0;">
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
+  `).join('');
+}
+
+function filterNewsletter() {
+  const term = document.getElementById('newsletterSearch').value.toLowerCase();
+  const filtered = allSubscribers.filter(s => s.email.toLowerCase().includes(term));
+  renderNewsletterList(filtered);
+}
+
+async function deleteSubscriber(id, email) {
+  if (!confirm(`Delete subscriber "${email}"?`)) return;
+  
+  const { error } = await _supabase.from('newsletter').delete().eq('id', id);
+  
+  if (error) {
+    alert('❌ Failed to delete: ' + error.message);
+  } else {
+    alert('🗑️ Subscriber deleted!');
+    loadNewsletterSubscribers();
+  }
+}
+
+function exportNewsletterCSV() {
+  if (allSubscribers.length === 0) {
+    alert('❌ No subscribers to export!');
+    return;
+  }
+  
+  // Build CSV
+  const headers = ['Email', 'Source', 'Subscribed On'];
+  const rows = allSubscribers.map(s => [
+    s.email,
+    s.source || 'website',
+    new Date(s.created_at).toLocaleString('en-IN')
+  ]);
+  
+  const csvContent = [
+    headers.join(','),
+    ...rows.map(r => r.map(cell => `"${cell}"`).join(','))
+  ].join('\n');
+  
+  // Download
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `SparkCircuit-Newsletter-${new Date().toISOString().split('T')[0]}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+  
+  console.log('✅ CSV exported:', allSubscribers.length, 'subscribers');
+}
+
+function renderSalesChart(orders) {
+  const chartContainer = document.getElementById('salesChart');
+  
+  const days = [];
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const today = new Date();
+  
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    days.push({
+      date: d.toISOString().split('T')[0],
+      label: dayNames[d.getDay()],
+      amount: 0
+    });
+  }
+  
+  orders.forEach(o => {
+    if (!o.created_at) return;
+    const orderDate = new Date(o.created_at).toISOString().split('T')[0];
+    const day = days.find(d => d.date === orderDate);
+    if (day) {
+      day.amount += parseFloat(o.grand_total) || 0;
+    }
+  });
+  
+  const maxAmount = Math.max(...days.map(d => d.amount), 1);
+  
+  chartContainer.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; height:180px; gap:8px;">
+      ${days.map(d => {
+        const height = (d.amount / maxAmount) * 100;
+        return `
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%;">
+            <div style="font-size:0.7rem; color:#f97316; font-weight:700; margin-bottom:5px;">${d.amount > 0 ? '₹' + d.amount.toFixed(0) : ''}</div>
+            <div style="width:100%; background:${d.amount > 0 ? 'linear-gradient(180deg,#f97316,#ea580c)' : '#334155'}; height:${Math.max(height, 3)}%; border-radius:6px 6px 0 0; transition:0.5s; min-height:5px;"></div>
+            <div style="font-size:0.75rem; color:#94a3b8; margin-top:8px; font-weight:600;">${d.label}</div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function renderTopProducts(orders, products) {
+  const container = document.getElementById('topProducts');
+  
+  const salesCount = {};
+  orders.forEach(o => {
+    if (!Array.isArray(o.order_items)) return;
+    o.order_items.forEach(item => {
+      const key = item.id;
+      if (!salesCount[key]) {
+        salesCount[key] = { name: item.name, qty: 0, revenue: 0 };
+      }
+      salesCount[key].qty += item.qty || 1;
+      salesCount[key].revenue += (item.price || 0) * (item.qty || 1);
+    });
+  });
+  
+  const topProducts = Object.values(salesCount)
+    .sort((a, b) => b.qty - a.qty)
+    .slice(0, 5);
+  
+  if (topProducts.length === 0) {
+    container.innerHTML = '<p style="color:#94a3b8; text-align:center; padding:15px;">No sales yet.</p>';
+    return;
+  }
+  
+  container.innerHTML = topProducts.map((p, idx) => `
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #334155;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span style="background:${idx === 0 ? '#eab308' : idx === 1 ? '#94a3b8' : idx === 2 ? '#b45309' : '#475569'}; color:#fff; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700;">${idx + 1}</span>
+        <div>
+          <div style="color:#fff; font-weight:600; font-size:0.9rem;">${p.name}</div>
+          <div style="color:#94a3b8; font-size:0.75rem;">${p.qty} sold</div>
+        </div>
+      </div>
+      <div style="color:#22c55e; font-weight:700; font-size:0.95rem;">₹${p.revenue.toFixed(0)}</div>
+    </div>
+  `).join('');
+}
+
+function renderRecentOrders(orders) {
+  const container = document.getElementById('recentOrders');
+  
+  if (!orders || orders.length === 0) {
+    container.innerHTML = '<p style="color:#94a3b8; text-align:center; padding:15px;">No orders yet.</p>';
+    return;
+  }
+  
+  const statusColors = {
+    'Pending': '#f97316',
+    'Processing': '#3b82f6',
+    'Shipped': '#8b5cf6',
+    'Delivered': '#22c55e'
+  };
+  
+  container.innerHTML = orders.map(o => {
+    const status = o.order_status || 'Pending';
+    const color = statusColors[status] || '#f97316';
+    return `
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #334155;">
+        <div>
+          <div style="color:#f97316; font-weight:700; font-size:0.9rem;">#${o.order_code || 'SPC-' + o.id}</div>
+          <div style="color:#94a3b8; font-size:0.75rem;">${o.customer_name || 'Customer'} • ${new Date(o.created_at).toLocaleDateString('en-IN')}</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="color:#22c55e; font-weight:700; font-size:0.9rem;">₹${o.grand_total}</span>
+          <span style="background:${color}20; color:${color}; padding:3px 8px; border-radius:6px; font-size:0.7rem; font-weight:700;">${status}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ============================================================
+// 🔐 INIT — LOGIN CHECK
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  const emailInput = document.getElementById('adminEmail');
+  const passInput = document.getElementById('adminPassword');
+  
+  if (emailInput && passInput) {
+    [emailInput, passInput].forEach(el => {
+      el.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') adminLogin();
+      });
+    });
+  }
+  
+  checkAdminSession();
+});
+</script>
+</body>
+</html>
