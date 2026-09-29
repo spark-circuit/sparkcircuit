@@ -37,27 +37,222 @@
 
 <style>
   /* CATEGORY PAGE STYLES */
-  .cat-hero { position:relative; min-height:70vh; display:flex; align-items:center; padding:120px 20px 80px; overflow:hidden; }
-  .cat-hero-bg { position:absolute; inset:0; z-index:0; }
-  .cat-hero-bg img { width:100%; height:100%; object-fit:cover; }
-  .cat-hero-bg::after { content:''; position:absolute; inset:0; background:linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.85) 50%, rgba(15,23,42,0.95) 100%); }
-  .cat-hero-inner { position:relative; z-index:2; max-width:1200px; margin:0 auto; width:100%; display:grid; grid-template-columns:1.2fr 1fr; gap:50px; align-items:center; }
-  .cat-hero-text { color:#fff; }
-  .cat-hero-text .back { display:inline-flex; align-items:center; gap:8px; color:#fed7aa; font-size:0.85rem; font-weight:600; text-decoration:none; margin-bottom:20px; transition:0.2s; }
-  .cat-hero-text .back:hover { color:#f97316; transform:translateX(-4px); }
-  .cat-hero-text .cat-tag { display:inline-block; background:rgba(249,115,22,0.2); border:1px solid rgba(249,115,22,0.4); color:#fed7aa; padding:7px 18px; border-radius:50px; font-size:0.75rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:20px; }
-  .cat-hero-text h1 { font-family:'Poppins',sans-serif; font-size:3rem; font-weight:800; line-height:1.15; margin-bottom:20px; }
-  .cat-hero-text h1 span { background:linear-gradient(135deg,#f97316,#fbbf24); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-  .cat-hero-text p { font-size:1.1rem; color:#cbd5e1; line-height:1.8; margin-bottom:30px; }
-  .cat-hero-btns { display:flex; gap:14px; flex-wrap:wrap; }
-  .cat-hero-img { border-radius:20px; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.5); border:2px solid rgba(249,115,22,0.3); }
-  .cat-hero-img img { width:100%; height:420px; object-fit:cover; display:block; }
+.cat-hero {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  padding: 140px 20px 80px;
+  overflow: hidden;
+  background: #0f172a;
+}
 
-<section class="cat-hero">
-  <!-- 🔴 CATEGORY HERO VIDEO: Apna video URL yahan daalo (agar chahiye) -->
-  <!-- Agar video nahi chahiye toh ye <video> tag hata do, image hi rahegi -->
-  <div class="cat-hero-bg"><img src="${data.heroImage}" alt="${data.title}"></div>
-  ...
+/* Background image - full cover */
+.cat-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.cat-hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Dark gradient overlay - left side darker for text */
+.cat-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 60%,
+    rgba(15, 23, 42, 0.4) 85%,
+    rgba(15, 23, 42, 0.7) 100%
+  );
+}
+
+/* Inner container */
+.cat-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.cat-hero-text {
+  color: #fff;
+  max-width: 620px;
+}
+
+.cat-hero-text .back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fed7aa;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 20px;
+  transition: 0.2s;
+}
+.cat-hero-text .back:hover {
+  color: #f97316;
+  transform: translateX(-4px);
+}
+
+.cat-hero-text .cat-tag {
+  display: inline-block;
+  background: rgba(249,115,22,0.25);
+  border: 1px solid rgba(249,115,22,0.5);
+  color: #fed7aa;
+  padding: 7px 18px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.cat-hero-text h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 22px;
+  text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+}
+
+.cat-hero-text h1 span {
+  background: linear-gradient(135deg, #f97316, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cat-hero-text p {
+  font-size: 1.08rem;
+  color: #e2e8f0;
+  line-height: 1.8;
+  margin-bottom: 32px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.cat-hero-btns {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* ============ MOBILE HERO — XIAOMI STYLE ============ */
+@media (max-width: 900px) {
+  .cat-hero {
+    min-height: 75vh;
+    padding: 120px 20px 70px;
+    align-items: flex-end;
+  }
+  
+  /* Image fully visible, positioned better */
+  .cat-hero-bg img {
+    object-position: center center;
+  }
+  
+  /* Light vertical gradient — top bright, bottom dark for text */
+  .cat-hero-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.1) 0%,
+      rgba(15, 23, 42, 0.3) 30%,
+      rgba(15, 23, 42, 0.75) 65%,
+      rgba(15, 23, 42, 0.95) 100%
+    );
+  }
+  
+  .cat-hero-inner {
+    align-self: flex-end;
+  }
+  
+  .cat-hero-text {
+    max-width: 100%;
+    text-align: left;
+  }
+  
+  .cat-hero-text h1 {
+    font-size: 2.4rem;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  
+  .cat-hero-text p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 22px;
+  }
+  
+  .cat-hero-text .back {
+    font-size: 0.8rem;
+    margin-bottom: 14px;
+  }
+  
+  .cat-hero-text .cat-tag {
+    font-size: 0.7rem;
+    padding: 6px 14px;
+    letter-spacing: 1.5px;
+    margin-bottom: 14px;
+  }
+  
+  .cat-hero-btns {
+    gap: 10px;
+  }
+  
+  .cat-hero-btns .btn {
+    padding: 13px 24px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .cat-hero {
+    padding: 100px 16px 50px;
+    min-height: 85vh;
+  }
+  
+  .cat-hero-text h1 {
+    font-size: 1.9rem;
+  }
+  
+  .cat-hero-text p {
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+  
+  .cat-hero-btns {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .cat-hero-btns .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+  }
+  
+  /* WhatsApp button mobile pe upar shift */
+  .whatsapp-float {
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+}
 
   /* TYPES SECTION */
   .types-section { padding:80px 20px; max-width:1200px; margin:0 auto; }
@@ -137,7 +332,7 @@
 </div>
 
 <a href="https://wa.me/916374017186" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ============================================================
 // CATEGORY DATA — Saari 6 categories ka full content
@@ -359,24 +554,24 @@ function renderCategory() {
 
   container.innerHTML = `
     <!-- HERO -->
-    <section class="cat-hero">
-      <div class="cat-hero-bg"><img src="${data.heroImage}" alt="${data.title}"></div>
-      <div class="cat-hero-inner">
-        <div class="cat-hero-text">
-          <a href="index.html#products" class="back"><i class="fas fa-arrow-left"></i> Back to Home</a>
-          <span class="cat-tag">${data.tag}</span>
-          <h1>${data.title} <span>${data.titleHighlight}</span></h1>
-          <p>${data.description}</p>
-          <div class="cat-hero-btns">
-            <a href="shop.html?cat=${encodeURIComponent(data.shopCat)}" class="btn btn-primary"><i class="fas fa-store"></i> Shop This Category</a>
-            <a href="https://wa.me/916374017186?text=Hi%20SparkCircuit,%20I%20want%20to%20enquire%20about%20${encodeURIComponent(data.title + ' ' + data.titleHighlight)}" target="_blank" class="btn btn-ghost"><i class="fab fa-whatsapp"></i> Enquire on WhatsApp</a>
-          </div>
-        </div>
-        <div class="cat-hero-img">
-          <img src="${data.heroImage}" alt="${data.title}">
-        </div>
+<section class="cat-hero">
+  <div class="cat-hero-bg">
+    <img src="${data.heroImage}" alt="${data.title}">
+  </div>
+  <div class="cat-hero-overlay"></div>
+  <div class="cat-hero-inner">
+    <div class="cat-hero-text">
+      <a href="index.html#products" class="back"><i class="fas fa-arrow-left"></i> Back to Home</a>
+      <span class="cat-tag">${data.tag}</span>
+      <h1>${data.title} <span>${data.titleHighlight}</span></h1>
+      <p>${data.description}</p>
+      <div class="cat-hero-btns">
+        <a href="shop.html?cat=${encodeURIComponent(data.shopCat)}" class="btn btn-primary"><i class="fas fa-store"></i> Shop This Category</a>
+        <a href="https://wa.me/916374017186?text=Hi%20SparkCircuit,%20I%20want%20to%20enquire%20about%20${encodeURIComponent(data.title + ' ' + data.titleHighlight)}" target="_blank" class="btn btn-ghost"><i class="fab fa-whatsapp"></i> Enquire on WhatsApp</a>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
     <!-- TYPES -->
     <section class="types-section">
@@ -440,8 +635,86 @@ function renderCategory() {
     </section>
   `;
 }
+// ============================================================
+// 🎨 LOAD SITE ASSETS FROM SUPABASE
+// ============================================================
+async function loadSiteAssetsFromSupabase() {
+  try {
+    // Supabase client banao (agar nahi hai)
+    const { createClient } = supabase;
+    const _sb = createClient(
+      'https://mrqvzmtdsohvzsnryogp.supabase.co',
+      'sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z'
+    );
+    
+    // Detect: Mobile ya Desktop?
+    const isMobile = window.matchMedia('(max-width: 900px)').matches;
+    console.log(`📱 Device: ${isMobile ? 'MOBILE' : 'DESKTOP'}`);
+    
+    // Fetch both value and value_mobile
+    const { data, error } = await _sb
+      .from('site_assets')
+      .select('key, value, value_mobile');
+    
+    if (error || !data) {
+      console.warn('Site assets load failed, using defaults');
+      return;
+    }
+    
+    // Build lookup map — pick mobile ya desktop value
+    const assets = {};
+    data.forEach(item => {
+      if (isMobile && item.value_mobile) {
+        assets[item.key] = item.value_mobile;
+      } else if (item.value) {
+        assets[item.key] = item.value;
+      }
+    });
+    
+    // Override CATEGORIES object URLs
+    const categoryKeys = ['led', 'amplifier', 'theater', 'iot', 'embedded', 'pcb'];
+    
+    categoryKeys.forEach(cat => {
+      if (!CATEGORIES[cat]) return;
+      
+      // Hero image
+      if (assets[`${cat}_hero`]) {
+        CATEGORIES[cat].heroImage = assets[`${cat}_hero`];
+      }
+      
+      // Type images (1-6)
+      for (let i = 1; i <= 6; i++) {
+        const key = `${cat}_type_${i}`;
+        if (assets[key] && CATEGORIES[cat].types[i - 1]) {
+          CATEGORIES[cat].types[i - 1].img = assets[key];
+        }
+      }
+      
+      // Gallery images (1-4)
+      for (let i = 1; i <= 4; i++) {
+        const key = `${cat}_gallery_${i}`;
+        if (assets[key] && CATEGORIES[cat].gallery[i - 1] !== undefined) {
+          CATEGORIES[cat].gallery[i - 1] = assets[key];
+        }
+      }
+    });
+    
+    console.log(`✅ Site assets loaded (${isMobile ? 'MOBILE' : 'DESKTOP'} version)`);
+    
+  } catch (err) {
+    console.warn('Site assets fetch error:', err);
+    // Fallback to hardcoded values
+  }
+}
 
-document.addEventListener('DOMContentLoaded', renderCategory);
+// ============================================================
+// 🚀 INIT — Load assets, then render
+// ============================================================
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadSiteAssetsFromSupabase();
+  renderCategory();
+});
+
 </script>
 
 <script src="script.js"></script>
