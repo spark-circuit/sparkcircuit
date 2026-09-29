@@ -499,6 +499,130 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// ============================================================
+// 🎯 CUSTOM LOGIN REQUIRED MODAL (Front Layer)
+// ============================================================
+function showLoginRequiredModal(actionMessage = 'to continue') {
+  const existing = document.getElementById('customLoginRequiredModal');
+  if (existing) existing.remove();
+  
+  const modal = document.createElement('div');
+  modal.id = 'customLoginRequiredModal';
+  modal.style.cssText = `
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeInModal 0.3s ease;
+  `;
+  
+  modal.innerHTML = `
+    <style>
+      @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes slideUpModal { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+    <div style="
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px 26px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+      animation: slideUpModal 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    ">
+      <button onclick="document.getElementById('customLoginRequiredModal').remove()" 
+        style="position: absolute; top: 14px; right: 14px; background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; color: #64748b; display: flex; align-items: center; justify-content: center;">
+        ✕
+      </button>
+      
+      <div style="
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 18px;
+        background: linear-gradient(135deg, #fff7ed, #ffedd5);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+      ">🔐</div>
+      
+      <h3 style="
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 8px;
+      ">Login Required</h3>
+      
+      <p style="
+        color: #64748b;
+        font-size: 0.92rem;
+        line-height: 1.6;
+        margin-bottom: 24px;
+      ">Please login ${actionMessage}. It only takes 10 seconds with email OTP.</p>
+      
+      <button onclick="
+        document.getElementById('customLoginRequiredModal').remove();
+        window.location.href = 'shop.html';
+      " style="
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #f97316, #ea580c);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+        box-shadow: 0 8px 25px rgba(249,115,22,0.4);
+      ">
+        🔓 Login Now
+      </button>
+      
+      <button onclick="document.getElementById('customLoginRequiredModal').remove()" 
+        style="
+          width: 100%;
+          padding: 12px;
+          background: transparent;
+          color: #64748b;
+          border: none;
+          margin-top: 10px;
+          cursor: pointer;
+          font-size: 0.85rem;
+          font-weight: 600;
+        ">
+        Maybe Later
+      </button>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.remove();
+  });
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      modal.remove();
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+}
+</script>
+
+<script>
   const SUPABASE_URL = 'https://mrqvzmtdsohvzsnryogp.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z';
   const DEFAULT_IMG = 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80';
@@ -861,10 +985,9 @@
   async function openReviewModal() {
     const { data: { session } } = await _supabase.auth.getSession();
     if (!session?.user?.email) {
-      alert('Please login to write a review!');
-      window.location.href = 'shop.html';
-      return;
-    }
+  showLoginRequiredModal('to write a review');
+  return;
+}
 
     const productId = new URLSearchParams(window.location.search).get('id');
     const rating = prompt('Rate this product (1-5 stars):');
