@@ -127,6 +127,7 @@ h3.section-h { color:#cbd5e1; margin-bottom:15px; font-family:'Poppins',sans-ser
   <button class="tab-btn" onclick="switchTab('inventoryTab', this)">📦 Inventory</button>
   <button class="tab-btn" onclick="switchTab('blogTab', this)">📝 Blog</button>
   <button class="tab-btn" onclick="switchTab('newsletterTab', this)">📧 Newsletter</button>
+ <button class="tab-btn" onclick="switchTab('siteAssetsTab', this)">🎨 Site Assets</button>
 </div>
 
   <!-- DASHBOARD TAB -->
@@ -307,6 +308,25 @@ h3.section-h { color:#cbd5e1; margin-bottom:15px; font-family:'Poppins',sans-ser
   </div>
 </div>
 
+<!-- ============================================================ -->
+<!-- SITE ASSETS TAB -->
+<!-- ============================================================ -->
+<div id="siteAssetsTab" class="tab-content">
+  <h3 class="section-h">🎨 Site Assets Manager</h3>
+  <p style="color:#94a3b8; font-size:0.88rem; margin-bottom:20px;">
+    Homepage ki images aur videos yahan se change karo. URL paste karo aur Save dabao.
+  </p>
+  
+  <div id="siteAssetsContainer">
+    <p style="color:#94a3b8; text-align:center; padding:20px;">Loading assets...</p>
+  </div>
+  
+  <div class="btn-container" style="margin-top:20px;">
+    <button id="saveAssetsBtn" class="action-btn" onclick="saveAllSiteAssets()">💾 Save All Changes</button>
+    <button id="resetAssetsBtn" class="action-btn" onclick="resetSiteAssets()" style="background:#64748b;">🔄 Reset</button>
+  </div>
+</div>
+
 </div><!-- END adminMainContent -->
 
 <script>
@@ -393,6 +413,7 @@ async function checkAdminSession() {
     loadDashboard();
     loadNewsletterSubscribers();
     loadAdminBlogPosts();
+    loadSiteAssets();
   } else {
     document.getElementById('adminLoginScreen').style.display = 'flex';
     document.getElementById('adminMainContent').style.display = 'none';
@@ -409,6 +430,247 @@ function switchTab(tabId, el) {
   el.classList.add('active');
 }
 
+// ============================================================
+// 🎨 SITE ASSETS MANAGER
+// ============================================================
+let allSiteAssets = [];
+
+async function loadSiteAssets() {
+  const container = document.getElementById('siteAssetsContainer');
+  if (!container) return;
+  
+  try {
+    const { data, error } = await _supabase
+      .from('site_assets')
+      .select('*')
+      .order('id', { ascending: true });
+    
+    if (error) throw error;
+    
+    allSiteAssets = data || [];
+    
+    if (allSiteAssets.length === 0) {
+      container.innerHTML = '<p style="color:#94a3b8; text-align:center; padding:20px;">No assets found. Run the SQL setup.</p>';
+      return;
+    }
+    
+    // Group by category
+    const grouped = {
+      homepage: [],
+      led: [],
+      amplifier: [],
+      theater: [],
+      iot: [],
+      embedded: [],
+      pcb: []
+    };
+    
+    allSiteAssets.forEach(asset => {
+      const key = asset.key;
+      
+      if (['hero_video', 'why_video', 'about_image', 'services_bg', 'products_bg'].includes(key)) {
+        grouped.homepage.push(asset);
+      } else if (key.startsWith('card_')) {
+        grouped.homepage.push(asset);
+      } else if (key.startsWith('led_')) {
+        grouped.led.push(asset);
+      } else if (key.startsWith('amplifier_')) {
+        grouped.amplifier.push(asset);
+      } else if (key.startsWith('theater_')) {
+        grouped.theater.push(asset);
+      } else if (key.startsWith('iot_')) {
+        grouped.iot.push(asset);
+      } else if (key.startsWith('embedded_')) {
+        grouped.embedded.push(asset);
+      } else if (key.startsWith('pcb_')) {
+        grouped.pcb.push(asset);
+      } else {
+        grouped.homepage.push(asset);
+      }
+    });
+    
+    const sectionConfig = [
+      { key: 'homepage', title: '🏠 Homepage', subtitle: 'Main website section', color: '#f97316' },
+      { key: 'led', title: '💡 Smart LED', subtitle: 'Category: led', color: '#eab308' },
+      { key: 'amplifier', title: '🔊 Bluetooth Amplifiers', subtitle: 'Category: amplifier', color: '#3b82f6' },
+      { key: 'theater', title: '🎬 Home Theater', subtitle: 'Category: theater', color: '#8b5cf6' },
+      { key: 'iot', title: '📡 IoT Devices', subtitle: 'Category: iot', color: '#10b981' },
+      { key: 'embedded', title: '⚙️ Embedded Systems', subtitle: 'Category: embedded', color: '#06b6d4' },
+      { key: 'pcb', title: '🔧 PCB Design', subtitle: 'Category: pcb', color: '#ec4899' }
+    ];
+    
+    container.innerHTML = sectionConfig.map(section => {
+      const assets = grouped[section.key] || [];
+      if (assets.length === 0) return '';
+      
+      return `
+        <div style="background:#0f172a; border:1px solid #334155; border-radius:14px; padding:20px; margin-bottom:20px; border-top:4px solid ${section.color};">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px;">
+            <div>
+              <h4 style="color:#fff; font-family:'Poppins',sans-serif; font-size:1.15rem; margin:0 0 4px 0;">${section.title}</h4>
+              <p style="color:#64748b; font-size:0.78rem; margin:0;">${section.subtitle} • ${assets.length} assets</p>
+            </div>
+            <span style="background:${section.color}20; color:${section.color}; font-size:0.7rem; font-weight:700; padding:4px 12px; border-radius:50px; letter-spacing:1px;">${assets.length} ASSETS</span>
+          </div>
+          
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:14px;">
+            ${assets.map(asset => renderAssetField(asset)).join('')}
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+  } catch (err) {
+    console.error('Site assets load error:', err);
+    container.innerHTML = '<p style="color:#ef4444; text-align:center; padding:20px;">Failed to load: ' + err.message + '</p>';
+  }
+}
+
+function renderAssetField(asset) {
+  const isVideo = asset.type === 'video';
+  const desktopUrl = asset.value || '';
+  const mobileUrl = asset.value_mobile || desktopUrl;
+  
+  return `
+    <div style="background:#1e293b; border:1px solid #334155; border-radius:10px; padding:14px;">
+      <label style="display:block; color:#cbd5e1; font-weight:600; font-size:0.82rem; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between;">
+        <span>${isVideo ? '🎬' : '🖼️'} ${asset.label || asset.key}</span>
+        <span style="background:${isVideo ? '#3b82f6' : '#f97316'}20; color:${isVideo ? '#60a5fa' : '#fb923c'}; font-size:0.6rem; padding:2px 7px; border-radius:50px; font-weight:700;">${isVideo ? 'VIDEO' : 'IMG'}</span>
+      </label>
+      
+      <!-- Desktop URL -->
+      <div style="margin-bottom:10px;">
+        <div style="color:#94a3b8; font-size:0.7rem; font-weight:600; margin-bottom:4px; letter-spacing:0.5px;">🖥️ DESKTOP</div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <input 
+            type="text" 
+            id="asset_${asset.key}" 
+            value="${desktopUrl.replace(/"/g, '&quot;')}" 
+            placeholder="https://..."
+            style="flex:1; padding:8px 10px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:6px; font-size:0.78rem; min-width:0;"
+            oninput="updateAssetPreview('${asset.key}', 'desktop')"
+          >
+          <div id="preview_${asset.key}_desktop" style="width:48px; height:48px; border-radius:6px; background:#0f172a; border:1px solid #334155; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0;">
+            ${isVideo 
+              ? `<video src="${desktopUrl}" style="width:100%; height:100%; object-fit:cover;" muted></video>`
+              : desktopUrl 
+                ? `<img src="${desktopUrl}" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.innerHTML='<span style=&quot;color:#ef4444;font-size:0.6rem&quot;>❌</span>';">`
+                : `<span style="color:#475569; font-size:0.6rem;">—</span>`
+            }
+          </div>
+        </div>
+      </div>
+      
+      <!-- Mobile URL -->
+      <div>
+        <div style="color:#94a3b8; font-size:0.7rem; font-weight:600; margin-bottom:4px; letter-spacing:0.5px;">📱 MOBILE (optional)</div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <input 
+            type="text" 
+            id="asset_${asset.key}_mobile" 
+            value="${mobileUrl.replace(/"/g, '&quot;')}" 
+            placeholder="https://... (portrait image)"
+            style="flex:1; padding:8px 10px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:6px; font-size:0.78rem; min-width:0;"
+            oninput="updateAssetPreview('${asset.key}', 'mobile')"
+          >
+          <div id="preview_${asset.key}_mobile" style="width:48px; height:48px; border-radius:6px; background:#0f172a; border:1px solid #334155; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0;">
+            ${isVideo 
+              ? `<video src="${mobileUrl}" style="width:100%; height:100%; object-fit:cover;" muted></video>`
+              : mobileUrl 
+                ? `<img src="${mobileUrl}" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.innerHTML='<span style=&quot;color:#ef4444;font-size:0.6rem&quot;>❌</span>';">`
+                : `<span style="color:#475569; font-size:0.6rem;">—</span>`
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function updateAssetPreview(key, platform = 'desktop') {
+  const inputId = platform === 'mobile' ? `asset_${key}_mobile` : `asset_${key}`;
+  const previewId = platform === 'mobile' ? `preview_${key}_mobile` : `preview_${key}_desktop`;
+  
+  const input = document.getElementById(inputId);
+  const preview = document.getElementById(previewId);
+  if (!input || !preview) return;
+  
+  const url = input.value.trim();
+  const asset = allSiteAssets.find(a => a.key === key);
+  const isVideo = asset?.type === 'video';
+  
+  if (!url) {
+    preview.innerHTML = '<span style="color:#475569; font-size:0.6rem;">—</span>';
+    return;
+  }
+  
+  if (isVideo) {
+    preview.innerHTML = `<video src="${url}" style="width:100%; height:100%; object-fit:cover;" muted></video>`;
+  } else {
+    preview.innerHTML = `<img src="${url}" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.innerHTML='<span style=&quot;color:#ef4444;font-size:0.6rem&quot;>❌</span>';">`;
+  }
+}
+async function saveAllSiteAssets() {
+  const btn = document.getElementById('saveAssetsBtn');
+  const originalText = btn.innerText;
+  btn.innerText = '⏳ Saving...';
+  btn.disabled = true;
+  
+  try {
+    let successCount = 0;
+    let errorCount = 0;
+    
+    for (const asset of allSiteAssets) {
+      const desktopInput = document.getElementById('asset_' + asset.key);
+      const mobileInput = document.getElementById('asset_' + asset.key + '_mobile');
+      
+      if (!desktopInput) continue;
+      
+      const newDesktopValue = desktopInput.value.trim();
+      const newMobileValue = mobileInput ? mobileInput.value.trim() : newDesktopValue;
+      
+      // Skip if no change
+      if (newDesktopValue === asset.value && newMobileValue === asset.value_mobile) continue;
+      
+      const { error } = await _supabase
+        .from('site_assets')
+        .update({ 
+          value: newDesktopValue,
+          value_mobile: newMobileValue,
+          updated_at: new Date().toISOString()
+        })
+        .eq('key', asset.key);
+      
+      if (error) {
+        console.error('Failed to update:', asset.key, error);
+        errorCount++;
+      } else {
+        asset.value = newDesktopValue;
+        asset.value_mobile = newMobileValue;
+        successCount++;
+      }
+    }
+    
+    if (errorCount === 0) {
+      alert(`✅ ${successCount} assets updated successfully!\n\nHomepage will reflect changes on next refresh.`);
+    } else {
+      alert(`⚠️ ${successCount} updated, ${errorCount} failed.\n\nCheck console for details.`);
+    }
+    
+  } catch (err) {
+    alert('❌ Error: ' + err.message);
+  } finally {
+    btn.innerText = originalText;
+    btn.disabled = false;
+  }
+}
+
+function resetSiteAssets() {
+  if (!confirm('⚠️ Reset all assets to default URLs?\n\nThis will reload from database. Any unsaved changes will be lost.')) {
+    return;
+  }
+  loadSiteAssets();
+}
 // ============================================================
 // PRODUCTS — LOAD, RENDER, FILTER
 // ============================================================
