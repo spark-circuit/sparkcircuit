@@ -124,7 +124,7 @@
 .hero-video-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(10, 15, 31, 0.35);
+  background: rgba(10, 15, 31, 0.15);
   z-index: 1;
   pointer-events: none;
 }
@@ -158,15 +158,76 @@
 .hero-content {
   position: relative;
   z-index: 4;
+  background: transparent;
 }
 
 .hero-overlay {
   display: none !important;
 }
 
+/* ============ MOBILE HERO OPTIMIZATION ============ */
 @media (max-width: 700px) {
+  /* Video - brighter on mobile */
+ .hero-video-bg {
+  filter: brightness(1) contrast(1.1) saturate(1.2);
+  opacity: 0.9;
+}
+  
+  /* Overlay - lighter so video shows through */
   .hero-video-overlay {
-    background: rgba(10, 15, 31, 0.45);
+  background: rgba(10, 15, 31, 0.1);
+}
+  
+  /* Neural dots - more visible */
+  #neuralCanvas {
+    opacity: 0.95;
+  }
+  
+  /* Vignette - lighter */
+  .hero-vignette {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    transparent 60%,
+    rgba(5, 8, 16, 0.2) 85%,
+    rgba(5, 8, 16, 0.5) 100%
+  );
+}
+  
+  /* Text - readable with shadow */
+  .hero-content {
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+  
+  .hero h1 {
+    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), 0 2px 10px rgba(0, 0, 0, 0.4);
+  }
+  
+  .hero p {
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
+  }
+  
+  .hero-badge {
+    backdrop-filter: blur(15px);
+    background: rgba(249, 115, 22, 0.22);
+    box-shadow: 0 4px 20px rgba(249, 115, 22, 0.3);
+  }
+  
+  /* Hero padding adjust */
+  .hero {
+    padding: 100px 16px 60px;
+    min-height: auto;
+  }
+  
+  .hero h1 {
+    font-size: 1.9rem;
+    line-height: 1.15;
+  }
+  
+  .hero p {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin-bottom: 28px;
   }
 }
 
@@ -1022,6 +1083,121 @@
   }, { threshold: 0.5 });
 
   document.querySelectorAll('.counter-stat').forEach(el => trustCounterObserver.observe(el));
+</script>
+
+<!-- HOMEPAGE SITE ASSETS LOADER -->
+<script>
+(async function() {
+  try {
+    const { createClient } = supabase;
+    const _sb = createClient(
+      'https://mrqvzmtdsohvzsnryogp.supabase.co',
+      'sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z'
+    );
+    
+    // Detect mobile or desktop
+    const isMobile = window.matchMedia('(max-width: 900px)').matches;
+    
+    const { data, error } = await _sb
+      .from('site_assets')
+      .select('key, value, value_mobile');
+    
+    if (error || !data) {
+      console.warn('Homepage assets load failed');
+      return;
+    }
+    
+    // Build map
+    const assets = {};
+    data.forEach(item => {
+      if (isMobile && item.value_mobile) {
+        assets[item.key] = item.value_mobile;
+      } else if (item.value) {
+        assets[item.key] = item.value;
+      }
+    });
+    
+    // ============================================================
+    // Update HERO video
+    // ============================================================
+    if (assets.hero_video) {
+      const heroVideo = document.querySelector('.hero-video-bg source');
+      if (heroVideo) heroVideo.src = assets.hero_video;
+      
+      const heroVideoTag = document.querySelector('.hero-video-bg');
+      if (heroVideoTag) heroVideoTag.load();
+    }
+    
+    // ============================================================
+    // Update "Why Choose Us" video
+    // ============================================================
+    if (assets.why_video) {
+      const whyVideo = document.querySelector('.with-video .bg-video source');
+      if (whyVideo) whyVideo.src = assets.why_video;
+      
+      const whyVideoTag = document.querySelector('.with-video .bg-video');
+      if (whyVideoTag) whyVideoTag.load();
+    }
+    
+    // ============================================================
+    // Update About image
+    // ============================================================
+    if (assets.about_image) {
+      const aboutImg = document.querySelector('.about-img img');
+      if (aboutImg) aboutImg.src = assets.about_image;
+    }
+    
+    // ============================================================
+    // Update "Our Tech Products" — 6 cards (use category hero images)
+    // ============================================================
+    const productCards = document.querySelectorAll('.cards-grid a.product-show');
+    
+    // Card 1 — Smart LED → led_hero
+    if (productCards[0] && (assets.led_hero || assets.card_1_image)) {
+      const img = productCards[0].querySelector('img');
+      if (img) img.src = assets.led_hero || assets.card_1_image;
+    }
+    
+    // Card 2 — Bluetooth Amplifiers → amplifier_hero
+    if (productCards[1] && (assets.amplifier_hero || assets.card_2_image)) {
+      const img = productCards[1].querySelector('img');
+      if (img) img.src = assets.amplifier_hero || assets.card_2_image;
+    }
+    
+    // Card 3 — Home Theater → theater_hero
+    if (productCards[2] && (assets.theater_hero || assets.card_3_image)) {
+      const img = productCards[2].querySelector('img');
+      if (img) img.src = assets.theater_hero || assets.card_3_image;
+    }
+    
+    // Card 4 — IoT Devices → iot_hero (video card)
+    if (productCards[3] && (assets.iot_hero || assets.card_4_video)) {
+      const video = productCards[3].querySelector('video source');
+      if (video && assets.card_4_video) {
+        video.src = assets.card_4_video;
+        const vid = productCards[3].querySelector('video');
+        if (vid) vid.load();
+      }
+    }
+    
+    // Card 5 — Embedded Systems → embedded_hero
+    if (productCards[4] && (assets.embedded_hero || assets.card_5_image)) {
+      const img = productCards[4].querySelector('img');
+      if (img) img.src = assets.embedded_hero || assets.card_5_image;
+    }
+    
+    // Card 6 — PCB Design → pcb_hero
+    if (productCards[5] && (assets.pcb_hero || assets.card_6_image)) {
+      const img = productCards[5].querySelector('img');
+      if (img) img.src = assets.pcb_hero || assets.card_6_image;
+    }
+    
+    console.log(`✅ Homepage assets loaded (${isMobile ? 'MOBILE' : 'DESKTOP'} version)`);
+    
+  } catch (err) {
+    console.warn('Homepage assets error:', err);
+  }
+})();
 </script>
 
 </body>
