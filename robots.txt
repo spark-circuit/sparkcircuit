@@ -1,8 +1,12 @@
 User-agent: *
 Allow: /
 
-# Admin panel block karo — Google search me na aaye
+# Block admin panel from Google
+Disallow: /admin
 Disallow: /admin.html
 
+# Block wishlist (requires login)
+Disallow: /wishlist.html
+
 # Sitemap location
-Sitemap: https://sparkcircuit.in/sitemap.xml
+Sitemap: https://www.sparkcircuit.in/sitemap.xml
