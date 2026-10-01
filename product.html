@@ -767,6 +767,7 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
 
       const p = data[0];
       saveRecentlyViewed(p);
+      window.currentProduct = p;
       
       let allImages = [];
       if (p.image && p.image.trim() !== '') allImages.push(p.image);
@@ -911,10 +912,18 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
 
       if (!reviews || reviews.length === 0) {
         container.innerHTML = '<p style="color:#64748b;text-align:center;padding:20px;">No reviews yet. Be the first to review!</p>';
+         // Update schema without rating
+        if (window.currentProduct) {
+          updateProductSchema(window.currentProduct, 0, 0);
+        }
         return;
       }
 
       const avg = reviews.reduce((a, r) => a + r.rating, 0) / reviews.length;
+            // Update schema with rating data
+      if (window.currentProduct) {
+        updateProductSchema(window.currentProduct, avg, reviews.length);
+      }
 
       container.innerHTML = `
         <div class="avg-rating-box">
@@ -1151,6 +1160,62 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
       console.error('Buy now failed:', err);
       alert('❌ Failed');
     });
+  }
+    // ============================================================
+  // 🎯 UPDATE SCHEMA WITH REAL PRODUCT DATA (For Google Rich Snippets)
+  // ============================================================
+  function updateProductSchema(product, avgRating, reviewCount) {
+    const schemaEl = document.getElementById('productSchema');
+    if (!schemaEl) return;
+    
+    const productUrl = `https://www.sparkcircuit.in/product.html?id=${product.id}`;
+    const imageUrl = (product.image && product.image.trim() !== '') 
+      ? product.image 
+      : 'https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg';
+    
+    const inStock = (product.stock_quantity !== undefined && product.stock_quantity !== null)
+      ? product.stock_quantity > 0
+      : product.in_stock;
+    
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": product.name,
+      "image": imageUrl,
+      "description": product.description || `Buy ${product.name} online at SparkCircuit.`,
+      "sku": `SPC-${product.id}`,
+      "brand": {
+        "@type": "Brand",
+        "name": "SparkCircuit"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": productUrl,
+        "priceCurrency": "INR",
+        "price": product.price.toString(),
+        "availability": inStock 
+          ? "https://schema.org/InStock" 
+          : "https://schema.org/OutOfStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "SparkCircuit"
+        }
+      }
+    };
+    
+    // Add rating ONLY if real reviews exist (Google policy compliant)
+    if (avgRating > 0 && reviewCount > 0) {
+      schema.aggregateRating = {
+        "@type": "AggregateRating",
+        "ratingValue": avgRating.toFixed(1),
+        "reviewCount": reviewCount.toString(),
+        "bestRating": "5",
+        "worstRating": "1"
+      };
+    }
+    
+    schemaEl.textContent = JSON.stringify(schema, null, 2);
+    console.log('✅ Product schema updated:', schema.name);
   }
 
   document.addEventListener('DOMContentLoaded', loadProductDetails);
