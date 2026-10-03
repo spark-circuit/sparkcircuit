@@ -308,76 +308,51 @@
   border-radius: 2px;
 }
 
-.trust-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  margin-bottom: 50px;
-}
-.trust-stat-card {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 20px;
-  padding: 30px 20px;
+/* Trust Statement Block (naya) */
+.trust-statement {
+  max-width: 750px;
+  margin: 0 auto 50px;
   text-align: center;
-  transition: 0.35s;
-  position: relative;
-  overflow: hidden;
+  padding: 0 20px;
 }
-.trust-stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: linear-gradient(90deg, #f97316, #fbbf24);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: 0.4s;
-}
-.trust-stat-card:hover::before {
-  transform: scaleX(1);
-}
-.trust-stat-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 45px rgba(249,115,22,0.15);
-  border-color: #f97316;
-}
-.trust-stat-icon {
-  width: 60px;
-  height: 60px;
-  margin: 0 auto 15px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, rgba(249,115,22,0.1), rgba(251,191,36,0.1));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  color: #f97316;
-  transition: 0.3s;
-}
-.trust-stat-card:hover .trust-stat-icon {
-  background: linear-gradient(135deg, #f97316, #fb923c);
-  color: #fff;
-  transform: rotate(-6deg) scale(1.05);
-}
-.trust-stat-num {
+
+.trust-statement .tagline {
   font-family: 'Poppins', sans-serif;
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: #0f172a;
-  line-height: 1;
-  margin-bottom: 8px;
-}
-.trust-stat-num .plus {
+  font-size: 1.3rem;
+  font-weight: 700;
   color: #f97316;
-}
-.trust-stat-label {
-  color: #64748b;
-  font-size: 0.88rem;
-  font-weight: 600;
+  margin-bottom: 20px;
   letter-spacing: 0.5px;
+}
+
+.trust-statement p {
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.trust-statement .final-line {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 2px dashed #fed7aa;
+  display: inline-block;
+}
+
+.trust-statement .final-line span {
+  background: linear-gradient(135deg, #f97316, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 700px) {
+  .trust-statement .tagline { font-size: 1.1rem; }
+  .trust-statement p { font-size: 0.92rem; }
+  .trust-statement .final-line { font-size: 1rem; }
 }
 
 .trust-badges-row {
@@ -686,16 +661,11 @@
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 900px) {
-  .trust-stats { grid-template-columns: repeat(2, 1fr); }
+  .trust-modern-head h2 { font-size: 1.8rem; }
 }
 @media (max-width: 500px) {
   .trust-modern { padding: 60px 16px; }
   .trust-modern-head h2 { font-size: 1.7rem; }
-  .trust-stats { gap: 12px; }
-  .trust-stat-card { padding: 22px 14px; border-radius: 16px; }
-  .trust-stat-num { font-size: 1.7rem; }
-  .trust-stat-icon { width: 50px; height: 50px; font-size: 1.2rem; margin-bottom: 10px; }
-  .trust-stat-label { font-size: 0.78rem; }
   .trust-badge-item { padding: 14px 18px; }
   .trust-badge-item i { font-size: 1.3rem; }
 }
@@ -746,7 +716,7 @@
   <div class="hero-content">
     <div class="hero-badge reveal"><span class="dot"></span> INDEPENDENT TECH STUDIO / INDIA</div>
     <h1 class="reveal">From an idea<br>to <span class="grad">intelligent technology.</span></h1>
-    <p class="reveal">Electronics, IoT & Smart Technology — built from concept to reality. We design, build, and deliver hardware that matters.</p>
+    <p class="reveal">Electronics, IoT & Smart Technology — from concept to reality. We design, build, and deliver innovative solutions that matter.</p>
     <div class="hero-btns reveal">
       <a href="shop.html" class="btn btn-primary"><i class="fas fa-bolt"></i> Explore Products</a>
       <a href="https://wa.me/916374017186?text=Hi%20SparkCircuit,%20I%20want%20to%20start%20a%20project" target="_blank" class="btn btn-ghost">Start a Project <i class="fas fa-arrow-right"></i></a>
@@ -995,36 +965,20 @@
   </div>
 </section>
 
-<!-- TRUST SECTION (HONEST) -->
+<!-- TRUST SECTION (HONEST - NAYA TEXT) -->
 <section class="trust-modern">
   <div class="trust-modern-inner">
     <div class="trust-modern-head reveal">
       <span class="kicker">Our Commitment</span>
-      <h2>Why Choose SparkCircuit</h2>
+      <h2>Why Build With SparkCircuit</h2>
     </div>
 
-    <!-- Stats Grid (Honest) -->
-    <div class="trust-stats">
-      <div class="trust-stat-card reveal">
-        <div class="trust-stat-icon"><i class="fas fa-shield-alt"></i></div>
-        <div class="trust-stat-num">100<span class="plus">%</span></div>
-        <div class="trust-stat-label">Genuine Components</div>
-      </div>
-      <div class="trust-stat-card reveal">
-        <div class="trust-stat-icon"><i class="fas fa-truck-fast"></i></div>
-        <div class="trust-stat-num">24<span class="plus">h</span></div>
-        <div class="trust-stat-label">Fast Dispatch</div>
-      </div>
-      <div class="trust-stat-card reveal">
-        <div class="trust-stat-icon"><i class="fas fa-rotate-left"></i></div>
-        <div class="trust-stat-num">7<span class="plus">-Day</span></div>
-        <div class="trust-stat-label">Easy Returns</div>
-      </div>
-      <div class="trust-stat-card reveal">
-        <div class="trust-stat-icon"><i class="fas fa-headset"></i></div>
-        <div class="trust-stat-num">10<span class="plus">min</span></div>
-        <div class="trust-stat-label">Support Reply</div>
-      </div>
+    <!-- Trust Statement Block -->
+    <div class="trust-statement reveal">
+      <div class="tagline">Ideas into Intelligent Technology.</div>
+      <p>From genuine electronics components to custom-built hardware and IoT solutions, SparkCircuit is focused on turning ideas into reliable technology.</p>
+      <p>We believe in practical engineering, quality components, transparent communication, and solutions built around real-world needs.</p>
+      <div class="final-line">Your Idea. Our Technology. <span>Built Together.</span></div>
     </div>
 
     <!-- Trust Badges Row -->
