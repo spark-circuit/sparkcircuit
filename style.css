@@ -842,3 +842,18 @@ a.product-show:hover .explore-link { gap:12px; }
     padding-top: 105px;  /* mobile header (60px) + category (45px) */
   }
 }
+
+/* ============ HERO SCALE FIX (for smaller screens) ============ */
+@media (min-width: 1000px) and (max-width: 1199px) {
+  .hero h1 { font-size: 2.8rem !important; }
+  .hero p { font-size: 0.95rem !important; }
+  .hero { padding: 100px 20px 50px !important; min-height: 85vh !important; }
+}
+
+@media (min-width: 1200px) and (max-width: 1920px) {
+  .hero h1 { font-size: 3rem !important; }
+  .hero p { font-size: 1rem !important; }
+  .hero { padding: 90px 20px 40px !important; min-height: 80vh !important; }
+  .hero-stats { margin-top: 40px !important; padding-top: 25px !important; }
+  .hero-badge { margin-bottom: 20px !important; }
+}
