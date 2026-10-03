@@ -5,10 +5,6 @@
     {
       "source": "/sitemap.xml",
       "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker"
-    },
-    {
-      "source": "/product.html",
-      "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/product-render"
     }
   ]
 }
