@@ -4,6 +4,14 @@
   "rewrites": [
     {
       "source": "/sitemap.xml",
+      "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker?sitemap=1"
+    },
+    {
+      "source": "/products/:slug-:id",
+      "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker?product_id=:id"
+    },
+    {
+      "source": "/product.html",
       "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker"
     }
   ]
