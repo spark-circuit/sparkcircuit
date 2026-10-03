@@ -7,8 +7,8 @@
       "dest": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker"
     },
     {
-      "src": "/product.html",
-      "dest": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/product-render"
+      "src": "/product.html(.*)",
+      "dest": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/product-render$1"
     }
   ]
 }
