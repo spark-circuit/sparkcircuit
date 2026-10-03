@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f97316">
+
+<title>Product Details | SparkCircuit — Buy Electronic Components Online</title>
+<meta name="description" content="View detailed product information, specifications, and pricing. Buy genuine electronic components online from SparkCircuit with fast shipping across India.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://sparkcircuit.in/product.html">
+
+<meta property="og:type" content="product">
+<meta property="og:site_name" content="SparkCircuit">
+<meta property="og:title" content="Product Details — SparkCircuit">
+<meta property="og:description" content="View detailed product information and buy genuine electronic components online.">
+<meta property="og:image" content="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg">
+
+<link rel="icon" type="image/jpeg" href="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="preconnect" href="https://mrqvzmtdsohvzsnryogp.supabase.co">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* ============ BACK NAVIGATION ============ */
+.back-nav-bar {
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 12px 20px;
+  position: sticky;
+  top: 70px;
+  z-index: 50;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+.back-nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 20px;
+  background: linear-gradient(135deg, #f97316, #fb923c);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px rgba(249,115,22,0.3);
+}
+.back-btn:hover {
+  transform: translateX(-4px);
+  box-shadow: 0 8px 22px rgba(249,115,22,0.5);
+}
+.back-btn i {
+  font-size: 0.85rem;
+  transition: transform 0.3s;
+}
+.back-btn:hover i {
+  transform: translateX(-3px);
+}
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #94a3b8;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+.breadcrumb a {
+  color: #475569;
+  text-decoration: none;
+  transition: 0.2s;
+}
+.breadcrumb a:hover {
+  color: #f97316;
+}
+.breadcrumb i {
+  font-size: 0.6rem;
+  color: #cbd5e1;
+}
+.breadcrumb-current {
+  color: #f97316;
+  font-weight: 700;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============ PRODUCT DETAIL PAGE STYLES ============ */
+.pd-container { max-width: 1200px; margin: 40px auto 60px; padding: 0 20px; }
+
+.pd-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.06); }
+.pd-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 0; }
+
+/* === IMAGE GALLERY === */
+.pd-gallery { padding: 30px; background: #f8fafc; border-right: 1px solid #e2e8f0; }
+.pd-main-image { width: 100%; height: 450px; background: #fff; border-radius: 14px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 15px; position: relative; }
+.pd-main-image img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.4s ease; }
+.pd-main-image:hover img { transform: scale(1.08); }
+
+.pd-thumbnails { display: flex; gap: 10px; flex-wrap: wrap; }
+.pd-thumb { width: 75px; height: 75px; border-radius: 10px; border: 2px solid #e2e8f0; background: #fff; cursor: pointer; overflow: hidden; transition: 0.25s; padding: 0; }
+.pd-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.pd-thumb:hover { border-color: #f97316; transform: translateY(-3px); }
+.pd-thumb.active { border-color: #f97316; box-shadow: 0 0 0 3px rgba(249,115,22,0.2); }
+
+/* === INFO SECTION === */
+.pd-info { padding: 35px 30px; display: flex; flex-direction: column; }
+
+.pd-category { display: inline-block; background: #fff7ed; color: #ea580c; font-size: 0.75rem; font-weight: 700; padding: 5px 14px; border-radius: 50px; letter-spacing: 1px; text-transform: uppercase; width: fit-content; margin-bottom: 15px; }
+
+.pd-title { font-family: 'Poppins', sans-serif; font-size: 1.9rem; font-weight: 700; color: #0f172a; line-height: 1.3; margin-bottom: 15px; }
+
+.pd-rating { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 0.9rem; color: #64748b; }
+.pd-rating .stars { color: #fbbf24; letter-spacing: 2px; }
+
+.pd-price-section { display: flex; align-items: baseline; gap: 14px; margin-bottom: 25px; flex-wrap: wrap; }
+.pd-price { font-size: 2.4rem; font-weight: 800; color: #0f172a; font-family: 'Poppins', sans-serif; line-height: 1; }
+.pd-mrp { font-size: 1.3rem; color: #94a3b8; text-decoration: line-through; }
+.pd-discount { background: #dcfce7; color: #15803d; font-size: 0.85rem; padding: 5px 12px; border-radius: 6px; font-weight: 700; }
+
+/* Stock */
+.pd-stock { padding: 12px 16px; border-radius: 10px; font-size: 0.9rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+.pd-stock.in { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+.pd-stock.low { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+.pd-stock.out { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+/* Delivery */
+.pd-delivery { background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 1px solid #bae6fd; border-radius: 12px; padding: 15px 18px; margin-bottom: 25px; display: flex; align-items: center; gap: 14px; }
+.pd-delivery i { font-size: 1.6rem; color: #0284c7; }
+.pd-delivery .title { font-weight: 700; color: #075985; font-size: 0.95rem; }
+.pd-delivery .date { color: #0369a1; font-size: 0.85rem; margin-top: 2px; }
+
+/* Buttons */
+.pd-buttons { display: flex; gap: 12px; margin-bottom: 25px; }
+.pd-btn { flex: 1; padding: 16px; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.25s; font-family: 'Poppins', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.pd-btn-cart { background: #0f172a; color: #fff; }
+.pd-btn-cart:hover { background: #1e293b; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(15,23,42,0.25); }
+.pd-btn-buy { background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; box-shadow: 0 6px 20px rgba(249,115,22,0.35); }
+.pd-btn-buy:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(249,115,22,0.5); }
+
+/* Trust badges */
+.pd-trust { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+.pd-trust-item { text-align: center; }
+.pd-trust-item i { font-size: 1.4rem; color: #f97316; display: block; margin-bottom: 6px; }
+.pd-trust-item span { font-size: 0.75rem; color: #64748b; font-weight: 600; }
+
+/* === TABS SECTION === */
+.pd-tabs-section { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+.pd-tabs { display: flex; gap: 5px; border-bottom: 2px solid #e2e8f0; margin-bottom: 25px; overflow-x: auto; }
+.pd-tab-btn { padding: 14px 22px; background: transparent; border: none; font-weight: 600; font-size: 0.95rem; color: #64748b; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: 0.2s; white-space: nowrap; font-family: 'Poppins', sans-serif; }
+.pd-tab-btn:hover { color: #f97316; }
+.pd-tab-btn.active { color: #f97316; border-bottom-color: #f97316; }
+.pd-tab-content { display: none; animation: fadeIn 0.4s; }
+.pd-tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.pd-content-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 30px; }
+.pd-content-card h3 { font-family: 'Poppins', sans-serif; font-size: 1.3rem; color: #0f172a; margin-bottom: 15px; }
+.pd-content-card p { color: #475569; font-size: 0.95rem; line-height: 1.8; }
+.pd-content-card ul { color: #475569; font-size: 0.95rem; line-height: 2; padding-left: 20px; }
+
+/* Share Section */
+.pd-share { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; margin-top: 20px; }
+.pd-share-label { font-size: 0.9rem; font-weight: 700; color: #0f172a; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.pd-share-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+.pd-share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: 0.25s; color: #fff; font-family: 'Inter', sans-serif; }
+.pd-share-btn.whatsapp { background: #25d366; }
+.pd-share-btn.whatsapp:hover { background: #1ebe57; transform: translateY(-2px); }
+.pd-share-btn.facebook { background: #1877f2; }
+.pd-share-btn.facebook:hover { background: #0d65d9; transform: translateY(-2px); }
+.pd-share-btn.twitter { background: #000; }
+.pd-share-btn.twitter:hover { background: #333; transform: translateY(-2px); }
+.pd-share-btn.copy { background: #64748b; }
+.pd-share-btn.copy:hover { background: #475569; transform: translateY(-2px); }
+
+/* Related Products */
+.related-section { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+.related-header h3 { font-family: 'Poppins', sans-serif; font-size: 1.5rem; color: #0f172a; margin-bottom: 20px; }
+.related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+.related-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; text-decoration: none; color: inherit; transition: 0.3s; display: flex; flex-direction: column; }
+.related-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(249, 115, 22, 0.15); border-color: #f97316; }
+.related-card img { width: 100%; height: 150px; object-fit: contain; border-radius: 10px; margin-bottom: 12px; background: #f8fafc; }
+.related-cat { font-size: 0.7rem; color: #ea580c; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.related-card h4 { font-size: 0.95rem; font-weight: 600; color: #0f172a; margin: 6px 0 10px; min-height: 2.6em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.related-price { display: flex; gap: 8px; align-items: center; margin-top: auto; }
+.related-price .now { font-size: 1.1rem; font-weight: 800; color: #0f172a; }
+.related-price .old { font-size: 0.8rem; color: #94a3b8; text-decoration: line-through; }
+
+/* Reviews */
+.reviews-section { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+.reviews-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+.reviews-header h3 { font-family: 'Poppins', sans-serif; font-size: 1.5rem; color: #0f172a; }
+.write-review-btn { background: linear-gradient(135deg, #f97316, #fb923c); color: #fff; border: none; padding: 12px 24px; border-radius: 50px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; transition: 0.3s; box-shadow: 0 6px 20px rgba(249, 115, 22, 0.3); }
+.write-review-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(249, 115, 22, 0.5); }
+.avg-rating-box { background: linear-gradient(135deg, #fff7ed, #fed7aa); border: 2px solid #f97316; border-radius: 16px; padding: 25px; text-align: center; margin-bottom: 25px; }
+.avg-rating-number { font-size: 3rem; font-weight: 800; color: #ea580c; font-family: 'Poppins', sans-serif; line-height: 1; }
+.avg-rating-stars { color: #fbbf24; font-size: 1.3rem; margin: 10px 0; letter-spacing: 3px; }
+.avg-rating-count { color: #92400e; font-size: 0.9rem; font-weight: 600; }
+.review-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 15px; transition: 0.3s; }
+.review-card:hover { border-color: #f97316; box-shadow: 0 6px 20px rgba(249, 115, 22, 0.1); }
+.review-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+.review-head strong { color: #0f172a; font-size: 1rem; }
+.review-stars { color: #fbbf24; font-size: 0.85rem; margin-top: 4px; letter-spacing: 2px; }
+.review-date { color: #94a3b8; font-size: 0.8rem; }
+.review-text { color: #475569; font-size: 0.95rem; line-height: 1.7; margin: 0; }
+
+/* Recently Viewed Section */
+.recently-section { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+.recently-header h3 { font-family: 'Poppins', sans-serif; font-size: 1.5rem; color: #0f172a; margin-bottom: 20px; }
+.recently-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+.recently-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px; text-decoration: none; color: inherit; transition: 0.3s; display: flex; flex-direction: column; position: relative; }
+.recently-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(249, 115, 22, 0.15); border-color: #f97316; }
+.recently-card img { width: 100%; height: 130px; object-fit: contain; border-radius: 10px; margin-bottom: 10px; background: #f8fafc; }
+.recently-cat { font-size: 0.68rem; color: #ea580c; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.recently-card h4 { font-size: 0.88rem; font-weight: 600; color: #0f172a; margin: 5px 0 8px; min-height: 2.4em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.recently-price { display: flex; gap: 6px; align-items: center; margin-top: auto; }
+.recently-price .now { font-size: 1rem; font-weight: 800; color: #0f172a; }
+.recently-price .old { font-size: 0.75rem; color: #94a3b8; text-decoration: line-through; }
+.recently-badge { position: absolute; top: 8px; right: 8px; background: #f97316; color: #fff; font-size: 0.6rem; font-weight: 700; padding: 3px 7px; border-radius: 50px; letter-spacing: 0.5px; }
+
+/* ============ BOTTOM NAV PRODUCT PAGE ============ */
+.bottom-nav-product {
+  max-width: 1200px;
+  margin: 60px auto 30px;
+  padding: 0 20px;
+}
+.bottom-nav-product-inner {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  border-radius: 20px;
+  padding: 35px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(15,23,42,0.3);
+}
+.bottom-nav-product-inner::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(249,115,22,0.2), transparent 70%);
+  border-radius: 50%;
+}
+.bottom-nav-product-text { position: relative; z-index: 2; }
+.bottom-nav-product-text h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.bottom-nav-product-text h3 i { color: #f97316; }
+.bottom-nav-product-text p { color: #94a3b8; font-size: 0.9rem; }
+.bottom-nav-product-actions {
+  display: flex;
+  gap: 12px;
+  position: relative;
+  z-index: 2;
+  flex-wrap: wrap;
+}
+.bnp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 26px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.bnp-primary {
+  background: linear-gradient(135deg, #f97316, #fb923c);
+  color: #fff;
+  box-shadow: 0 8px 25px rgba(249,115,22,0.4);
+}
+.bnp-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(249,115,22,0.6);
+}
+.bnp-ghost {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+}
+.bnp-ghost:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.4);
+  transform: translateY(-3px);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .pd-grid { grid-template-columns: 1fr; }
+  .pd-gallery { border-right: none; border-bottom: 1px solid #e2e8f0; }
+  .pd-main-image { height: 320px; }
+  .pd-title { font-size: 1.5rem; }
+  .pd-price { font-size: 1.9rem; }
+}
+@media (max-width: 700px) {
+  .back-nav-bar { top: 60px; padding: 10px 16px; }
+  .breadcrumb { display: none; }
+  .back-btn { font-size: 0.8rem; padding: 8px 16px; }
+  .bottom-nav-product-inner { flex-direction: column; text-align: center; padding: 28px 22px; }
+  .bottom-nav-product-text h3 { justify-content: center; font-size: 1.1rem; }
+  .bottom-nav-product-actions { width: 100%; flex-direction: column; }
+  .bnp-btn { justify-content: center; width: 100%; }
+}
+@media (max-width: 600px) {
+  .pd-container { margin-top: 30px; }
+  .pd-gallery, .pd-info { padding: 20px; }
+  .pd-main-image { height: 260px; }
+  .pd-thumb { width: 60px; height: 60px; }
+  .pd-buttons { flex-direction: column; }
+  .pd-trust { grid-template-columns: 1fr; gap: 8px; }
+  .pd-trust-item { display: flex; align-items: center; gap: 10px; text-align: left; padding: 8px 0; }
+  .pd-trust-item i { margin-bottom: 0; }
+  .related-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .pd-content-card { padding: 20px; }
+  .recently-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .recently-card img { height: 110px; }
+  .recently-card h4 { font-size: 0.8rem; }
+  .recently-header h3 { font-size: 1.2rem; }
+}
+</style>
+
+  <!-- PRODUCT SCHEMA — For Google Rich Snippets -->
+<script type="application/ld+json" id="productSchema">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Loading...",
+  "image": "https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg",
+  "description": "Buy genuine electronic components online at SparkCircuit.",
+  "brand": {
+    "@type": "Brand",
+    "name": "SparkCircuit"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "https://www.sparkcircuit.in/product.html",
+    "priceCurrency": "INR",
+    "price": "0",
+    "availability": "https://schema.org/InStock",
+    "seller": {
+      "@type": "Organization",
+      "name": "SparkCircuit"
+    }
+  }
+}
+</script>
+
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="brand">
+      <img src="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg" alt="SparkCircuit" class="brand-logo">
+      <div class="brand-text">
+        <span class="brand-name"><span class="orange">Spark</span>Circuit</span>
+        <span class="brand-tag">TECH / R&D STUDIO</span>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="shop.html" class="btn-shop"><i class="fas fa-store"></i> Store</a>
+    </nav>
+  </div>
+</header>
+
+<!-- BACK NAVIGATION -->
+<div class="back-nav-bar">
+  <div class="back-nav-inner">
+    <a href="shop.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Back to Shop
+    </a>
+    <div class="breadcrumb">
+      <a href="index.html"><i class="fas fa-home"></i> Home</a>
+      <i class="fas fa-chevron-right"></i>
+      <a href="shop.html">Shop</a>
+      <i class="fas fa-chevron-right"></i>
+      <span class="breadcrumb-current" id="bcCurrentPage">Product</span>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT DETAIL CONTAINER -->
+<div class="pd-container">
+  <div id="productDetailContent">
+    <p style="text-align:center; color:#64748b; padding:40px;">Loading product details...</p>
+  </div>
+</div>
+
+<!-- TABS (Description, Specs, Shipping) -->
+<div class="pd-tabs-section" id="pdTabsSection" style="display:none;">
+  <div class="pd-tabs">
+    <button class="pd-tab-btn active" onclick="switchPdTab('descTab', this)">📄 Description</button>
+    <button class="pd-tab-btn" onclick="switchPdTab('specsTab', this)">⚙️ Specifications</button>
+    <button class="pd-tab-btn" onclick="switchPdTab('shippingTab', this)">🚚 Shipping & Returns</button>
+  </div>
+  
+  <div id="descTab" class="pd-tab-content active">
+    <div class="pd-content-card">
+      <h3>Product Description</h3>
+      <p id="pdDescription">Loading...</p>
+    </div>
+  </div>
+  
+  <div id="specsTab" class="pd-tab-content">
+    <div class="pd-content-card">
+      <h3>Specifications</h3>
+      <ul id="pdSpecs">
+        <li>Brand: SparkCircuit</li>
+        <li>Category: <span id="pdSpecCat">Electronics</span></li>
+        <li>Country of Origin: India</li>
+        <li>Warranty: 30 Days Replacement</li>
+        <li>Tested & Verified</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div id="shippingTab" class="pd-tab-content">
+    <div class="pd-content-card">
+      <h3>Shipping & Returns</h3>
+      <p><strong>🚚 Shipping:</strong> Free shipping on orders above ₹499. Orders dispatched within 24 hours. Delivery in 3-5 business days across India.</p>
+      <p style="margin-top:12px;"><strong>↩️ Returns:</strong> 7-day replacement guarantee on damaged or defective products. Easy return process — contact us on WhatsApp or email.</p>
+      <p style="margin-top:12px;"><strong>💳 Payment:</strong> UPI, Cards, NetBanking, and Cash on Delivery available.</p>
+    </div>
+  </div>
+  
+  <!-- SHARE SECTION -->
+  <div class="pd-share" id="shareSection" style="display:none;">
+    <div class="pd-share-label"><i class="fas fa-share-alt"></i> Share this product:</div>
+    <div class="pd-share-buttons">
+      <a href="#" onclick="shareOnWhatsApp(event)" class="pd-share-btn whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+      <a href="#" onclick="shareOnFacebook(event)" class="pd-share-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</a>
+      <a href="#" onclick="shareOnTwitter(event)" class="pd-share-btn twitter"><i class="fab fa-twitter"></i> Twitter</a>
+      <button onclick="copyProductLink(event)" class="pd-share-btn copy"><i class="fas fa-link"></i> Copy Link</button>
+    </div>
+  </div>
+</div>
+
+<!-- RELATED PRODUCTS -->
+<div class="related-section" id="relatedSection">
+  <div class="related-header">
+    <h3>🔥 You May Also Like</h3>
+  </div>
+  <div id="relatedProducts" class="related-grid">
+    <p style="color:#64748b;text-align:center;padding:20px;grid-column:1/-1;">Loading similar products...</p>
+  </div>
+</div>
+
+<!-- RECENTLY VIEWED -->
+<div class="recently-section" id="recentlySection" style="display:none;">
+  <div class="recently-header">
+    <h3>👀 Recently Viewed</h3>
+  </div>
+  <div id="recentlyProducts" class="recently-grid"></div>
+</div>
+
+<!-- REVIEWS SECTION -->
+<div class="reviews-section" id="reviewsSection">
+  <div class="reviews-header">
+    <h3>⭐ Customer Reviews</h3>
+    <button onclick="openReviewModal()" class="write-review-btn">
+      <i class="fas fa-pen"></i> Write a Review
+    </button>
+  </div>
+  <div id="reviewsList">
+    <p style="color:#64748b;text-align:center;padding:20px;">Loading reviews...</p>
+  </div>
+</div>
+
+<!-- BOTTOM NAVIGATION -->
+<div class="bottom-nav-product">
+  <div class="bottom-nav-product-inner">
+    <div class="bottom-nav-product-text">
+      <h3><i class="fas fa-compass"></i> Explore More Products</h3>
+      <p>Keep shopping or go back to the homepage.</p>
+    </div>
+    <div class="bottom-nav-product-actions">
+      <a href="shop.html" class="bnp-btn bnp-primary">
+        <i class="fas fa-store"></i> Continue Shopping
+      </a>
+      <a href="index.html" class="bnp-btn bnp-ghost">
+        <i class="fas fa-home"></i> Back to Home
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-bottom" style="border:none;padding-top:0;">
+    <p>&copy; 2026 SparkCircuit | All Rights Reserved</p>
+  </div>
+</footer>
+
+<a href="https://wa.me/916374017186" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ============================================================
+// 🎯 CUSTOM LOGIN REQUIRED MODAL (Front Layer)
+// ============================================================
+function showLoginRequiredModal(actionMessage = 'to continue') {
+  const existing = document.getElementById('customLoginRequiredModal');
+  if (existing) existing.remove();
+  
+  const modal = document.createElement('div');
+  modal.id = 'customLoginRequiredModal';
+  modal.style.cssText = `
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeInModal 0.3s ease;
+  `;
+  
+  modal.innerHTML = `
+    <style>
+      @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes slideUpModal { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+    <div style="
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px 26px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+      animation: slideUpModal 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    ">
+      <button onclick="document.getElementById('customLoginRequiredModal').remove()" 
+        style="position: absolute; top: 14px; right: 14px; background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; color: #64748b; display: flex; align-items: center; justify-content: center;">
+        ✕
+      </button>
+      
+      <div style="
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 18px;
+        background: linear-gradient(135deg, #fff7ed, #ffedd5);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+      ">🔐</div>
+      
+      <h3 style="
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 8px;
+      ">Login Required</h3>
+      
+      <p style="
+        color: #64748b;
+        font-size: 0.92rem;
+        line-height: 1.6;
+        margin-bottom: 24px;
+      ">Please login ${actionMessage}. It only takes 10 seconds with email OTP.</p>
+      
+      <button onclick="
+        document.getElementById('customLoginRequiredModal').remove();
+        window.location.href = 'shop.html';
+      " style="
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #f97316, #ea580c);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+        box-shadow: 0 8px 25px rgba(249,115,22,0.4);
+      ">
+        🔓 Login Now
+      </button>
+      
+      <button onclick="document.getElementById('customLoginRequiredModal').remove()" 
+        style="
+          width: 100%;
+          padding: 12px;
+          background: transparent;
+          color: #64748b;
+          border: none;
+          margin-top: 10px;
+          cursor: pointer;
+          font-size: 0.85rem;
+          font-weight: 600;
+        ">
+        Maybe Later
+      </button>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.remove();
+  });
+  
+  const escHandler = (e) => {
+    if (e.key === 'Escape') {
+      modal.remove();
+      document.removeEventListener('keydown', escHandler);
+    }
+  };
+  document.addEventListener('keydown', escHandler);
+}
+</script>
+
+<script>
+  const SUPABASE_URL = 'https://mrqvzmtdsohvzsnryogp.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z';
+  const DEFAULT_IMG = 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80';
+
+  const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // ============================================================
+  // DELIVERY DATE CALCULATOR
+  // ============================================================
+  function calculateDeliveryDate() {
+    const today = new Date();
+    const minDate = new Date(today);
+    minDate.setDate(today.getDate() + 3);
+    const maxDate = new Date(today);
+    maxDate.setDate(today.getDate() + 5);
+    
+    const options = { day: 'numeric', month: 'short' };
+    return {
+      minDate: minDate.toLocaleDateString('en-IN', options),
+      maxDate: maxDate.toLocaleDateString('en-IN', options),
+      range: `${minDate.toLocaleDateString('en-IN', options)} - ${maxDate.toLocaleDateString('en-IN', options)}`,
+      fullDate: maxDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
+      days: '3-5 days'
+    };
+  }
+
+  // ============================================================
+  // RECENTLY VIEWED
+  // ============================================================
+  function saveRecentlyViewed(product) {
+    try {
+      let recent = JSON.parse(localStorage.getItem('sc_recently_viewed')) || [];
+      recent = recent.filter(p => p.id !== product.id);
+      recent.unshift({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        original_price: product.original_price,
+        category: product.category,
+        image: product.image,
+        viewed_at: Date.now()
+      });
+      recent = recent.slice(0, 8);
+      localStorage.setItem('sc_recently_viewed', JSON.stringify(recent));
+    } catch (e) {
+      console.error('Recently viewed save failed:', e);
+    }
+  }
+
+  function renderRecentlyViewed(currentProductId) {
+    const section = document.getElementById('recentlySection');
+    const container = document.getElementById('recentlyProducts');
+    if (!section || !container) return;
+    
+    try {
+      let recent = JSON.parse(localStorage.getItem('sc_recently_viewed')) || [];
+      recent = recent.filter(p => p.id !== currentProductId);
+      recent = recent.slice(0, 4);
+      
+      if (recent.length === 0) {
+        section.style.display = 'none';
+        return;
+      }
+      
+      section.style.display = 'block';
+      
+      container.innerHTML = recent.map(p => {
+        const img = p.image && p.image.trim() !== '' ? p.image : DEFAULT_IMG;
+        const discount = p.original_price && p.original_price > p.price
+          ? Math.round(((p.original_price - p.price) / p.original_price) * 100) : 0;
+        
+        return `
+          <a href="${getProductSEOUrl(p)}" class="recently-card">
+            ${discount > 0 ? `<span class="recently-badge">${discount}% OFF</span>` : ''}
+            <img src="${img}" alt="${p.name}" onerror="this.src='${DEFAULT_IMG}'">
+            <span class="recently-cat">${p.category || 'Electronics'}</span>
+            <h4>${p.name}</h4>
+            <div class="recently-price">
+              <span class="now">₹${p.price}</span>
+              ${p.original_price && p.original_price > p.price ? `<span class="old">₹${p.original_price}</span>` : ''}
+            </div>
+          </a>
+        `;
+      }).join('');
+      
+    } catch (e) {
+      console.error('Recently viewed render failed:', e);
+      section.style.display = 'none';
+    }
+  }
+
+function slugifyProductName(name = "") {
+  return String(name)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+
+function getProductSEOUrl(product) {
+
+  if (!product || !product.id) {
+    return "#";
+  }
+
+  return `/products/${slugifyProductName(product.name)}-${product.id}`;
+}  
+
+// LOAD PRODUCT DETAILS
+// ============================================================
+async function loadProductDetails() {
+
+  const container =
+    document.getElementById('productDetailContent');
+
+  // ==========================================================
+  // 1. FIRST: CHECK SERVER-SIDE PRODUCT DATA
+  // ==========================================================
+
+  let p =
+    window.__SPARKCIRCUIT_PRODUCT__ || null;
+
+
+  // ==========================================================
+  // 2. IF SSR DATA IS NOT AVAILABLE
+  //    THEN USE OLD ?id=123 URL
+  // ==========================================================
+
+  if (!p) {
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+    const productId =
+      params.get('id');
+
+
+    if (!productId) {
+
+      container.innerHTML =
+        `<h3 style="color:#ef4444;text-align:center;">
+          Product Not Found!
+        </h3>`;
+
+      return;
+    }
+
+
+    try {
+
+      const res =
+        await fetch(
+          `${SUPABASE_URL}/rest/v1/products?id=eq.${encodeURIComponent(productId)}`,
+          {
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization':
+                `Bearer ${SUPABASE_KEY}`
+            }
+          }
+        );
+
+
+      const data =
+        await res.json();
+
+
+      if (
+        !data ||
+        data.length === 0
+      ) {
+
+        container.innerHTML =
+          `<h3 style="color:#ef4444;text-align:center;">
+            Product Not Found!
+          </h3>`;
+
+        return;
+      }
+
+
+      // OLD URL SE PRODUCT MILA
+      p = data[0];
+
+    } catch (error) {
+
+      console.error(
+        'Product loading error:',
+        error
+      );
+
+      container.innerHTML =
+        `<h3 style="color:#ef4444;text-align:center;">
+          Unable to load product!
+        </h3>`;
+
+      return;
+    }
+  }
+
+
+  // ==========================================================
+  // 3. PRODUCT MIL GAYA
+  //    YAHAN SE TUMHARA PURANA CODE SAME RAHEGA
+  // ==========================================================
+
+  saveRecentlyViewed(p);
+
+  window.currentProduct = p;
+      
+  let allImages = [];
+
+  if (
+    p.image &&
+    p.image.trim() !== ''
+  ) {
+    allImages.push(p.image);
+  }
+
+  if (
+    Array.isArray(p.images)
+  ) {
+
+    p.images.forEach(img => {
+
+      if (
+        img &&
+        img.trim() !== '' &&
+        !allImages.includes(img)
+      ) {
+
+        allImages.push(img);
+
+      }
+
+    });
+  }
+
+  if (
+    allImages.length === 0
+  ) {
+
+    allImages.push(
+      DEFAULT_IMG
+    );
+
+  }
+      
+  const mainImg =
+    allImages[0];
+
+  const discount =
+    p.original_price &&
+    p.original_price > p.price
+      ? Math.round(
+          (
+            (p.original_price - p.price) /
+            p.original_price
+          ) * 100
+        )
+      : 0;
+      
+  let stockClass = 'in';
+  let stockText = '';
+
+  if (
+    p.stock_quantity !== undefined &&
+    p.stock_quantity !== null
+  ) {
+
+    if (
+      p.stock_quantity > 5
+    ) {
+
+      stockClass = 'in';
+
+      stockText =
+        `✅ In Stock — ${p.stock_quantity} available`;
+
+    } else if (
+      p.stock_quantity > 0
+    ) {
+
+      stockClass = 'low';
+
+      stockText =
+        `🔥 Hurry! Only ${p.stock_quantity} left in stock`;
+
+    } else {
+
+      stockClass = 'out';
+
+      stockText =
+        `❌ Out of Stock`;
+
+    }
+
+  } else {
+
+    stockText =
+      p.in_stock
+        ? '✅ In Stock'
+        : '❌ Out of Stock';
+
+  }
+      
+      // Update breadcrumbs
+      document.getElementById('bcCurrentPage').innerText = p.name.length > 30 ? p.name.substring(0, 30) + '...' : p.name;
+      
+      // Update tab content
+      document.getElementById('pdDescription').innerText = p.description || 'High-performance tested electronic component from SparkCircuit.';
+      document.getElementById('pdSpecCat').innerText = p.category || 'Electronics';
+
+      // Render main card
+      container.innerHTML = `
+        <div class="pd-card">
+          <div class="pd-grid">
+            
+            <!-- IMAGE GALLERY -->
+            <div class="pd-gallery">
+              <div class="pd-main-image">
+                <img id="mainProductImage" src="${mainImg}" alt="${p.name}" onerror="this.src='${DEFAULT_IMG}'">
+              </div>
+              ${allImages.length > 1 ? `
+                <div class="pd-thumbnails">
+                  ${allImages.map((img, idx) => `
+                    <button class="pd-thumb ${idx === 0 ? 'active' : ''}" onclick="changeMainImage('${img}', this)">
+                      <img src="${img}" alt="View ${idx + 1}" onerror="this.src='${DEFAULT_IMG}'">
+                    </button>
+                  `).join('')}
+                </div>
+              ` : ''}
+            </div>
+            
+            <!-- INFO SECTION -->
+            <div class="pd-info">
+              <span class="pd-category">${p.category || 'Electronics'}</span>
+              
+              <h1 class="pd-title">${p.name}</h1>
+              
+              <div class="pd-rating">
+                <span class="stars">⭐⭐⭐⭐⭐</span>
+                <span>4.8 | Trusted by 500+ customers</span>
+              </div>
+              
+              <div class="pd-price-section">
+                <span class="pd-price">₹${p.price}</span>
+                ${p.original_price && p.original_price > p.price ? `<span class="pd-mrp">₹${p.original_price}</span>` : ''}
+                ${discount > 0 ? `<span class="pd-discount">${discount}% OFF</span>` : ''}
+              </div>
+              
+              <div class="pd-stock ${stockClass}">
+                ${stockText}
+              </div>
+              
+              <div class="pd-delivery">
+                <i class="fas fa-truck-fast"></i>
+                <div>
+                  <div class="title">🚚 Free Delivery Available</div>
+                  <div class="date">Order today, get it by <strong>${calculateDeliveryDate().maxDate}</strong></div>
+                </div>
+              </div>
+              
+              ${p.in_stock
+                ? `<div class="pd-buttons">
+                     <button onclick="addToCartFromDetail(${p.id})" class="pd-btn pd-btn-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                     <button onclick="buyNowFromDetail(${p.id})" class="pd-btn pd-btn-buy"><i class="fas fa-bolt"></i> Buy Now</button>
+                   </div>`
+                : `<button disabled style="width:100%;padding:16px;background:#cbd5e1;color:#64748b;border:none;border-radius:12px;font-weight:700;cursor:not-allowed;">❌ Out of Stock</button>`
+              }
+              
+              <div class="pd-trust">
+                <div class="pd-trust-item"><i class="fas fa-shield-alt"></i><span>100% Genuine</span></div>
+                <div class="pd-trust-item"><i class="fas fa-rotate-left"></i><span>7-Day Return</span></div>
+                <div class="pd-trust-item"><i class="fas fa-lock"></i><span>Secure Payment</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('pdTabsSection').style.display = 'block';
+      document.getElementById('shareSection').style.display = 'block';
+
+      loadReviews(p.id);
+      loadRelatedProducts(p.id, p.category);
+      renderRecentlyViewed(p.id);
+
+    } catch (err) {
+      console.error('Error:', err);
+      container.innerHTML = `<h3 style="color:#ef4444;text-align:center;">Error loading product!</h3>`;
+    }
+  }
+
+  function changeMainImage(imgUrl, btn) {
+    document.getElementById('mainProductImage').src = imgUrl;
+    document.querySelectorAll('.pd-thumb').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function switchPdTab(tabId, btn) {
+    document.querySelectorAll('.pd-tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.pd-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  async function loadReviews(productId) {
+    const container = document.getElementById('reviewsList');
+    if (!container) return;
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?product_id=eq.${productId}&order=created_at.desc`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      const reviews = await res.json();
+
+      if (!reviews || reviews.length === 0) {
+        container.innerHTML = '<p style="color:#64748b;text-align:center;padding:20px;">No reviews yet. Be the first to review!</p>';
+         // Update schema without rating
+        if (window.currentProduct) {
+          updateProductSchema(window.currentProduct, 0, 0);
+        }
+        return;
+      }
+
+      const avg = reviews.reduce((a, r) => a + r.rating, 0) / reviews.length;
+            // Update schema with rating data
+      if (window.currentProduct) {
+        updateProductSchema(window.currentProduct, avg, reviews.length);
+      }
+
+      container.innerHTML = `
+        <div class="avg-rating-box">
+          <div class="avg-rating-number">${avg.toFixed(1)}</div>
+          <div class="avg-rating-stars">${renderStars(avg)}</div>
+          <div class="avg-rating-count">${reviews.length} review${reviews.length > 1 ? 's' : ''}</div>
+        </div>
+        ${reviews.map(r => `
+          <div class="review-card">
+            <div class="review-head">
+              <div>
+                <strong>${r.user_name}</strong>
+                <div class="review-stars">${renderStars(r.rating)}</div>
+              </div>
+              <span class="review-date">${new Date(r.created_at).toLocaleDateString('en-IN')}</span>
+            </div>
+            <p class="review-text">${r.review_text}</p>
+          </div>
+        `).join('')}
+      `;
+    } catch (err) {
+      container.innerHTML = '<p style="color:#ef4444;text-align:center;padding:20px;">Failed to load reviews</p>';
+    }
+  }
+
+  function renderStars(rating) {
+    const full = Math.floor(rating);
+    const half = rating % 1 >= 0.5;
+    let html = '';
+    for (let i = 0; i < full; i++) html += '<i class="fas fa-star"></i>';
+    if (half) html += '<i class="fas fa-star-half-alt"></i>';
+    for (let i = full + (half ? 1 : 0); i < 5; i++) html += '<i class="far fa-star"></i>';
+    return html;
+  }
+
+  async function loadRelatedProducts(productId, category) {
+    const container = document.getElementById('relatedProducts');
+    if (!container) return;
+
+    try {
+      let products = [];
+      if (category) {
+        const res1 = await fetch(
+          `${SUPABASE_URL}/rest/v1/products?category=eq.${encodeURIComponent(category)}&id=neq.${productId}&in_stock=eq.true&limit=4`,
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+        );
+        products = await res1.json() || [];
+      }
+
+      if (products.length < 4) {
+        const res2 = await fetch(
+          `${SUPABASE_URL}/rest/v1/products?id=neq.${productId}&in_stock=eq.true&limit=8`,
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+        );
+        const fallbackProducts = await res2.json() || [];
+        const existingIds = new Set(products.map(p => p.id));
+        for (const fp of fallbackProducts) {
+          if (!existingIds.has(fp.id) && products.length < 4) {
+            products.push(fp);
+            existingIds.add(fp.id);
+          }
+        }
+      }
+
+      if (!products || products.length === 0) {
+        container.innerHTML = '<p style="color:#64748b;text-align:center;padding:20px;grid-column:1/-1;">No products available right now.</p>';
+        return;
+      }
+
+      container.innerHTML = products.slice(0, 4).map(p => {
+        const img = p.image && p.image.trim() !== '' ? p.image : DEFAULT_IMG;
+        const discount = p.original_price && p.original_price > p.price
+          ? Math.round(((p.original_price - p.price) / p.original_price) * 100) : 0;
+
+        return `
+          <a href="${getProductSEOUrl(p)}" class="related-card">
+            <img src="${img}" alt="${p.name}" onerror="this.src='${DEFAULT_IMG}'">
+            <span class="related-cat">${p.category || 'Electronics'}</span>
+            <h4>${p.name}</h4>
+            <div class="related-price">
+              <span class="now">₹${p.price}</span>
+              ${p.original_price && p.original_price > p.price ? `<span class="old">₹${p.original_price}</span>` : ''}
+              ${discount > 0 ? `<span style="color:#15803d;font-size:0.75rem;font-weight:700;">${discount}% OFF</span>` : ''}
+            </div>
+          </a>
+        `;
+      }).join('');
+
+    } catch (err) {
+      console.error('Related products error:', err);
+      container.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:20px;grid-column:1/-1;">Failed to load similar products</p>';
+    }
+  }
+
+  async function openReviewModal() {
+    const { data: { session } } = await _supabase.auth.getSession();
+    if (!session?.user?.email) {
+  showLoginRequiredModal('to write a review');
+  return;
+}
+
+    const productId = new URLSearchParams(window.location.search).get('id');
+    const rating = prompt('Rate this product (1-5 stars):');
+    if (!rating || rating < 1 || rating > 5) { alert('Please enter rating between 1-5'); return; }
+
+    const reviewText = prompt('Write your review:');
+    if (!reviewText || reviewText.trim().length < 5) { alert('Please write at least 5 characters'); return; }
+
+    const userName = session.user.email.split('@')[0];
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          product_id: parseInt(productId),
+          user_email: session.user.email,
+          user_name: userName,
+          rating: parseInt(rating),
+          review_text: reviewText.trim()
+        })
+      });
+
+      if (res.ok) {
+        alert('✅ Thank you for your review!');
+        loadReviews(productId);
+      } else {
+        alert('❌ Failed to submit review');
+      }
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+  }
+
+  function getShareData() {
+    const productName = document.querySelector('.pd-title')?.innerText || 'SparkCircuit Product';
+    const productPrice = document.querySelector('.pd-price')?.innerText || '';
+    const currentUrl = window.location.href;
+    const shareText = `🔌 Check out this product on SparkCircuit!\n\n📦 ${productName}\n💰 ${productPrice}\n\n🛒 Buy now:`;
+    return { productName, productPrice, currentUrl, shareText };
+  }
+
+  function shareOnWhatsApp(e) {
+    e.preventDefault();
+    const { currentUrl, shareText } = getShareData();
+    window.open(`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + currentUrl)}`, '_blank');
+  }
+
+  function shareOnFacebook(e) {
+    e.preventDefault();
+    const { currentUrl } = getShareData();
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`, '_blank', 'width=600,height=400');
+  }
+
+  function shareOnTwitter(e) {
+    e.preventDefault();
+    const { currentUrl, shareText } = getShareData();
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(currentUrl)}`, '_blank', 'width=600,height=400');
+  }
+
+  function copyProductLink(e) {
+    e.preventDefault();
+    const { currentUrl } = getShareData();
+    navigator.clipboard.writeText(currentUrl).then(() => {
+      const btn = e.target.closest('.pd-share-btn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      btn.style.background = '#22c55e';
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.style.background = '';
+      }, 2000);
+    }).catch(err => {
+      alert('Failed to copy link');
+    });
+  }
+
+  function addToCartFromDetail(id) {
+    fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${id}`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (!data || data.length === 0) { alert('❌ Product not found'); return; }
+      
+      const p = data[0];
+      let cart = JSON.parse(localStorage.getItem('sc_cart')) || [];
+      const existing = cart.find(item => item.id === p.id);
+      if (existing) {
+        existing.qty += 1;
+        existing.price = p.price;
+        existing.name = p.name;
+      } else {
+        cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
+      }
+      
+      localStorage.setItem('sc_cart', JSON.stringify(cart));
+      const totalItems = cart.reduce((a, i) => a + i.qty, 0);
+      alert(`✅ "${p.name}" added to cart!\n\n🛒 Cart me total ${totalItems} item${totalItems > 1 ? 's' : ''} hain.`);
+    })
+    .catch(err => {
+      console.error('Add to cart failed:', err);
+      alert('❌ Failed to add to cart');
+    });
+  }
+
+  function buyNowFromDetail(id) {
+    fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${id}`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (!data || data.length === 0) { alert('❌ Product not found'); return; }
+      
+      const p = data[0];
+      let cart = JSON.parse(localStorage.getItem('sc_cart')) || [];
+      const existing = cart.find(item => item.id === p.id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
+      }
+      
+      localStorage.setItem('sc_cart', JSON.stringify(cart));
+      localStorage.setItem('sc_pending_cart', JSON.stringify({ id, action: 'buy' }));
+      window.location.href = 'shop.html';
+    })
+    .catch(err => {
+      console.error('Buy now failed:', err);
+      alert('❌ Failed');
+    });
+  }
+    // ============================================================
+  // 🎯 UPDATE SCHEMA WITH REAL PRODUCT DATA (For Google Rich Snippets)
+  // ============================================================
+  function updateProductSchema(product, avgRating, reviewCount) {
+    const schemaEl = document.getElementById('productSchema');
+    if (!schemaEl) return;
+    
+    const productUrl = `https://www.sparkcircuit.in/product.html?id=${product.id}`;
+    const imageUrl = (product.image && product.image.trim() !== '') 
+      ? product.image 
+      : 'https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg';
+    
+    const inStock = (product.stock_quantity !== undefined && product.stock_quantity !== null)
+      ? product.stock_quantity > 0
+      : product.in_stock;
+    
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": product.name,
+      "image": imageUrl,
+      "description": product.description || `Buy ${product.name} online at SparkCircuit.`,
+      "sku": `SPC-${product.id}`,
+      "brand": {
+        "@type": "Brand",
+        "name": "SparkCircuit"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": productUrl,
+        "priceCurrency": "INR",
+        "price": product.price.toString(),
+        "availability": inStock 
+          ? "https://schema.org/InStock" 
+          : "https://schema.org/OutOfStock",
+        "seller": {
+          "@type": "Organization",
+          "name": "SparkCircuit"
+        }
+      }
+    };
+    
+    // Add rating ONLY if real reviews exist (Google policy compliant)
+    if (avgRating > 0 && reviewCount > 0) {
+      schema.aggregateRating = {
+        "@type": "AggregateRating",
+        "ratingValue": avgRating.toFixed(1),
+        "reviewCount": reviewCount.toString(),
+        "bestRating": "5",
+        "worstRating": "1"
+      };
+    }
+    
+    schemaEl.textContent = JSON.stringify(schema, null, 2);
+    console.log('✅ Product schema updated:', schema.name);
+  }
+
+  document.addEventListener('DOMContentLoaded', loadProductDetails);
+</script>
+</body>
+</html>
