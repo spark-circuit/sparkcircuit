@@ -1,12 +1,14 @@
 {
-  "rewrites": [
+  "cleanUrls": false,
+  "trailingSlash": false,
+  "routes": [
     {
-      "source": "/sitemap.xml",
-      "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker"
+      "src": "/sitemap.xml",
+      "dest": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker"
     },
     {
-      "source": "/product.html",
-      "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/product-render"
+      "src": "/product.html",
+      "dest": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/product-render"
     }
   ]
 }
