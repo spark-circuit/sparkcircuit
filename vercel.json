@@ -1,18 +1,14 @@
 {
   "cleanUrls": false,
   "trailingSlash": false,
-  "rewrites": [
+  "routes": [
     {
-      "source": "/sitemap.xml",
-      "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker"
+      "src": "/sitemap.xml",
+      "dest": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker"
     },
     {
-      "source": "/product.html",
-      "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/product-render"
-    },
-    {
-      "source": "/product.html/:path*",
-      "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/product-render/:path*"
+      "src": "/product.html",
+      "dest": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/product-render"
     }
   ]
 }
