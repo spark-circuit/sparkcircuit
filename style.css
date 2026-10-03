@@ -789,27 +789,56 @@ a.product-show:hover .explore-link { gap:12px; }
 }
 
 
-/* ============ STICKY CATEGORY STRIP (Shop Page) ============ */
-/* Header already sticky hai, ab category strip ko bhi header ke neeche chipka do */
+/* ============ FIXED HEADER + CATEGORY STRIP (Amazon/Flipkart Style) ============ */
+/* Header hamesha upar fix, category strip header ke neeche fix */
 
+/* Desktop */
 @media (min-width: 701px) {
-  /* Desktop pe */
+  .header {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+  
   .cat-strip {
-    position: sticky;
-    top: 71px;  /* header ki height (approx) */
+    position: fixed !important;
+    top: 71px;  /* header ki height */
+    left: 0;
+    right: 0;
     z-index: 999;
     background: #fff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   }
+  
+  /* Content ko neeche shift karo taki header ke neeche na chhupe */
+  body {
+    padding-top: 120px;  /* header (71px) + category (49px) */
+  }
 }
 
+/* Mobile */
 @media (max-width: 700px) {
-  /* Mobile pe header ki height alag hai */
+  .header {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+  
   .cat-strip {
-    position: sticky;
+    position: fixed !important;
     top: 60px;  /* mobile header height */
+    left: 0;
+    right: 0;
     z-index: 999;
     background: #fff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  body {
+    padding-top: 105px;  /* mobile header (60px) + category (45px) */
   }
 }
