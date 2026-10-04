@@ -3,8 +3,8 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/products/:slug-:id",
-      "destination": "/api/product?id=:id"
+      "source": "/products/:path*",
+      "destination": "/api/product?path=:path*"
     },
     {
       "source": "/product.html",
