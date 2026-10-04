@@ -7,9 +7,9 @@
       "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker?sitemap=1"
     },
     {
-      "source": "/products/:path*",
-      "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker"
-    },
+  "source": "/products/:path*",
+  "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker?path=:path*"
+},
     {
       "source": "/product.html",
       "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker"
