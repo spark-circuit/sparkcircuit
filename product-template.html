@@ -1034,14 +1034,13 @@ async function loadProductDetails() {
         </div>
       `;
 
-      document.getElementById('pdTabsSection').style.display = 'block';
+           document.getElementById('pdTabsSection').style.display = 'block';
       document.getElementById('shareSection').style.display = 'block';
 
       loadReviews(p.id);
       loadRelatedProducts(p.id, p.category);
       renderRecentlyViewed(p.id);
-
-    }
+  }
 
   function changeMainImage(imgUrl, btn) {
     document.getElementById('mainProductImage').src = imgUrl;
@@ -1055,7 +1054,6 @@ async function loadProductDetails() {
     document.getElementById(tabId).classList.add('active');
     btn.classList.add('active');
   }
-
   async function loadReviews(productId) {
     const container = document.getElementById('reviewsList');
     if (!container) return;
