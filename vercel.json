@@ -3,16 +3,16 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/sitemap.xml",
-      "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker?sitemap=1"
+      "source": "/products/:slug-:id",
+      "destination": "/api/product?id=:id"
     },
     {
-  "source": "/products/:path*",
-  "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker?path=:path*"
-},
-    {
       "source": "/product.html",
-      "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker"
+      "destination": "/api/product"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker?sitemap=1"
     }
   ]
 }
