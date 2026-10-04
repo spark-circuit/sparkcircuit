@@ -1041,11 +1041,7 @@ async function loadProductDetails() {
       loadRelatedProducts(p.id, p.category);
       renderRecentlyViewed(p.id);
 
-    } catch (err) {
-      console.error('Error:', err);
-      container.innerHTML = `<h3 style="color:#ef4444;text-align:center;">Error loading product!</h3>`;
     }
-  }
 
   function changeMainImage(imgUrl, btn) {
     document.getElementById('mainProductImage').src = imgUrl;
@@ -1328,7 +1324,8 @@ async function loadProductDetails() {
     const schemaEl = document.getElementById('productSchema');
     if (!schemaEl) return;
     
-    const productUrl = `https://www.sparkcircuit.in/product.html?id=${product.id}`;
+    
+const productUrl = `https://sparkcircuit.in/products/${slugifyProductName(product.name)}-${product.id}`;
     const imageUrl = (product.image && product.image.trim() !== '') 
       ? product.image 
       : 'https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg';
