@@ -1312,7 +1312,7 @@ if (!productId) {
       
       localStorage.setItem('sc_cart', JSON.stringify(cart));
       localStorage.setItem('sc_pending_cart', JSON.stringify({ id, action: 'buy' }));
-      window.location.href = 'shop.html';
+     window.location.href = '/shop.html';
     })
     .catch(err => {
       console.error('Buy now failed:', err);
