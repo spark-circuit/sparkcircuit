@@ -1179,7 +1179,12 @@ async function loadProductDetails() {
   return;
 }
 
-    const productId = new URLSearchParams(window.location.search).get('id');
+   const productId = window.currentProduct?.id;
+
+if (!productId) {
+  alert('❌ Product information not found');
+  return;
+}
     const rating = prompt('Rate this product (1-5 stars):');
     if (!rating || rating < 1 || rating > 5) { alert('Please enter rating between 1-5'); return; }
 
