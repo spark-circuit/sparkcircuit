@@ -339,10 +339,10 @@
 
     <div class="track-form">
       <label>Order ID</label>
-      <input type="text" id="trackOrderId" placeholder="e.g. SPC-1234" autocomplete="off">
+     <input type="text" id="trackOrderId" pattern="SPC-[A-Z0-9]{8}" placeholder="e.g. SPC-ABC12345" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9-]/g, '')">
 
-      <label>Phone Number</label>
-      <input type="tel" id="trackPhone" placeholder="10-digit mobile number" maxlength="10" autocomplete="off">
+<label>Phone Number</label>
+<input type="tel" id="trackPhone" placeholder="10-digit mobile number" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" autocomplete="off" autocorrect="off" spellcheck="false" oninput="this.value = this.value.replace(/\D/g, '')">
 
       <button onclick="trackOrder()" id="trackBtn" class="track-btn">
         <i class="fas fa-search"></i> Track Order
@@ -366,8 +366,8 @@ const STATUS_STEPS = ['Pending', 'Processing', 'Shipped', 'Delivered'];
 const STATUS_ICONS = ['fa-clock', 'fa-box-open', 'fa-truck-fast', 'fa-circle-check'];
 
 async function trackOrder() {
-  const orderIdInput = document.getElementById('trackOrderId').value.trim().toUpperCase();
-  const phone = document.getElementById('trackPhone').value.trim();
+ const orderIdInput = document.getElementById('trackOrderId').value.trim().toUpperCase().replace(/[\s\u00A0\u200B]/g, '');
+const phone = document.getElementById('trackPhone').value.trim().replace(/[\s\u00A0\u200B]/g, '').replace(/^\+91/, '').replace(/^0+/, '').replace(/\D/g, '');
   const resultDiv = document.getElementById('trackResult');
   const btn = document.getElementById('trackBtn');
 
