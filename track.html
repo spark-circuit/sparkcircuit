@@ -366,26 +366,35 @@ const STATUS_STEPS = ['Pending', 'Processing', 'Shipped', 'Delivered'];
 const STATUS_ICONS = ['fa-clock', 'fa-box-open', 'fa-truck-fast', 'fa-circle-check'];
 
 async function trackOrder() {
- const orderIdInput = document.getElementById('trackOrderId').value.trim().toUpperCase().replace(/[\s\u00A0\u200B]/g, '');
-const phone = document.getElementById('trackPhone').value.trim().replace(/[\s\u00A0\u200B]/g, '').replace(/^\+91/, '').replace(/^0+/, '').replace(/\D/g, '');
+  // Clean inputs
+  const orderIdInput = document.getElementById('trackOrderId').value
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9-]/g, '');
+  
+  const phone = document.getElementById('trackPhone').value
+    .trim()
+    .replace(/[^0-9]/g, '')
+    .slice(-10);  // Last 10 digits only
+  
   const resultDiv = document.getElementById('trackResult');
   const btn = document.getElementById('trackBtn');
 
-    // Validate
+  // Validate
   if (!orderIdInput || !phone) {
     showError('Please enter both Order ID and Phone Number');
     return;
   }
-  if (!/^SPC-[A-Z0-9]{8}$/i.test(orderIdInput)) {
-    showError('Invalid Order ID format. Use: SPC-XXXXXXXX');
+  
+  if (orderIdInput.length !== 12) {
+    showError('Invalid Order ID. Format should be: SPC-XXXXXXXX');
     return;
   }
-  if (!/^[6-9]\d{9}$/.test(phone)) {
+  
+  if (phone.length !== 10) {
     showError('Please enter a valid 10-digit mobile number');
     return;
   }
-  // Extract numeric ID
-  const numericId = orderIdInput.replace(/^SPC-/i, '');
 
   btn.disabled = true;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
@@ -393,21 +402,38 @@ const phone = document.getElementById('trackPhone').value.trim().replace(/[\s\u0
   resultDiv.innerHTML = '';
 
   try {
-   const { data, error } = await _supabase
-  .from('orders')
-  .select('*')
-  .eq('order_code', orderIdInput.toUpperCase())
-  .eq('customer_phone', phone)
-  .single();
+    // Fetch with both filters separately, then match
+    const { data: allOrders, error } = await _supabase
+      .from('orders')
+      .select('*')
+      .eq('order_code', orderIdInput);
 
-    if (error || !data) {
-      showError('❌ Order not found. Please check your Order ID and Phone Number.');
+    if (error) {
+      console.error('Supabase error:', error);
+      showError('❌ Database error. Please try again.');
       return;
     }
 
-    renderResult(data);
+    if (!allOrders || allOrders.length === 0) {
+      showError('❌ Order not found. Please check your Order ID.');
+      return;
+    }
+
+    // Now match phone manually (more lenient)
+    const matchedOrder = allOrders.find(o => {
+      const dbPhone = String(o.customer_phone || '').replace(/[^0-9]/g, '').slice(-10);
+      return dbPhone === phone;
+    });
+
+    if (!matchedOrder) {
+      showError('❌ Order found, but phone number does not match. Please check your phone number.');
+      return;
+    }
+
+    renderResult(matchedOrder);
 
   } catch (err) {
+    console.error('Track error:', err);
     showError('Something went wrong. Please try again.');
   } finally {
     btn.disabled = false;
