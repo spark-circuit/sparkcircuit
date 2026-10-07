@@ -480,15 +480,16 @@
   </div>
 </div>
 
-<script>
 const SUPABASE_URL =
   'https://mrqvzmtdsohvzsnryogp.supabase.co';
 
 const SUPABASE_KEY =
   'sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z';
 
-const db =
-  supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 const STATUS_STEPS = [
   'Pending',
@@ -505,15 +506,28 @@ const STATUS_ICONS = [
 ];
 
 function cleanOrderId(value) {
-  return String(value || '')
-    .toUpperCase()
+  let text = String(value || '')
+    .trim()
+    .toUpperCase();
+
+  // Handle different types of dash
+  text = text.replace(/[‐-‒–—―]/g, '-');
+
+  // If user pastes "Order ID: SPC-XXXXXXXX"
+  const match = text.match(/SPC-[A-Z0-9]{8}/);
+
+  if (match) {
+    return match[0];
+  }
+
+  return text
     .replace(/\s+/g, '')
-    .replace(/[‐-‒–—―]/g, '-')
     .replace(/[^A-Z0-9-]/g, '');
 }
 
 function cleanPhone(value) {
-  let phone = String(value || '').replace(/\D/g, '');
+  let phone = String(value || '')
+    .replace(/\D/g, '');
 
   if (phone.length > 10) {
     phone = phone.slice(-10);
@@ -533,11 +547,14 @@ function escapeHTML(value) {
 
 function money(value) {
   const n = Number(value);
-  return Number.isFinite(n) ? n.toFixed(2) : '0.00';
+  return Number.isFinite(n)
+    ? n.toFixed(2)
+    : '0.00';
 }
 
 function showError(message) {
-  const result = document.getElementById('trackResult');
+  const result =
+    document.getElementById('trackResult');
 
   result.innerHTML =
     '<div class="error-box">' +
@@ -596,74 +613,51 @@ async function trackOrder() {
   }
 
   button.disabled = true;
+
   button.innerHTML =
     '<i class="fas fa-spinner fa-spin"></i> Searching...';
 
   try {
 
     /*
-      First search by Order ID.
-      ilike makes the search case-insensitive.
+      Supabase server function:
+      Order ID + Phone number
+      are checked together.
     */
 
-    const response = await db
-      .from('orders')
-      .select('*')
-      .ilike('order_code', orderId)
-      .limit(10);
+    const { data, error } =
+      await db.rpc(
+        'track_order',
+        {
+          p_order_code: orderId,
+          p_phone: phone
+        }
+      );
 
-    if (response.error) {
+    if (error) {
 
       console.error(
-        'Supabase error:',
-        response.error
+        'Tracking error:',
+        error
       );
 
       showError(
-        'Database error. Please try again.'
+        'Unable to track order right now. Please try again.'
       );
 
       return;
     }
 
-    const orders = response.data || [];
-
-    if (orders.length === 0) {
+    if (!data || data.success !== true) {
 
       showError(
-        'Order not found. Please check your Order ID.'
+        'Order not found or phone number does not match. Please check your Order ID and phone number.'
       );
 
       return;
     }
 
-    /*
-      Match phone number locally.
-      Supports:
-      9876543210
-      +919876543210
-      919876543210
-    */
-
-    const matchedOrder = orders.find(order => {
-
-      const databasePhone =
-        cleanPhone(order.customer_phone);
-
-      return databasePhone === phone;
-
-    });
-
-    if (!matchedOrder) {
-
-      showError(
-        'Order found, but the phone number does not match.'
-      );
-
-      return;
-    }
-
-    renderOrder(matchedOrder);
+    renderOrder(data.order);
 
   } catch (error) {
 
@@ -682,7 +676,6 @@ async function trackOrder() {
 
     button.innerHTML =
       '<i class="fas fa-search"></i> Track Order';
-
   }
 }
 
@@ -692,9 +685,9 @@ function renderOrder(order) {
     document.getElementById('trackResult');
 
   let status =
-    String(order.order_status || 'Pending').trim();
-
-  const statusLower = status.toLowerCase();
+    String(
+      order.order_status || 'Pending'
+    ).trim();
 
   const statusMap = {
     pending: 'Pending',
@@ -704,50 +697,66 @@ function renderOrder(order) {
   };
 
   status =
-    statusMap[statusLower] || 'Pending';
+    statusMap[status.toLowerCase()]
+    || 'Pending';
 
   const activeIndex =
     STATUS_STEPS.indexOf(status);
 
   const progress =
-    (activeIndex / (STATUS_STEPS.length - 1)) * 80;
+    (activeIndex /
+      (STATUS_STEPS.length - 1)) * 80;
 
   let stepsHTML = '';
 
-  STATUS_STEPS.forEach((step, index) => {
+  STATUS_STEPS.forEach(
+    (step, index) => {
 
-    let className = '';
+      let className = '';
 
-    if (index < activeIndex) {
-      className = 'completed';
-    } else if (index === activeIndex) {
-      className = 'active';
+      if (index < activeIndex) {
+        className = 'completed';
+      } else if (index === activeIndex) {
+        className = 'active';
+      }
+
+      stepsHTML += `
+        <div class="step ${className}">
+          <div class="step-icon">
+            <i class="fas ${STATUS_ICONS[index]}"></i>
+          </div>
+
+          <div class="step-label">
+            ${escapeHTML(step)}
+          </div>
+        </div>
+      `;
     }
-
-    stepsHTML += `
-      <div class="step ${className}">
-        <div class="step-icon">
-          <i class="fas ${STATUS_ICONS[index]}"></i>
-        </div>
-        <div class="step-label">
-          ${escapeHTML(step)}
-        </div>
-      </div>
-    `;
-  });
+  );
 
   let items = [];
 
   if (Array.isArray(order.order_items)) {
+
     items = order.order_items;
-  } else if (typeof order.order_items === 'string') {
+
+  } else if (
+    typeof order.order_items === 'string'
+  ) {
+
     try {
-      const parsed = JSON.parse(order.order_items);
+
+      const parsed =
+        JSON.parse(order.order_items);
+
       if (Array.isArray(parsed)) {
         items = parsed;
       }
+
     } catch (e) {
-      console.warn('Could not parse order_items');
+      console.warn(
+        'Could not parse order_items'
+      );
     }
   }
 
@@ -756,13 +765,28 @@ function renderOrder(order) {
   items.forEach(item => {
 
     const name =
-      escapeHTML(item.name || item.product_name || 'Product');
+      escapeHTML(
+        item.name ||
+        item.product_name ||
+        'Product'
+      );
 
     const qty =
-      Math.max(1, Number(item.qty || item.quantity || 1));
+      Math.max(
+        1,
+        Number(
+          item.qty ||
+          item.quantity ||
+          1
+        )
+      );
 
     const price =
-      Number(item.price || item.mrp || 0);
+      Number(
+        item.price ||
+        item.mrp ||
+        0
+      );
 
     itemsHTML += `
       <div class="item-line">
@@ -801,22 +825,40 @@ function renderOrder(order) {
   }
 
   const customerName =
-    escapeHTML(order.customer_name || 'Customer');
+    escapeHTML(
+      order.customer_name ||
+      'Customer'
+    );
 
   const customerPhone =
-    escapeHTML(order.customer_phone || '');
+    escapeHTML(
+      order.customer_phone ||
+      ''
+    );
 
   const deliveryAddress =
-    escapeHTML(order.delivery_address || 'Not available');
+    escapeHTML(
+      order.delivery_address ||
+      'Not available'
+    );
 
   const pincode =
-    escapeHTML(order.pincode || '');
+    escapeHTML(
+      order.pincode ||
+      ''
+    );
 
   const paymentStatus =
-    escapeHTML(order.payment_status || 'Pending');
+    escapeHTML(
+      order.payment_status ||
+      'Pending'
+    );
 
   const orderCode =
-    escapeHTML(order.order_code || '');
+    escapeHTML(
+      order.order_code ||
+      ''
+    );
 
   const subtotal =
     Number(order.subtotal || 0);
@@ -868,7 +910,8 @@ function renderOrder(order) {
         <div class="detail-row">
           <span>Delivery Address</span>
           <span>
-            ${deliveryAddress}${pincode ? ', ' + pincode : ''}
+            ${deliveryAddress}
+            ${pincode ? ', ' + pincode : ''}
           </span>
         </div>
 
@@ -941,48 +984,73 @@ function renderOrder(order) {
   result.classList.add('active');
 
   setTimeout(() => {
+
     result.scrollIntoView({
       behavior: 'smooth',
       block: 'start'
     });
+
   }, 150);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener(
+  'DOMContentLoaded',
+  function() {
 
-  const orderInput =
-    document.getElementById('trackOrderId');
+    const orderInput =
+      document.getElementById(
+        'trackOrderId'
+      );
 
-  const phoneInput =
-    document.getElementById('trackPhone');
+    const phoneInput =
+      document.getElementById(
+        'trackPhone'
+      );
 
-  orderInput.addEventListener('input', function() {
-    this.value = cleanOrderId(this.value);
-  });
+    orderInput.addEventListener(
+      'input',
+      function() {
+        this.value =
+          cleanOrderId(this.value);
+      }
+    );
 
-  phoneInput.addEventListener('input', function() {
-    this.value = cleanPhone(this.value);
-  });
+    phoneInput.addEventListener(
+      'input',
+      function() {
+        this.value =
+          cleanPhone(this.value);
+      }
+    );
 
-  orderInput.addEventListener('keydown', function(event) {
+    orderInput.addEventListener(
+      'keydown',
+      function(event) {
 
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      trackOrder();
-    }
+        if (event.key === 'Enter') {
 
-  });
+          event.preventDefault();
+          trackOrder();
 
-  phoneInput.addEventListener('keydown', function(event) {
+        }
+      }
+    );
 
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      trackOrder();
-    }
+    phoneInput.addEventListener(
+      'keydown',
+      function(event) {
 
-  });
+        if (event.key === 'Enter') {
 
-});
+          event.preventDefault();
+          trackOrder();
+
+        }
+      }
+    );
+
+  }
+);
 </script>
 
 </body>
