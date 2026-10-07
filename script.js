@@ -1251,7 +1251,7 @@ async function saveOrderToSupabase(orderData) {
       grand_total: grand,
       payment_status: paymentStatus,
       payType: payType,
-      created_at: new Date().toISOString()
+     created_at: data[0].created_at
     };
 
     // Send notifications
