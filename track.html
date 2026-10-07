@@ -1,21 +1,30 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#f97316">
+
 <title>Track Your Order | SparkCircuit</title>
-<meta name="description" content="Track your SparkCircuit order status in real-time.">
+<meta name="description" content="Track your SparkCircuit order status in real-time. Enter your Order ID and phone number to see live updates.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://sparkcircuit.in/track.html">
+
 <link rel="icon" type="image/jpeg" href="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg">
+
+<link rel="preconnect" href="https://mrqvzmtdsohvzsnryogp.supabase.co">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
 
 <style>
 .track-page {
@@ -24,8 +33,17 @@
   padding: 100px 20px 60px;
   color: #fff;
 }
-.track-container { max-width: 700px; margin: 0 auto; }
-.track-header { text-align: center; margin-bottom: 40px; }
+
+.track-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.track-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
 .track-header h1 {
   font-family: 'Poppins', sans-serif;
   font-size: 2.5rem;
@@ -35,7 +53,11 @@
   -webkit-text-fill-color: transparent;
   margin-bottom: 10px;
 }
-.track-header p { color: #94a3b8; font-size: 1rem; }
+
+.track-header p {
+  color: #94a3b8;
+  font-size: 1rem;
+}
 
 .track-form {
   background: rgba(15, 23, 42, 0.6);
@@ -45,6 +67,7 @@
   padding: 35px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
+
 .track-form label {
   display: block;
   color: #cbd5e1;
@@ -54,6 +77,7 @@
   text-transform: uppercase;
   letter-spacing: 1px;
 }
+
 .track-form input {
   width: 100%;
   padding: 14px 18px;
@@ -68,11 +92,15 @@
   transition: 0.3s;
   box-sizing: border-box;
 }
+
 .track-form input:focus {
   border-color: #f97316;
   box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
 }
-.track-form input::placeholder { color: #64748b; }
+
+.track-form input::placeholder {
+  color: #64748b;
+}
 
 .track-btn {
   width: 100%;
@@ -88,12 +116,38 @@
   transition: 0.3s;
   box-shadow: 0 8px 25px rgba(249, 115, 22, 0.35);
 }
-.track-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 35px rgba(249, 115, 22, 0.5); }
-.track-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-.track-result { margin-top: 30px; display: none; }
-.track-result.active { display: block; animation: fadeInUp 0.5s ease; }
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.track-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(249, 115, 22, 0.5);
+}
+
+.track-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.track-result {
+  margin-top: 30px;
+  display: none;
+}
+
+.track-result.active {
+  display: block;
+  animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 .result-card {
   background: rgba(15, 23, 42, 0.7);
@@ -103,6 +157,7 @@
   padding: 30px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
+
 .result-head {
   display: flex;
   justify-content: space-between;
@@ -113,7 +168,14 @@
   padding-bottom: 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-.result-head h2 { font-family: 'Poppins', sans-serif; font-size: 1.3rem; color: #f97316; }
+
+.result-head h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.3rem;
+  color: #f97316;
+  margin: 0;
+}
+
 .order-status-badge {
   background: rgba(249, 115, 22, 0.2);
   border: 1px solid rgba(249, 115, 22, 0.4);
@@ -125,7 +187,13 @@
   text-transform: uppercase;
 }
 
-.progress-steps { display: flex; justify-content: space-between; margin: 30px 0; position: relative; }
+.progress-steps {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 0;
+  position: relative;
+}
+
 .progress-steps::before {
   content: '';
   position: absolute;
@@ -136,6 +204,7 @@
   background: rgba(255, 255, 255, 0.1);
   z-index: 0;
 }
+
 .progress-fill {
   position: absolute;
   top: 22px;
@@ -145,7 +214,16 @@
   z-index: 1;
   transition: width 0.8s ease;
 }
-.step { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; flex: 1; }
+
+.step {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
 .step-icon {
   width: 45px;
   height: 45px;
@@ -160,13 +238,20 @@
   margin-bottom: 8px;
   transition: 0.4s;
 }
+
 .step.active .step-icon {
   background: linear-gradient(135deg, #f97316, #fb923c);
   border-color: #f97316;
   color: #fff;
   box-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
 }
-.step.completed .step-icon { background: #22c55e; border-color: #22c55e; color: #fff; }
+
+.step.completed .step-icon {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: #fff;
+}
+
 .step-label {
   font-size: 0.72rem;
   color: #64748b;
@@ -175,33 +260,69 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-.step.active .step-label, .step.completed .step-label { color: #fff; }
 
-.order-details { background: rgba(0, 0, 0, 0.25); border-radius: 12px; padding: 20px; margin-top: 20px; }
+.step.active .step-label,
+.step.completed .step-label {
+  color: #fff;
+}
+
+.order-details {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
 .detail-row {
   display: flex;
   justify-content: space-between;
-  gap: 15px;
+  gap: 20px;
   padding: 10px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   font-size: 0.9rem;
 }
-.detail-row:last-child { border-bottom: none; }
-.detail-row span:first-child { color: #94a3b8; flex-shrink: 0; }
-.detail-row span:last-child { color: #fff; font-weight: 600; text-align: right; word-break: break-word; }
 
-.order-items-list { background: rgba(0, 0, 0, 0.25); border-radius: 12px; padding: 20px; margin-top: 15px; }
-.order-items-list h4 { color: #f97316; font-family: 'Poppins', sans-serif; font-size: 1rem; margin-bottom: 12px; }
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row span:first-child {
+  color: #94a3b8;
+}
+
+.detail-row span:last-child {
+  color: #fff;
+  font-weight: 600;
+  text-align: right;
+}
+
+.order-items-list {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 15px;
+}
+
+.order-items-list h4 {
+  color: #f97316;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
 .item-line {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
+  gap: 15px;
   padding: 8px 0;
   font-size: 0.88rem;
   color: #cbd5e1;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
-.item-line:last-child { border-bottom: none; }
+
+.item-line:last-child {
+  border-bottom: none;
+}
 
 .error-box {
   background: rgba(239, 68, 68, 0.1);
@@ -211,7 +332,6 @@
   border-radius: 12px;
   text-align: center;
   font-size: 0.95rem;
-  line-height: 1.6;
 }
 
 .back-home {
@@ -224,263 +344,648 @@
   margin-top: 25px;
   transition: 0.3s;
 }
-.back-home:hover { gap: 12px; }
+
+.back-home:hover {
+  gap: 12px;
+}
 
 @media (max-width: 600px) {
-  .track-page { padding: 90px 15px 50px; }
-  .track-header h1 { font-size: 1.8rem; }
-  .track-form { padding: 25px 20px; }
-  .result-card { padding: 22px 18px; }
-  .step-label { font-size: 0.62rem; }
-  .step-icon { width: 38px; height: 38px; font-size: 0.85rem; }
-  .detail-row { flex-direction: column; gap: 4px; }
-  .detail-row span:last-child { text-align: left; }
+
+  .track-page {
+    padding: 90px 15px 50px;
+  }
+
+  .track-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .track-form {
+    padding: 25px 20px;
+  }
+
+  .result-card {
+    padding: 22px 18px;
+  }
+
+  .step-label {
+    font-size: 0.62rem;
+  }
+
+  .step-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 0.85rem;
+  }
+
+  .detail-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .detail-row span:last-child {
+    text-align: left;
+    word-break: break-word;
+  }
 }
 </style>
 </head>
+
 <body>
 
 <header class="header">
   <div class="header-inner">
+
     <a href="index.html" class="brand">
-      <img src="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg" alt="SparkCircuit" class="brand-logo">
+      <img
+        src="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg"
+        alt="SparkCircuit"
+        class="brand-logo"
+      >
+
       <div class="brand-text">
-        <span class="brand-name"><span class="orange">Spark</span>Circuit</span>
+        <span class="brand-name">
+          <span class="orange">Spark</span>Circuit
+        </span>
         <span class="brand-tag">TECH / R&D STUDIO</span>
       </div>
     </a>
+
     <nav class="nav">
       <a href="index.html">Home</a>
       <a href="shop.html">Shop</a>
-      <a href="track.html" class="btn-shop"><i class="fas fa-truck"></i> Track Order</a>
+      <a href="track.html" class="btn-shop">
+        <i class="fas fa-truck"></i> Track Order
+      </a>
     </nav>
+
   </div>
 </header>
 
 <div class="track-page">
+
   <div class="track-container">
+
     <div class="track-header">
       <h1>Track Your Order</h1>
       <p>Enter your Order ID and Phone Number to see live status</p>
     </div>
 
     <div class="track-form">
+
       <label for="trackOrderId">Order ID</label>
-      <input type="text" id="trackOrderId" placeholder="e.g. SPC-ABC12345" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" maxlength="15">
+
+      <input
+        type="text"
+        id="trackOrderId"
+        placeholder="e.g. SPC-ABC12345"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="characters"
+        spellcheck="false"
+        inputmode="text"
+        maxlength="12"
+      >
 
       <label for="trackPhone">Phone Number</label>
-      <input type="tel" id="trackPhone" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" autocomplete="off" autocorrect="off" spellcheck="false">
 
-      <button onclick="trackOrder()" id="trackBtn" class="track-btn">
+      <input
+        type="tel"
+        id="trackPhone"
+        placeholder="10-digit mobile number"
+        maxlength="10"
+        inputmode="numeric"
+        autocomplete="tel"
+        autocorrect="off"
+        spellcheck="false"
+      >
+
+      <button
+        type="button"
+        onclick="trackOrder()"
+        id="trackBtn"
+        class="track-btn"
+      >
         <i class="fas fa-search"></i> Track Order
       </button>
+
     </div>
 
     <div id="trackResult" class="track-result"></div>
 
     <div style="text-align: center;">
-      <a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i> Back to Home</a>
+      <a href="index.html" class="back-home">
+        <i class="fas fa-arrow-left"></i> Back to Home
+      </a>
     </div>
+
   </div>
 </div>
 
 <script>
-/* ============================================================
-   SUPABASE CONFIG
-============================================================ */
-const SUPABASE_URL = 'https://mrqvzmtdsohvzsnryogp.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z';
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL =
+  'https://mrqvzmtdsohvzsnryogp.supabase.co';
 
-const STATUS_STEPS = ['Pending', 'Processing', 'Shipped', 'Delivered'];
-const STATUS_ICONS = ['fa-clock', 'fa-box-open', 'fa-truck-fast', 'fa-circle-check'];
+const SUPABASE_KEY =
+  'sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z';
 
-/* ============================================================
-   NORMALIZE FUNCTIONS
-============================================================ */
-function normalizeOrderId(value) {
-  if (!value) return '';
-  return String(value)
-    .trim()
+const db =
+  supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const STATUS_STEPS = [
+  'Pending',
+  'Processing',
+  'Shipped',
+  'Delivered'
+];
+
+const STATUS_ICONS = [
+  'fa-clock',
+  'fa-box-open',
+  'fa-truck-fast',
+  'fa-circle-check'
+];
+
+function cleanOrderId(value) {
+  return String(value || '')
     .toUpperCase()
-    .replace(/[‐-‒–—―]/g, '-')
     .replace(/\s+/g, '')
+    .replace(/[‐-‒–—―]/g, '-')
     .replace(/[^A-Z0-9-]/g, '');
 }
 
-function normalizePhone(value) {
-  if (!value) return '';
-  let phone = String(value).replace(/\D/g, '');
-  if (phone.length > 10) phone = phone.slice(-10);
+function cleanPhone(value) {
+  let phone = String(value || '').replace(/\D/g, '');
+
+  if (phone.length > 10) {
+    phone = phone.slice(-10);
+  }
+
   return phone;
 }
 
-/* ============================================================
-   MAIN TRACK FUNCTION
-============================================================ */
-async function trackOrder() {
-  const orderInput = document.getElementById('trackOrderId');
-  const phoneInput = document.getElementById('trackPhone');
-  const resultDiv = document.getElementById('trackResult');
-  const btn = document.getElementById('trackBtn');
+function escapeHTML(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
 
-  const orderId = normalizeOrderId(orderInput.value);
-  const phone = normalizePhone(phoneInput.value);
+function money(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n.toFixed(2) : '0.00';
+}
+
+function showError(message) {
+  const result = document.getElementById('trackResult');
+
+  result.innerHTML =
+    '<div class="error-box">' +
+    escapeHTML(message) +
+    '</div>';
+
+  result.classList.add('active');
+}
+
+async function trackOrder() {
+
+  const orderInput =
+    document.getElementById('trackOrderId');
+
+  const phoneInput =
+    document.getElementById('trackPhone');
+
+  const result =
+    document.getElementById('trackResult');
+
+  const button =
+    document.getElementById('trackBtn');
+
+  const orderId =
+    cleanOrderId(orderInput.value);
+
+  const phone =
+    cleanPhone(phoneInput.value);
 
   orderInput.value = orderId;
   phoneInput.value = phone;
 
-  // Validation
-  if (!orderId || !phone) {
-    showError('Please enter both Order ID and Phone Number.');
+  result.classList.remove('active');
+  result.innerHTML = '';
+
+  if (!orderId) {
+    showError('Please enter your Order ID.');
+    orderInput.focus();
     return;
   }
 
   if (!/^SPC-[A-Z0-9]{8}$/.test(orderId)) {
-    showError('Invalid Order ID format. It should look like SPC-ABC12345');
+    showError(
+      'Invalid Order ID. Example: SPC-ABC12345'
+    );
+    orderInput.focus();
     return;
   }
 
   if (!/^[0-9]{10}$/.test(phone)) {
-    showError('Please enter a valid 10-digit mobile number.');
+    showError(
+      'Please enter a valid 10-digit mobile number.'
+    );
+    phoneInput.focus();
     return;
   }
 
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
-  resultDiv.classList.remove('active');
-  resultDiv.innerHTML = '';
+  button.disabled = true;
+  button.innerHTML =
+    '<i class="fas fa-spinner fa-spin"></i> Searching...';
 
   try {
-    // Query: fetch order by order_code only (case insensitive)
-    const { data, error } = await _supabase
+
+    /*
+      First search by Order ID.
+      ilike makes the search case-insensitive.
+    */
+
+    const response = await db
       .from('orders')
       .select('*')
       .ilike('order_code', orderId)
-      .limit(5);
+      .limit(10);
 
-    if (error) {
-      console.error('Supabase error:', error);
-      showError('Database connection error. Please try again.');
+    if (response.error) {
+
+      console.error(
+        'Supabase error:',
+        response.error
+      );
+
+      showError(
+        'Database error. Please try again.'
+      );
+
       return;
     }
 
-    if (!data || data.length === 0) {
-      showError('Order not found. Please check your Order ID.');
+    const orders = response.data || [];
+
+    if (orders.length === 0) {
+
+      showError(
+        'Order not found. Please check your Order ID.'
+      );
+
       return;
     }
 
-    // Manually match phone (more lenient)
-    const matchedOrder = data.find(o => {
-      const dbPhone = normalizePhone(o.customer_phone);
-      return dbPhone === phone;
+    /*
+      Match phone number locally.
+      Supports:
+      9876543210
+      +919876543210
+      919876543210
+    */
+
+    const matchedOrder = orders.find(order => {
+
+      const databasePhone =
+        cleanPhone(order.customer_phone);
+
+      return databasePhone === phone;
+
     });
 
     if (!matchedOrder) {
-      showError('Order found, but the phone number does not match. Please verify your phone number.');
+
+      showError(
+        'Order found, but the phone number does not match.'
+      );
+
       return;
     }
 
-    renderResult(matchedOrder);
+    renderOrder(matchedOrder);
 
-  } catch (err) {
-    console.error('Track error:', err);
-    showError('Something went wrong. Please try again.');
+  } catch (error) {
+
+    console.error(
+      'Track order error:',
+      error
+    );
+
+    showError(
+      'Something went wrong. Please try again.'
+    );
+
   } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-search"></i> Track Order';
+
+    button.disabled = false;
+
+    button.innerHTML =
+      '<i class="fas fa-search"></i> Track Order';
+
   }
 }
 
-/* ============================================================
-   ERROR DISPLAY
-============================================================ */
-function showError(msg) {
-  const resultDiv = document.getElementById('trackResult');
-  resultDiv.innerHTML = '<div class="error-box">' + msg + '</div>';
-  resultDiv.classList.add('active');
-}
+function renderOrder(order) {
 
-/* ============================================================
-   RENDER RESULT
-============================================================ */
-function renderResult(order) {
-  const resultDiv = document.getElementById('trackResult');
+  const result =
+    document.getElementById('trackResult');
 
-  const currentStatus = order.order_status || 'Pending';
-  const currentIndex = STATUS_STEPS.indexOf(currentStatus);
-  const activeIndex = currentIndex >= 0 ? currentIndex : 0;
-  const progressPercent = (activeIndex / (STATUS_STEPS.length - 1)) * 80;
+  let status =
+    String(order.order_status || 'Pending').trim();
+
+  const statusLower = status.toLowerCase();
+
+  const statusMap = {
+    pending: 'Pending',
+    processing: 'Processing',
+    shipped: 'Shipped',
+    delivered: 'Delivered'
+  };
+
+  status =
+    statusMap[statusLower] || 'Pending';
+
+  const activeIndex =
+    STATUS_STEPS.indexOf(status);
+
+  const progress =
+    (activeIndex / (STATUS_STEPS.length - 1)) * 80;
 
   let stepsHTML = '';
-  STATUS_STEPS.forEach((step, i) => {
-    let cls = '';
-    if (i < activeIndex) cls = 'completed';
-    else if (i === activeIndex) cls = 'active';
-    stepsHTML += '<div class="step ' + cls + '">' +
-      '<div class="step-icon"><i class="fas ' + STATUS_ICONS[i] + '"></i></div>' +
-      '<div class="step-label">' + step + '</div>' +
-    '</div>';
+
+  STATUS_STEPS.forEach((step, index) => {
+
+    let className = '';
+
+    if (index < activeIndex) {
+      className = 'completed';
+    } else if (index === activeIndex) {
+      className = 'active';
+    }
+
+    stepsHTML += `
+      <div class="step ${className}">
+        <div class="step-icon">
+          <i class="fas ${STATUS_ICONS[index]}"></i>
+        </div>
+        <div class="step-label">
+          ${escapeHTML(step)}
+        </div>
+      </div>
+    `;
   });
 
-  const items = Array.isArray(order.order_items) ? order.order_items : [];
-  const itemsHTML = items.map(i => {
-    const qty = i.qty || 1;
-    const total = (i.price || 0) * qty;
-    return '<div class="item-line"><span>' + (i.name || 'Product') + ' × ' + qty + '</span><span>₹' + total.toFixed(2) + '</span></div>';
-  }).join('');
+  let items = [];
 
-  const dateStr = new Date(order.created_at).toLocaleDateString('en-IN', {
-    day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+  if (Array.isArray(order.order_items)) {
+    items = order.order_items;
+  } else if (typeof order.order_items === 'string') {
+    try {
+      const parsed = JSON.parse(order.order_items);
+      if (Array.isArray(parsed)) {
+        items = parsed;
+      }
+    } catch (e) {
+      console.warn('Could not parse order_items');
+    }
+  }
+
+  let itemsHTML = '';
+
+  items.forEach(item => {
+
+    const name =
+      escapeHTML(item.name || item.product_name || 'Product');
+
+    const qty =
+      Math.max(1, Number(item.qty || item.quantity || 1));
+
+    const price =
+      Number(item.price || item.mrp || 0);
+
+    itemsHTML += `
+      <div class="item-line">
+        <span>${name} × ${qty}</span>
+        <span>₹${money(price * qty)}</span>
+      </div>
+    `;
   });
 
-  resultDiv.innerHTML = `
+  if (!itemsHTML) {
+    itemsHTML =
+      '<div class="item-line">No items found</div>';
+  }
+
+  let dateText = 'Not available';
+
+  if (order.created_at) {
+
+    const date =
+      new Date(order.created_at);
+
+    if (!isNaN(date.getTime())) {
+
+      dateText =
+        date.toLocaleDateString(
+          'en-IN',
+          {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          }
+        );
+    }
+  }
+
+  const customerName =
+    escapeHTML(order.customer_name || 'Customer');
+
+  const customerPhone =
+    escapeHTML(order.customer_phone || '');
+
+  const deliveryAddress =
+    escapeHTML(order.delivery_address || 'Not available');
+
+  const pincode =
+    escapeHTML(order.pincode || '');
+
+  const paymentStatus =
+    escapeHTML(order.payment_status || 'Pending');
+
+  const orderCode =
+    escapeHTML(order.order_code || '');
+
+  const subtotal =
+    Number(order.subtotal || 0);
+
+  const deliveryCharge =
+    Number(order.delivery_charge || 0);
+
+  const grandTotal =
+    Number(order.grand_total || 0);
+
+  result.innerHTML = `
     <div class="result-card">
+
       <div class="result-head">
-        <h2>Order #${order.order_code}</h2>
-        <span class="order-status-badge">${currentStatus}</span>
+
+        <h2>
+          Order #${orderCode}
+        </h2>
+
+        <span class="order-status-badge">
+          ${escapeHTML(status)}
+        </span>
+
       </div>
+
       <div class="progress-steps">
-        <div class="progress-fill" style="width:${progressPercent}%;"></div>
+
+        <div
+          class="progress-fill"
+          style="width:${progress}%">
+        </div>
+
         ${stepsHTML}
+
       </div>
+
       <div class="order-details">
-        <div class="detail-row"><span>Customer</span><span>${order.customer_name || 'Customer'}</span></div>
-        <div class="detail-row"><span>Phone</span><span>${order.customer_phone || ''}</span></div>
-        <div class="detail-row"><span>Delivery Address</span><span>${order.delivery_address || ''}, ${order.pincode || ''}</span></div>
-        <div class="detail-row"><span>Order Date</span><span>${dateStr}</span></div>
-        <div class="detail-row"><span>Payment Status</span><span>${order.payment_status || 'Pending'}</span></div>
+
+        <div class="detail-row">
+          <span>Customer</span>
+          <span>${customerName}</span>
+        </div>
+
+        <div class="detail-row">
+          <span>Phone</span>
+          <span>${customerPhone}</span>
+        </div>
+
+        <div class="detail-row">
+          <span>Delivery Address</span>
+          <span>
+            ${deliveryAddress}${pincode ? ', ' + pincode : ''}
+          </span>
+        </div>
+
+        <div class="detail-row">
+          <span>Order Date</span>
+          <span>${escapeHTML(dateText)}</span>
+        </div>
+
+        <div class="detail-row">
+          <span>Payment Status</span>
+          <span>${paymentStatus}</span>
+        </div>
+
       </div>
+
       <div class="order-items-list">
+
         <h4>📦 Items Ordered</h4>
-        ${itemsHTML || '<div class="item-line">No items found</div>'}
-        <div class="detail-row" style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1);">
-          <span>Subtotal</span><span>₹${(order.subtotal || 0).toFixed(2)}</span>
+
+        ${itemsHTML}
+
+        <div
+          class="detail-row"
+          style="
+            margin-top:12px;
+            padding-top:12px;
+            border-top:1px solid rgba(255,255,255,0.1);
+          "
+        >
+          <span>Subtotal</span>
+          <span>₹${money(subtotal)}</span>
         </div>
-        <div class="detail-row"><span>Delivery Charge</span><span>₹${(order.delivery_charge || 0).toFixed(2)}</span></div>
-        <div class="detail-row" style="font-size:1.1rem; padding-top:12px;">
-          <span style="color:#f97316; font-weight:700;">Grand Total</span>
-          <span style="color:#22c55e; font-weight:800;">₹${(order.grand_total || 0).toFixed(2)}</span>
+
+        <div class="detail-row">
+          <span>Delivery Charge</span>
+          <span>₹${money(deliveryCharge)}</span>
         </div>
+
+        <div
+          class="detail-row"
+          style="
+            font-size:1.1rem;
+            padding-top:12px;
+          "
+        >
+          <span
+            style="
+              color:#f97316;
+              font-weight:700;
+            "
+          >
+            Grand Total
+          </span>
+
+          <span
+            style="
+              color:#22c55e;
+              font-weight:800;
+            "
+          >
+            ₹${money(grandTotal)}
+          </span>
+        </div>
+
       </div>
+
     </div>
   `;
 
-  resultDiv.classList.add('active');
+  result.classList.add('active');
+
+  setTimeout(() => {
+    result.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }, 150);
 }
 
-/* ============================================================
-   ENTER KEY SUPPORT
-============================================================ */
 document.addEventListener('DOMContentLoaded', function() {
-  ['trackOrderId', 'trackPhone'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') { e.preventDefault(); trackOrder(); }
-    });
+
+  const orderInput =
+    document.getElementById('trackOrderId');
+
+  const phoneInput =
+    document.getElementById('trackPhone');
+
+  orderInput.addEventListener('input', function() {
+    this.value = cleanOrderId(this.value);
   });
+
+  phoneInput.addEventListener('input', function() {
+    this.value = cleanPhone(this.value);
+  });
+
+  orderInput.addEventListener('keydown', function(event) {
+
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      trackOrder();
+    }
+
+  });
+
+  phoneInput.addEventListener('keydown', function(event) {
+
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      trackOrder();
+    }
+
+  });
+
 });
 </script>
 
 </body>
 </html>
+```
