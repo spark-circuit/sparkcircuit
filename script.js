@@ -36,6 +36,89 @@ let cart = JSON.parse(localStorage.getItem('sc_cart')) || [];
 let currentUserSession = null;
 
 // ============================================================
+// PREMIUM TOAST NOTIFICATION (Replaces alert)
+// ============================================================
+function showToast(message, type = 'success') {
+  let container = document.querySelector('.toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = `toast-msg ${type}`;
+  
+  const icon = type === 'error' ? 'fa-circle-xmark' : 'fa-check';
+  
+  toast.innerHTML = `
+    <i class="fas ${icon}"></i>
+    <div>${message}</div>
+  `;
+  
+  container.appendChild(toast);
+
+  // Show animation
+  setTimeout(() => toast.classList.add('show'), 10);
+
+  // Remove after 3 seconds
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 400); 
+  }, 3000);
+}
+
+// ============================================================
+// FLYING STAR ANIMATION (From Button to Cart)
+// ============================================================
+function flyToCart(startElement) {
+  const cartBtn = document.querySelector('.cart-btn');
+  if (!cartBtn || !startElement) return;
+
+  // 1. Star create karo
+  const star = document.createElement('i');
+  star.className = 'fas fa-star flying-star';
+  
+  // 2. Button ki position lo
+  const startRect = startElement.getBoundingClientRect();
+  const startX = startRect.left + (startRect.width / 2);
+  const startY = startRect.top + (startRect.height / 2);
+
+  // 3. Cart ki position lo
+  const endRect = cartBtn.getBoundingClientRect();
+  const endX = endRect.left + (endRect.width / 2);
+  const endY = endRect.top + (endRect.height / 2);
+
+  // 4. Star ko starting position pe rakho
+  star.style.left = `${startX}px`;
+  star.style.top = `${startY}px`;
+  document.body.appendChild(star);
+
+  // 5. Thodi der baad star ko cart ki taraf udo (Animation trigger)
+  setTimeout(() => {
+    star.style.left = `${endX}px`;
+    star.style.top = `${endY}px`;
+    star.style.transform = 'scale(0.3) rotate(360deg)'; // Chhota aur ghuma hua
+    star.style.opacity = '0.5';
+  }, 50);
+
+  // 6. Jab star cart me pahuche (0.8s baad), toh use delete karo aur cart ko bounce karao
+  setTimeout(() => {
+    star.remove();
+    
+    // Cart Bounce
+    cartBtn.classList.add('cart-animate');
+    setTimeout(() => cartBtn.classList.remove('cart-animate'), 600);
+
+    // Badge Pulse
+    const cartBadge = document.getElementById('cartCount');
+    if (cartBadge) {
+      cartBadge.classList.add('badge-animate');
+      setTimeout(() => cartBadge.classList.remove('badge-animate'), 500);
+    }
+  }, 800);
+}
+// ============================================================
 // MOBILE MENU
 // ============================================================
 function toggleMenu() {
@@ -101,6 +184,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       } catch(e) {}
       localStorage.removeItem('sc_pending_cart');
     }
+  }
+});
+// URL check karo agar cart open karna hai
+document.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('open_cart') === 'true') {
+    setTimeout(() => {
+      if (typeof toggleCart === 'function') {
+        toggleCart();
+      }
+    }, 500); // 0.5 second baad cart khulega taaki products load ho jayein
   }
 });
 
@@ -192,9 +286,13 @@ function renderProducts(products) {
         </div>
         ${p.in_stock
           ? `<div class="card-btns">
-               <button onclick="addToCart(${p.id})" class="btn-cart"><i class="fas fa-cart-plus"></i> Add</button>
-               <button onclick="buyNow(${p.id})" class="btn-buy">⚡ Buy Now</button>
-             </div>
+  <button onclick="addToCart(${p.id}, false, this)" class="btn-cart">
+    <i class="fas fa-cart-plus"></i> Add
+  </button>
+  <button onclick="buyNow(${p.id})" class="btn-buy">
+    ⚡ Buy Now
+  </button>
+</div>
              ${p.stock_quantity && p.stock_quantity <= 5 && p.stock_quantity > 0 
                ? `<div class="low-stock-badge">🔥 Only ${p.stock_quantity} left!</div>` 
                : ''}`
@@ -242,10 +340,30 @@ async function loadProductRatings() {
 // ============================================================
 // CART
 // ============================================================
-function addToCart(id, showNotice = true) {
-  const p = allProducts.find(x => x.id === id);
-  if (!p) return;
-  const ex = cart.find(x => x.id === id);
+// ============================================================
+// CART (FINAL FIX - SAB KUCH INCLUDED)
+// ============================================================
+function addToCart(id, showNotice = true, btnElement = null) {
+  let p = allProducts.find(x => x.id === id);
+  
+  if (!p) {
+    // Agar product list me nahi hai, toh Supabase se fetch karo
+    fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${id}`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    }).then(res => res.json()).then(data => {
+      if (data && data.length > 0) {
+        processCartAddition(data[0], showNotice, btnElement);
+      }
+    });
+    return;
+  }
+  
+  processCartAddition(p, showNotice, btnElement);
+}
+
+function processCartAddition(p, showNotice, btnElement) {
+  const ex = cart.find(x => x.id === p.id);
+  
   if (ex) {
     ex.qty += 1;
     ex.price = p.price;
@@ -253,8 +371,46 @@ function addToCart(id, showNotice = true) {
   } else {
     cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
   }
+  
   saveCart();
-  if (showNotice) alert(`✅ Added "${p.name}" to cart!`);
+  animateCartIcon(); 
+
+  if (btnElement) {
+    flyToCart(btnElement); 
+    const originalHTML = btnElement.innerHTML;
+    btnElement.classList.add('btn-added');
+    btnElement.innerHTML = '<i class="fas fa-check"></i> Added!';
+    
+    setTimeout(() => {
+      btnElement.classList.remove('btn-added');
+      btnElement.innerHTML = originalHTML;
+    }, 2000);
+  } else if (showNotice) {
+    showToast(`"${p.name}" added to cart!`);
+  }
+
+    const cartModal = document.getElementById('cartModal');
+  if (cartModal && cartModal.classList.contains('active')) {
+    // Agar checkout form open nahi hai, tabhi cart items refresh karo
+    const checkoutForm = document.getElementById('checkoutForm');
+    if (checkoutForm && checkoutForm.style.display === 'none') {
+      renderCartUI();
+    }
+  }
+}
+
+function animateCartIcon() {
+  const cartBtn = document.querySelector('.cart-btn');
+  const cartBadge = document.getElementById('cartCount');
+  
+  if (cartBtn) {
+    cartBtn.classList.add('cart-animate');
+    setTimeout(() => cartBtn.classList.remove('cart-animate'), 600);
+  }
+  if (cartBadge) {
+    cartBadge.classList.add('badge-animate');
+    setTimeout(() => cartBadge.classList.remove('badge-animate'), 500);
+  }
 }
 
 function buyNow(id) {
@@ -278,104 +434,51 @@ function updateCartBadge() {
 }
 
 // ============================================================
-// WISHLIST
+// WISHLIST (Waisa hi rahega)
 // ============================================================
 async function loadWishlist() {
   const { data: { session } } = await _supabase.auth.getSession();
-  if (!session?.user?.email) {
-    updateWishlistBadge(0);
-    return [];
-  }
-
+  if (!session?.user?.email) { updateWishlistBadge(0); return []; }
   try {
-    const { data, error } = await _supabase
-      .from('wishlist')
-      .select('product_id')
-      .eq('user_email', session.user.email);
-
+    const { data, error } = await _supabase.from('wishlist').select('product_id').eq('user_email', session.user.email);
     if (error) throw error;
     const ids = (data || []).map(w => w.product_id);
     updateWishlistBadge(ids.length);
     return ids;
-  } catch (e) {
-    console.error('Wishlist load failed:', e);
-    return [];
-  }
+  } catch (e) { console.error('Wishlist load failed:', e); return []; }
 }
 
 function updateWishlistBadge(count) {
   const b = document.getElementById('wishlistCount');
-  if (b) {
-    b.innerText = count;
-    b.style.display = count > 0 ? 'inline-block' : 'none';
-  }
+  if (b) { b.innerText = count; b.style.display = count > 0 ? 'inline-block' : 'none'; }
 }
 
 async function toggleWishlist(productId, event) {
-  if (event) {
-    event.stopPropagation();
-    event.preventDefault();
-  }
-
+  if (event) { event.stopPropagation(); event.preventDefault(); }
   const { data: { session } } = await _supabase.auth.getSession();
-  if (!session?.user?.email) {
-    alert('❤️ Please login to add items to wishlist!');
-    openLoginModal();
-    return;
-  }
-
+  if (!session?.user?.email) { showToast('Please login to add items to wishlist!', 'error'); openLoginModal(); return; }
   const userEmail = session.user.email;
-
   try {
-    const { data: existing } = await _supabase
-      .from('wishlist')
-      .select('id')
-      .eq('user_email', userEmail)
-      .eq('product_id', productId)
-      .single();
-
+    const { data: existing } = await _supabase.from('wishlist').select('id').eq('user_email', userEmail).eq('product_id', productId).single();
     if (existing) {
-      await _supabase
-        .from('wishlist')
-        .delete()
-        .eq('user_email', userEmail)
-        .eq('product_id', productId);
-      console.log('💔 Removed from wishlist');
+      await _supabase.from('wishlist').delete().eq('user_email', userEmail).eq('product_id', productId);
     } else {
-      await _supabase
-        .from('wishlist')
-        .insert([{ user_email: userEmail, product_id: productId }]);
-      console.log('❤️ Added to wishlist');
+      await _supabase.from('wishlist').insert([{ user_email: userEmail, product_id: productId }]);
     }
-
     await loadWishlist();
     updateHeartIcons();
-
-  } catch (e) {
-    console.error('Wishlist toggle failed:', e);
-  }
+  } catch (e) { console.error('Wishlist toggle failed:', e); }
 }
 
 async function updateHeartIcons() {
   const { data: { session } } = await _supabase.auth.getSession();
   if (!session?.user?.email) return;
-
-  const { data } = await _supabase
-    .from('wishlist')
-    .select('product_id')
-    .eq('user_email', session.user.email);
-
+  const { data } = await _supabase.from('wishlist').select('product_id').eq('user_email', session.user.email);
   const wishlistIds = new Set((data || []).map(w => w.product_id));
-
   document.querySelectorAll('.wishlist-heart').forEach(el => {
     const pid = parseInt(el.getAttribute('data-product-id'));
-    if (wishlistIds.has(pid)) {
-      el.classList.add('active');
-      el.innerHTML = '<i class="fas fa-heart"></i>';
-    } else {
-      el.classList.remove('active');
-      el.innerHTML = '<i class="far fa-heart"></i>';
-    }
+    if (wishlistIds.has(pid)) { el.classList.add('active'); el.innerHTML = '<i class="fas fa-heart"></i>'; } 
+    else { el.classList.remove('active'); el.innerHTML = '<i class="far fa-heart"></i>'; }
   });
 }
 
@@ -412,16 +515,67 @@ function renderCartUI() {
   const gt = document.getElementById('grandTotalAmt');
   if (!c) return;
 
+  // ==========================================
+  // 1. AGAR CART KHALI HAI
+  // ==========================================
   if (cart.length === 0) {
-    c.innerHTML = '<p style="text-align:center;color:#64748b;padding:20px;">Your cart is empty.</p>';
+    let suggestedHTML = '';
+    if (allProducts && allProducts.length > 0) {
+      const suggested = allProducts.slice(0, 6);
+      suggestedHTML = suggested.map(p => `
+        <div class="mini-product-card">
+          <img src="${p.image || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80'}" class="mini-product-img">
+          <div class="mini-product-name">${p.name}</div>
+          <div class="mini-product-price">₹${p.price}</div>
+          <button onclick="addToCart(${p.id}, false, this)" class="mini-add-btn">+ Add</button>
+        </div>
+      `).join('');
+    }
+
+    c.innerHTML = `
+      <div class="empty-cart-wrapper">
+        <div class="empty-cart-icon"><i class="fas fa-shopping-cart"></i></div>
+        <h3>Your Cart is Empty!</h3>
+        <p>Looks like you haven't added anything yet.</p>
+        <button onclick="toggleCart(); window.location.href='index.html';" class="empty-cart-btn">
+          <i class="fas fa-shopping-bag"></i> Start Shopping
+        </button>
+      </div>
+      <div class="cart-suggestions-section">
+        <div class="cart-suggestions-title"><i class="fas fa-star" style="color:#fbbf24;"></i> Suggested for You</div>
+        <div class="cart-suggestions-slider">${suggestedHTML || '<p style="font-size:0.8rem; color:#94a3b8;">Loading products...</p>'}</div>
+      </div>
+      <div class="cart-suggestions-section">
+        <div class="cart-suggestions-title"><i class="fas fa-history" style="color:#f97316;"></i> Items You May Have Missed</div>
+        <div class="cart-suggestions-slider">
+           ${allProducts.slice(-6).map(p => `
+            <div class="mini-product-card">
+              <img src="${p.image || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80'}" class="mini-product-img">
+              <div class="mini-product-name">${p.name}</div>
+              <div class="mini-product-price">₹${p.price}</div>
+              <button onclick="addToCart(${p.id}, false, this)" class="mini-add-btn">+ Add</button>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+    
     if (box) box.style.display = 'none';
     const pb = document.getElementById('proceedBtn');
     if (pb) pb.style.display = 'none';
-    return;
+    const ct = document.getElementById('cartFooter');
+    if (ct) ct.style.display = 'none';
+    return; 
   }
+
+  // ==========================================
+  // 2. AGAR CART ME ITEMS HAIN (CALCULATIONS)
+  // ==========================================
+  if (box) box.style.display = 'block';
   const pb = document.getElementById('proceedBtn');
   if (pb) pb.style.display = 'block';
-  if (box) box.style.display = 'block';
+  const ct = document.getElementById('cartFooter');
+  if (ct) ct.style.display = 'block';
 
   let sub = 0;
   c.innerHTML = cart.map(i => {
@@ -464,6 +618,7 @@ function renderCartUI() {
     }
   }
 
+  // 👇 YAHAN SHIPPING AUR GRAND TOTAL CALCULATE HO RAHA HAI (Jo miss ho gaya tha) 👇
   const ship = sub >= FREE_SHIPPING_MIN ? 0 : SHIPPING_CHARGE;
   const grand = sub + ship;
   if (st) st.innerText = sub;
@@ -490,9 +645,11 @@ function changeQty(id, ch) {
     cart = cart.filter(x => x.id !== id);
   }
   saveCart();
-  renderCartUI();
   if (cart.length === 0) {
-    resetCartUI();
+    resetCartUI(); 
+    renderCartUI();
+  } else {
+    renderCartUI();
   }
 }
 
@@ -722,23 +879,23 @@ function resetOtpStep() {
 
 async function sendEmailOTP() {
   const email = document.getElementById('authEmail').value.trim();
-  if (!email || !email.includes('@')) { alert('Enter valid Email!'); return; }
+  if (!email || !email.includes('@')) { showToast('Please enter a valid Email address.', 'error'); return; }
   const btn = document.getElementById('btnSendOtp');
   btn.innerText = 'Sending...'; btn.disabled = true;
   try {
     const { error } = await _supabase.auth.signInWithOtp({ email });
     if (error) throw error;
-    alert('✅ OTP sent to ' + email);
+    showToast('OTP sent to ' + email);
     document.getElementById('otpStep1').style.display = 'none';
     document.getElementById('otpStep2').style.display = 'block';
-  } catch (err) { alert('Failed: ' + err.message); }
+  } catch (err) { showToast('Failed: ' + err.message, 'error'); }
   finally { btn.innerText = 'Send OTP →'; btn.disabled = false; }
 }
 
 async function verifyEmailOTP() {
   const email = document.getElementById('authEmail').value.trim();
   const token = document.getElementById('otpCode').value.trim();
-  if (token.length !== 6) { alert('Enter 6-digit OTP!'); return; }
+  if (token.length !== 6) { showToast('Please enter 6-digit OTP.', 'error'); return; }
   const btn = document.getElementById('btnVerifyOtp');
   btn.innerText = 'Verifying...'; btn.disabled = true;
   try {
@@ -746,13 +903,13 @@ async function verifyEmailOTP() {
     if (error) throw error;
     currentUserSession = data.session;
     updateAuthUI(currentUserSession?.user);
-    alert('✅ Verified! Logged in.');
+    showToast('Verified successfully! Logged in.');
     closeLoginModal();
     if (cart.length > 0) {
       toggleCart();
       showCheckout();
     }
-  } catch (err) { alert('Invalid OTP: ' + err.message); }
+  } catch (err) { showToast('Invalid OTP: ' + err.message, 'error'); }
   finally { btn.innerText = 'Verify OTP & Login →'; btn.disabled = false; }
 }
 
@@ -990,25 +1147,25 @@ async function processOrderToPayment() {
   const pincode = document.getElementById('custPincode').value.trim();
   const payType = document.querySelector('input[name="payType"]:checked')?.value || 'UPI';
 
-  if (!name || !phone || !address || !pincode) { alert('Please fill all shipping details!'); return; }
+  if (!name || !phone || !address || !pincode) { showToast('Please fill all shipping details.', 'error'); return; }
   if (phone.length !== 10 || !/^[6-9]\d{9}$/.test(phone)) {
-    alert('❌ Please enter a valid 10-digit Indian mobile number (starting with 6-9)');
+    showToast('Please enter a valid 10-digit Indian mobile number.', 'error');
     return;
   }
   if (pincode.length !== 6 || !/^\d{6}$/.test(pincode)) {
-    alert('❌ Please enter a valid Pincode');
+    showToast('Please enter a valid Pincode.', 'error');
     return;
   }
   if (cart.length === 0) {
-    alert('❌ Cart is empty!');
+    showToast('Your cart is empty.', 'error');
     return;
   }
 
-  const MIN_ORDER_VALUE = 99;
+    const MIN_ORDER_VALUE = 99;
   const currentSubtotal = cart.reduce((a, i) => a + i.price * i.qty, 0);
   if (currentSubtotal < MIN_ORDER_VALUE) {
     const remaining = MIN_ORDER_VALUE - currentSubtotal;
-    alert(`❌ Minimum order value is ₹${MIN_ORDER_VALUE}.\n\n🛒 Your cart: ₹${currentSubtotal}\n💰 Add ₹${remaining} more items.\n\n💡 Tip: Free shipping above ₹499!`);
+    showToast(`Minimum order is ₹${MIN_ORDER_VALUE}. Add ₹${remaining} more to proceed.`, 'error');
     return;
   }
 
@@ -1018,7 +1175,7 @@ async function processOrderToPayment() {
 
   const pinResult = await validatePincode(pincode);
   if (!pinResult.valid) {
-    alert('❌ ' + pinResult.error);
+    showToast(pinResult.error, 'error');
     btn.innerText = 'Place Order →'; btn.disabled = false;
     return;
   }
@@ -1099,7 +1256,7 @@ async function processOrderToPayment() {
             razorpayOrderId: response.razorpay_order_id
           });
         } else {
-          alert('❌ Payment verification failed: ' + (verifyResult?.error || 'Unknown error'));
+          showToast('Payment verification failed.', 'error');
           btn.innerText = 'Place Order →'; btn.disabled = false;
         }
       },
@@ -1123,13 +1280,13 @@ async function processOrderToPayment() {
 
     const rzp = new Razorpay(options);
     rzp.on('payment.failed', function(response) {
-      alert('❌ Payment failed: ' + response.error.description);
+      showToast('Payment failed: ' + response.error.description, 'error');
       btn.innerText = 'Place Order →'; btn.disabled = false;
     });
     rzp.open();
 
   } catch (err) {
-    alert('❌ ' + err.message);
+    showToast(err.message, 'error');
     btn.innerText = 'Place Order →'; btn.disabled = false;
   }
 }
@@ -1251,7 +1408,7 @@ async function saveOrderToSupabase(orderData) {
       grand_total: grand,
       payment_status: paymentStatus,
       payType: payType,
-     created_at: data[0].created_at
+      created_at: new Date().toISOString()
     };
 
     // Send notifications
@@ -1311,7 +1468,7 @@ async function saveOrderToSupabase(orderData) {
     updateCartBadge();
 
   } catch (err) {
-    alert('Order save failed: ' + err.message);
+    showToast('Order save failed. Please try again.', 'error');
     if (btn) { btn.innerText = 'Place Order →'; btn.disabled = false; }
   }
 }
@@ -1790,13 +1947,13 @@ async function cancelOrder(orderId) {
       .single();
     
     if (fetchErr || !order) {
-      alert('❌ Order not found');
+      showToast('Order not found', 'error');
       return;
     }
     
     const status = order.order_status || 'Pending';
     if (status === 'Shipped' || status === 'Delivered' || status === 'Cancelled') {
-      alert(`❌ Cannot cancel order.\n\nCurrent status: "${status}"\n\nOnly "Pending" or "Processing" orders can be cancelled.`);
+      showToast(`Cannot cancel order. Status is already "${status}".`, 'error');
       return;
     }
     
@@ -1836,7 +1993,7 @@ async function cancelOrder(orderId) {
       }
     }
     
-    sendTelegramCancelAlert({
+        sendTelegramCancelAlert({
       order_code: order.order_code || 'SPC-' + order.id,
       customer_name: order.customer_name,
       customer_phone: order.customer_phone,
@@ -1846,18 +2003,17 @@ async function cancelOrder(orderId) {
       payment_status: order.payment_status
     });
     
-    let successMsg = `✅ Order #${order.order_code || 'SPC-' + order.id} cancelled successfully!\n\n`;
+    let cancelMsg = `Order #${order.order_code || 'SPC-' + order.id} cancelled successfully.`;
     if (order.payment_status === 'Paid via Razorpay') {
-      successMsg += `💰 Refund will be processed within 5-7 business days to your original payment method.\n\n`;
+      cancelMsg += ` Refund will be processed in 5-7 days.`;
     }
-    successMsg += `📞 For any queries, contact us on WhatsApp: +91 6374017186`;
     
-    alert(successMsg);
+    showToast(cancelMsg);
     openMyOrdersModal();
     
   } catch (err) {
     console.error('Cancel order error:', err);
-    alert('❌ Failed to cancel order: ' + err.message);
+    showToast('Failed to cancel order. Please try again.', 'error');
   }
 }
 
@@ -1967,7 +2123,7 @@ function toggleFaq(el) {
 function confirmOnWhatsApp() {
   const order = currentOrderData;
   if (!order) {
-    alert('❌ Order data not found!');
+   showToast('Order data not found!', 'error');
     return;
   }
 
@@ -2000,7 +2156,7 @@ async function subscribeNewsletter() {
   }
   
   if (!_supabase) {
-    alert('❌ Connection error. Please refresh the page.');
+    showToast('Connection error. Please refresh the page.', 'error');
     return;
   }
   
@@ -2008,13 +2164,13 @@ async function subscribeNewsletter() {
   const email = emailInput.value.trim();
   
   if (!email || !email.includes('@') || !email.includes('.')) {
-    alert('❌ Please enter a valid email address!');
+    showToast('Please enter a valid email address!', 'error');
     return;
   }
   
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
-    alert('❌ Please enter a valid email address!');
+    showToast('Please enter a valid email address!', 'error');
     return;
   }
   
@@ -2033,7 +2189,7 @@ async function subscribeNewsletter() {
       .single();
     
     if (existing) {
-      alert('✅ You are already subscribed!\n\nWe\'ll keep you updated with new products and offers.');
+      showToast('You are already subscribed to our newsletter!');
       emailInput.value = '';
       if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; }
       return;
@@ -2048,16 +2204,16 @@ async function subscribeNewsletter() {
     
     if (error) throw error;
     
-    alert('🎉 Thank you for subscribing!\n\nYou\'ll receive updates about new products and exclusive offers.');
+    showToast('Thank you for subscribing!');
     emailInput.value = '';
     
   } catch (err) {
     console.error('Newsletter error:', err);
     
     if (err.message && err.message.includes('duplicate')) {
-      alert('✅ You are already subscribed!');
+      showToast('You are already subscribed!');
     } else {
-      alert('❌ Subscription failed. Please try again.');
+     showToast('Please enter a valid email address!', 'error');
     }
   } finally {
     if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; }
