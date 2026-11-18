@@ -12,8 +12,6 @@
 <meta name="keywords" content="electronic components India, buy ESP32 online, Arduino India, IoT devices, Bluetooth amplifier India, PCB design service, sensors buy online, embedded systems, SparkCircuit">
 <meta name="author" content="SparkCircuit — Azad Kumar">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
-<meta name="language" content="English">
-<meta name="revisit-after" content="7 days">
 <link rel="canonical" href="https://sparkcircuit.in/">
 
 <!-- OPEN GRAPH -->
@@ -22,16 +20,6 @@
 <meta property="og:title" content="SparkCircuit | Buy Electronic Components Online India">
 <meta property="og:description" content="India's trusted electronics store. ESP32, Arduino, sensors, IoT, amplifiers, PCB design. Free shipping above ₹499.">
 <meta property="og:image" content="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:url" content="https://sparkcircuit.in/">
-<meta property="og:locale" content="en_IN">
-
-<!-- TWITTER CARD -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="SparkCircuit | Buy Electronic Components Online India">
-<meta name="twitter:description" content="India's trusted electronics store. ESP32, Arduino, sensors, IoT, amplifiers, PCB design.">
-<meta name="twitter:image" content="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg">
 
 <!-- FAVICON -->
 <link rel="icon" type="image/jpeg" href="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg">
@@ -48,6 +36,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 
+<!-- RAZORPAY & PDF -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <!-- STRUCTURED DATA -->
 <script type="application/ld+json">
 {
@@ -57,23 +49,14 @@
   "url": "https://sparkcircuit.in/",
   "logo": "https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg",
   "description": "India's trusted electronics store for ESP32, Arduino, sensors, IoT devices, amplifiers, and PCB design services.",
-  "founder": {
-    "@type": "Person",
-    "name": "Azad Kumar"
-  },
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Chennai",
-    "addressRegion": "Tamil Nadu",
-    "addressCountry": "IN"
-  },
+  "founder": { "@type": "Person", "name": "Azad Kumar" },
+  "address": { "@type": "PostalAddress", "addressLocality": "Chennai", "addressRegion": "Tamil Nadu", "addressCountry": "IN" },
   "contactPoint": {
     "@type": "ContactPoint",
     "telephone": "+91-6374017186",
     "contactType": "customer service",
     "email": "sparkcircuit.in@gmail.com",
-    "areaServed": "IN",
-    "availableLanguage": ["English", "Hindi", "Tamil"]
+    "areaServed": "IN"
   },
   "sameAs": [
     "https://www.instagram.com/sparkcircuit.in",
@@ -82,602 +65,8 @@
   ]
 }
 </script>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "SparkCircuit",
-  "url": "https://sparkcircuit.in/",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://sparkcircuit.in/shop.html?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
-}
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-/* ============ HERO BACKGROUND ============ */
-.hero-bg-animated {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: #0a0f1f;
-  overflow: hidden;
-}
-
-.hero-video-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-}
-
-.hero-video-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(10, 15, 31, 0.15);
-  z-index: 1;
-  pointer-events: none;
-}
-
-#neuralCanvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.hero-vignette {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse at center,
-    transparent 0%,
-    transparent 50%,
-    rgba(5, 8, 16, 0.5) 100%
-  );
-  pointer-events: none;
-  z-index: 3;
-}
-
-.hero-content {
-  position: relative;
-  z-index: 4;
-  background: transparent;
-}
-
-.hero-overlay {
-  display: none !important;
-}
-
-/* ============ NEW LAUNCH OFFER BANNER ============ */
-.launch-offer-banner {
-  background: linear-gradient(135deg, #f97316, #fb923c);
-  color: #fff;
-  text-align: center;
-  padding: 12px 20px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  position: relative;
-  z-index: 100;
-  animation: pulseOffer 2s infinite;
-}
-
-.launch-offer-banner i {
-  margin-right: 8px;
-  animation: spin 3s linear infinite;
-  display: inline-block;
-}
-
-@keyframes pulseOffer {
-  0%, 100% { background: linear-gradient(135deg, #f97316, #fb923c); }
-  50% { background: linear-gradient(135deg, #ea580c, #f97316); }
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@media (max-width: 700px) {
-  .launch-offer-banner { font-size: 0.78rem; padding: 10px 15px; }
-}
-
-/* ============ MOBILE HERO ============ */
-@media (max-width: 700px) {
-  .hero-video-bg {
-    filter: brightness(1) contrast(1.1) saturate(1.2);
-    opacity: 0.9;
-  }
-  
-  .hero-video-overlay {
-    background: rgba(10, 15, 31, 0.1);
-  }
-  
-  #neuralCanvas {
-    opacity: 0.95;
-  }
-  
-  .hero-vignette {
-    background: radial-gradient(
-      ellipse at center,
-      transparent 0%,
-      transparent 60%,
-      rgba(5, 8, 16, 0.2) 85%,
-      rgba(5, 8, 16, 0.5) 100%
-    );
-  }
-  
-  .hero-content {
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.4);
-  }
-  
-  .hero h1 {
-    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), 0 2px 10px rgba(0, 0, 0, 0.4);
-  }
-  
-  .hero p {
-    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
-  }
-  
-  .hero-badge {
-    backdrop-filter: blur(15px);
-    background: rgba(249, 115, 22, 0.22);
-    box-shadow: 0 4px 20px rgba(249, 115, 22, 0.3);
-  }
-  
-  .hero {
-    padding: 100px 16px 60px;
-    min-height: auto;
-  }
-  
-  .hero h1 {
-    font-size: 1.9rem;
-    line-height: 1.15;
-  }
-  
-  .hero p {
-    font-size: 0.92rem;
-    line-height: 1.6;
-    margin-bottom: 28px;
-  }
-}
-
-/* ============ TRUST SECTION ============ */
-.trust-modern {
-  padding: 90px 20px;
-  background: linear-gradient(135deg, #f8fafc 0%, #fff 100%);
-  position: relative;
-  overflow: hidden;
-}
-.trust-modern::before {
-  content: '';
-  position: absolute;
-  top: -100px;
-  right: -100px;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(249,115,22,0.08), transparent 70%);
-  border-radius: 50%;
-}
-.trust-modern-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
-}
-.trust-modern-head {
-  text-align: center;
-  margin-bottom: 50px;
-}
-.trust-modern-head .kicker {
-  display: inline-block;
-  color: #f97316;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-.trust-modern-head h2 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2.4rem;
-  font-weight: 700;
-  color: #0f172a;
-  position: relative;
-  display: inline-block;
-}
-.trust-modern-head h2::after {
-  content: '';
-  position: absolute;
-  bottom: -14px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, #f97316, transparent);
-  border-radius: 2px;
-}
-
-/* Trust Statement Block (naya) */
-.trust-statement {
-  max-width: 750px;
-  margin: 0 auto 50px;
-  text-align: center;
-  padding: 0 20px;
-}
-
-.trust-statement .tagline {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #f97316;
-  margin-bottom: 20px;
-  letter-spacing: 0.5px;
-}
-
-.trust-statement p {
-  color: #475569;
-  font-size: 1rem;
-  line-height: 1.8;
-  margin-bottom: 16px;
-}
-
-.trust-statement .final-line {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin-top: 25px;
-  padding-top: 20px;
-  border-top: 2px dashed #fed7aa;
-  display: inline-block;
-}
-
-.trust-statement .final-line span {
-  background: linear-gradient(135deg, #f97316, #fbbf24);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-@media (max-width: 700px) {
-  .trust-statement .tagline { font-size: 1.1rem; }
-  .trust-statement p { font-size: 0.92rem; }
-  .trust-statement .final-line { font-size: 1rem; }
-}
-
-.trust-badges-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-}
-.trust-badge-item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 18px 22px;
-  transition: 0.3s;
-}
-.trust-badge-item:hover {
-  border-color: #f97316;
-  transform: translateX(6px);
-  box-shadow: 0 10px 25px rgba(249,115,22,0.1);
-}
-.trust-badge-item i {
-  font-size: 1.6rem;
-  color: #f97316;
-  flex-shrink: 0;
-}
-.trust-badge-item .badge-text strong {
-  display: block;
-  color: #0f172a;
-  font-size: 0.95rem;
-  font-weight: 700;
-  margin-bottom: 2px;
-}
-.trust-badge-item .badge-text span {
-  color: #64748b;
-  font-size: 0.8rem;
-}
-
-/* ============ SERVICES SPLIT ============ */
-.services-split {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.services-column {
-  background: rgba(15,23,42,0.55);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 20px;
-  padding: 35px 30px;
-}
-
-.services-column h3 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.4rem;
-  color: #fff;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.services-column h3 i {
-  color: #fb923c;
-}
-
-.services-column > p {
-  color: #cbd5e1;
-  font-size: 0.9rem;
-  margin-bottom: 20px;
-  line-height: 1.6;
-}
-
-.service-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  color: #e2e8f0;
-  font-size: 0.92rem;
-  font-weight: 500;
-}
-
-.service-item:last-child {
-  border-bottom: none;
-}
-
-.service-item i {
-  color: #fb923c;
-  font-size: 1rem;
-  flex-shrink: 0;
-}
-
-@media (max-width: 900px) {
-  .services-split {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-}
-
-/* ============ NEW LAUNCH SECTION ============ */
-.new-launch-section {
-  padding: 80px 20px;
-  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
-  text-align: center;
-}
-
-.new-launch-inner {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.new-launch-badge {
-  display: inline-block;
-  background: linear-gradient(135deg, #f97316, #fb923c);
-  color: #fff;
-  padding: 8px 22px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.85rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  box-shadow: 0 8px 25px rgba(249,115,22,0.35);
-}
-
-.new-launch-section h2 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: #0f172a;
-  margin-bottom: 15px;
-}
-
-.new-launch-section h2 span {
-  background: linear-gradient(135deg, #f97316, #fbbf24);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.new-launch-section p {
-  color: #475569;
-  font-size: 1.05rem;
-  line-height: 1.7;
-  margin-bottom: 30px;
-}
-
-.launch-benefits {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-bottom: 35px;
-}
-
-.launch-benefit {
-  background: #fff;
-  border-radius: 14px;
-  padding: 20px 15px;
-  border: 2px solid #fed7aa;
-  transition: 0.3s;
-}
-
-.launch-benefit:hover {
-  border-color: #f97316;
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(249,115,22,0.15);
-}
-
-.launch-benefit i {
-  font-size: 1.8rem;
-  color: #f97316;
-  margin-bottom: 10px;
-  display: block;
-}
-
-.launch-benefit strong {
-  display: block;
-  color: #0f172a;
-  font-family: 'Poppins', sans-serif;
-  font-size: 1rem;
-  margin-bottom: 4px;
-}
-
-.launch-benefit span {
-  color: #64748b;
-  font-size: 0.82rem;
-}
-
-@media (max-width: 700px) {
-  .new-launch-section { padding: 50px 16px; }
-  .new-launch-section h2 { font-size: 1.6rem; }
-  .new-launch-section p { font-size: 0.92rem; }
-  .launch-benefits { grid-template-columns: 1fr; gap: 12px; }
-  .launch-benefit { padding: 15px 12px; }
-}
-
-/* ============ HAVE AN IDEA SECTION ============ */
-.have-idea-section {
-  padding: 80px 20px;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.have-idea-section::before {
-  content: '';
-  position: absolute;
-  top: -100px;
-  left: -100px;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(249,115,22,0.15), transparent 70%);
-  border-radius: 50%;
-}
-
-.have-idea-section::after {
-  content: '';
-  position: absolute;
-  bottom: -100px;
-  right: -100px;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(249,115,22,0.1), transparent 70%);
-  border-radius: 50%;
-}
-
-.have-idea-inner {
-  max-width: 800px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
-}
-
-.have-idea-inner .kicker {
-  display: inline-block;
-  color: #fb923c;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-
-.have-idea-inner h2 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2.4rem;
-  font-weight: 800;
-  color: #fff;
-  margin-bottom: 15px;
-  line-height: 1.2;
-}
-
-.have-idea-inner h2 span {
-  background: linear-gradient(135deg, #f97316, #fbbf24);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.have-idea-inner p {
-  color: #cbd5e1;
-  font-size: 1.05rem;
-  line-height: 1.7;
-  margin-bottom: 30px;
-}
-
-.have-idea-btns {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.btn-wa {
-  background: #25d366;
-  color: #fff;
-  padding: 15px 32px;
-  border-radius: 50px;
-  font-weight: 700;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  transition: 0.3s;
-  font-size: 0.95rem;
-}
-
-.btn-wa:hover {
-  background: #1eb856;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(37,211,102,0.4);
-}
-
-@media (max-width: 700px) {
-  .have-idea-section { padding: 50px 16px; }
-  .have-idea-inner h2 { font-size: 1.6rem; }
-  .have-idea-inner p { font-size: 0.92rem; }
-  .have-idea-btns { flex-direction: column; }
-  .btn-wa { justify-content: center; width: 100%; }
-}
-
-/* ============ RESPONSIVE ============ */
-@media (max-width: 900px) {
-  .trust-modern-head h2 { font-size: 1.8rem; }
-}
-@media (max-width: 500px) {
-  .trust-modern { padding: 60px 16px; }
-  .trust-modern-head h2 { font-size: 1.7rem; }
-  .trust-badge-item { padding: 14px 18px; }
-  .trust-badge-item i { font-size: 1.3rem; }
-}
-</style>
 </head>
 <body>
-
-<!-- NEW LAUNCH OFFER BANNER (TOP) -->
-<div class="launch-offer-banner">
-  <i class="fas fa-gift"></i> 
-  <strong>NEW LAUNCH OFFER:</strong> First 100 Customers Get 10% OFF — Use Code: <strong>LAUNCH10</strong>
-</div>
 
 <!-- HEADER -->
 <header class="header">
@@ -689,366 +78,202 @@
         <span class="brand-tag">TECH / R&D STUDIO</span>
       </div>
     </a>
-    <nav class="nav" id="navMenu">
-      <a href="#home">Home</a>
-      <a href="#about">About</a>
-      <a href="#products">Products</a>
-      <a href="#services">Services</a>
-      <a href="#contact">Contact</a>
-      <a href="shop.html" class="btn-shop"><i class="fas fa-shopping-bag"></i> Shop Now</a>
-    </nav>
-    <div class="hamburger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+
+    <div class="search-box-wrapper">
+      <div class="search-box">
+        <input type="text" id="searchInput" onkeyup="handleSearchInput()" onfocus="handleSearchFocus()" onblur="handleSearchBlur()" placeholder="Search Parts, Components, SKU..." autocomplete="off">
+        <i class="fas fa-search"></i>
+      </div>
+      <div id="searchSuggestions" class="search-suggestions"></div>
+    </div>
+
+    <div class="nav-icons">
+      <a href="index.html" class="nav-item" style="color:#f97316;"><i class="fas fa-home"></i><span>Home</span></a>
+      <a href="shop.html" class="nav-item"><i class="fas fa-store"></i><span>Shop</span></a>
+      <a href="about.html" class="nav-item"><i class="fas fa-circle-info"></i><span>About</span></a>
+      <div class="user-dropdown">
+        <div id="userNavContainer" onclick="toggleProfileMenu()" class="nav-item user-btn">
+          <i class="fas fa-circle-user"></i>
+          <span id="navUserText">Account</span>
+          <i class="fas fa-chevron-down mini"></i>
+        </div>
+        <div id="profileDropdown" class="dropdown">
+          <div id="loggedInOptions" style="display:none;">
+            <a href="javascript:void(0)" onclick="openMyOrdersModal(); closeProfileMenu();"><i class="fas fa-box"></i> My Orders</a>
+            <a href="javascript:void(0)" onclick="handleLogout(); closeProfileMenu();" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+          <div id="loggedOutOptions">
+            <a href="javascript:void(0)" onclick="openLoginModal(); closeProfileMenu();"><i class="fas fa-sign-in-alt"></i> Login / Register</a>
+          </div>
+        </div>
+      </div>
+      <a href="wishlist.html" class="nav-item wishlist-btn" style="text-decoration:none;">
+        <i class="fas fa-heart"></i>
+        <span>Wishlist</span>
+        <span id="wishlistCount" class="cart-badge">0</span>
+      </a>
+      <div class="nav-item cart-btn" onclick="toggleCart()">
+        <i class="fas fa-shopping-cart"></i>
+        <span>Cart</span>
+        <span id="cartCount" class="cart-badge">0</span>
+      </div>
+    </div>
   </div>
 </header>
 
-<!-- HERO -->
-<section class="hero" id="home">
-
-<div class="hero-bg-animated">
-  <video autoplay loop muted playsinline class="hero-video-bg">
-    <source src="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/site-assets/hero-bg.mp4" type="video/mp4">
-  </video>
-  <div class="hero-video-overlay"></div>
-  <canvas id="neuralCanvas"></canvas>
-  <div class="hero-vignette"></div>
+<!-- CATEGORY STRIP -->
+<div class="cat-strip">
+  <div class="cat-strip-inner">
+    <a href="#products" onclick="filterCategory('All')">All Products</a>
+    <a href="#products" onclick="filterCategory('Microcontrollers')">Microcontrollers</a>
+    <a href="#products" onclick="filterCategory('Sensors')">Sensors</a>
+    <a href="#products" onclick="filterCategory('Power Supply')">Power Supply</a>
+    <a href="#products" onclick="filterCategory('Battery/BMS/Charger IC')">Battery/BMS</a>
+    <a href="#products" onclick="filterCategory('Interface Module')">Interface Module</a>
+    <a href="#products" onclick="filterCategory('Motor')">Motor</a>
+    <a href="#products" onclick="filterCategory('Servo & Stepper Motor')">Servo & Stepper</a>
+    <a href="#products" onclick="filterCategory('Display')">Display</a>
+    <a href="#products" onclick="filterCategory('Relay')">Relay</a>
+    <a href="#products" onclick="filterCategory('Wheels')">Wheels</a>
+    <a href="#products" onclick="filterCategory('Fan')">Fan</a>
+    <a href="#products" onclick="filterCategory('LEDs')">LEDs</a>
+    <a href="#products" onclick="filterCategory('Capacitor')">Capacitor</a>
+    <a href="#products" onclick="filterCategory('Resistor')">Resistor</a>
+    <a href="#products" onclick="filterCategory('Speakers')">Speakers</a>
+    <a href="#products" onclick="filterCategory('Audio & Amplifiers')">Audio & Amps</a>
+    <a href="#products" onclick="filterCategory('IoT Devices')">IoT Devices</a>
+  </div>
 </div>
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <div class="hero-badge reveal"><span class="dot"></span> INDEPENDENT TECH STUDIO / INDIA</div>
-    <h1 class="reveal">From an idea<br>to <span class="grad">intelligent technology.</span></h1>
-    <p class="reveal">Electronics, IoT & Smart Technology — from concept to reality. We design, build, and deliver innovative solutions that matter.</p>
-    <div class="hero-btns reveal">
-      <a href="shop.html" class="btn btn-primary"><i class="fas fa-bolt"></i> Explore Products</a>
-      <a href="https://wa.me/916374017186?text=Hi%20SparkCircuit,%20I%20want%20to%20start%20a%20project" target="_blank" class="btn btn-ghost">Start a Project <i class="fas fa-arrow-right"></i></a>
-    </div>
-    <div class="hero-stats reveal">
-      <div><strong>100%</strong><span>Genuine Parts</span></div>
-      <div><strong>24h</strong><span>Fast Dispatch</span></div>
-      <div><strong>7-Day</strong><span>Easy Returns</span></div>
-      <div><strong>COD</strong><span>Available</span></div>
-    </div>
-  </div>
-</section>
 
-<!-- TRUST STRIP -->
-<section class="trust-strip">
-  <div class="trust-inner">
-    <div class="trust-item reveal"><i class="fas fa-shield-alt"></i><div><strong>100% Genuine</strong><span>Tested Components</span></div></div>
-    <div class="trust-item reveal"><i class="fas fa-truck-fast"></i><div><strong>Express Shipping</strong><span>Dispatched in 24h</span></div></div>
-    <div class="trust-item reveal"><i class="fas fa-rotate-left"></i><div><strong>7-Day Returns</strong><span>Hassle-Free</span></div></div>
-    <div class="trust-item reveal"><i class="fas fa-lock"></i><div><strong>Secure Payment</strong><span>UPI & COD</span></div></div>
-  </div>
-</section>
-
-<!-- NEW LAUNCH SECTION -->
-<section class="new-launch-section">
-  <div class="new-launch-inner reveal">
-    <span class="new-launch-badge">🎉 Just Launched</span>
-    <h2>Be Among Our <span>First 100 Customers</span></h2>
-    <p>We're a new Indian technology studio with a simple mission — deliver genuine, tested components and build real hardware solutions. Join us in our journey and get exclusive launch benefits.</p>
-    <div class="launch-benefits">
-      <div class="launch-benefit">
-        <i class="fas fa-percent"></i>
-        <strong>10% OFF</strong>
-        <span>On First Order</span>
-      </div>
-      <div class="launch-benefit">
-        <i class="fas fa-headset"></i>
-        <strong>Priority Support</strong>
-        <span>Direct WhatsApp Help</span>
-      </div>
-      <div class="launch-benefit">
-        <i class="fas fa-shipping-fast"></i>
-        <strong>Free Shipping</strong>
-        <span>On Orders Above ₹499</span>
-      </div>
+<!-- MAIN PRODUCTS -->
+<div class="main">
+  <div class="banners">
+    <div class="banner dark">
+      <h2>⚡ Spark Your Creation</h2>
+      <p>Global Component Sourcing</p>
+    </div>
+    <div class="banner orange">
+      <h2>🚚 Express Delivery</h2>
+      <p>Free Shipping Above ₹499</p>
     </div>
   </div>
-</section>
 
-<!-- ABOUT -->
-<section class="section about" id="about">
-  <div class="section-head reveal">
-    <span class="kicker">About SparkCircuit</span>
-    <h2>Engineering Next-Gen Hardware</h2>
+  <h2 class="section-title" id="products">Trending Electronics & Hardware</h2>
+  <div id="dbProductGrid" class="product-grid">
+    <p style="text-align:center; grid-column:1/-1; color:#94a3b8;">Loading inventory...</p>
   </div>
-  <div class="about-grid">
-    <div class="about-img reveal">
-      <img src="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/site-assets/closeup-circuit-board.jpg" alt="Circuit Board">
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal-overlay" style="display:none;">
+  <div class="modal-dark">
+    <h3>🔐 Login / Register</h3>
+    <p class="muted">Enter email to receive OTP code</p>
+    <div id="otpStep1">
+      <input type="email" id="authEmail" placeholder="Enter your Email" class="input-dark">
+      <button onclick="sendEmailOTP()" id="btnSendOtp" class="btn-primary full">Send OTP →</button>
     </div>
-    <div class="about-text reveal">
-      <p><strong>SparkCircuit</strong> is an emerging Indian technology studio founded by <strong>Azad Kumar</strong> with a vision to build innovative, reliable, and affordable electronic solutions for homes, businesses, and industries.</p>
-      <p>We specialize in <strong>electronics, IoT, and smart technology</strong> — from concept and prototype to real-world products. Our work covers Bluetooth amplifiers, home theater systems, smart LED controllers, IoT devices, embedded systems, PCB design, and custom hardware development.</p>
-      <p>Every circuit we design, every product we build, and every solution we create reflects our commitment to innovation, quality, and customer satisfaction.</p>
-      <div class="mv-row">
-        <div class="mv-box">
-          <i class="fas fa-crosshairs"></i>
-          <h4>Our Mission</h4>
-          <p>Design innovative electronics combining quality, affordability, and advanced technology.</p>
-        </div>
-        <div class="mv-box">
-          <i class="fas fa-rocket"></i>
-          <h4>Our Vision</h4>
-          <p>Become India's most trusted technology brand delivering world-class products.</p>
+    <div id="otpStep2" style="display:none;">
+      <p class="info">Enter 6-digit OTP sent to your Email:</p>
+      <input type="text" id="otpCode" maxlength="6" placeholder="123456" class="input-dark otp-input">
+      <button onclick="verifyEmailOTP()" id="btnVerifyOtp" class="btn-success full">Verify OTP & Login →</button>
+      <p onclick="resetOtpStep()" class="link-muted">Change Email</p>
+    </div>
+    <button onclick="closeLoginModal()" class="btn-close">Close</button>
+  </div>
+</div>
+
+<!-- MY ORDERS MODAL -->
+<div id="myOrdersModal" class="modal-overlay" style="display:none;">
+  <div class="modal-dark wide">
+    <div class="modal-head">
+      <h3>📦 My Orders History</h3>
+      <span onclick="closeMyOrdersModal()" class="close-x">&times;</span>
+    </div>
+    <div id="userOrdersList"><p class="muted center">Loading...</p></div>
+  </div>
+</div>
+
+<!-- CART MODAL -->
+<div id="cartModal" class="modal-overlay">
+  <div class="modal-light">
+    <div class="modal-head">
+      <h3 id="modalTitle">🛒 Shopping Cart</h3>
+      <span class="close-x" onclick="toggleCart()">&times;</span>
+    </div>
+
+    <div id="cartItemsContainer">
+      <p class="muted center">Your cart is empty.</p>
+    </div>
+
+    <div id="minOrderWarning" style="display:none; background:linear-gradient(135deg,#fef3c7,#fde68a); border:1px solid #fcd34d; border-radius:10px; padding:12px 16px; margin-top:12px; font-size:0.85rem; color:#92400e;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <i class="fas fa-exclamation-triangle" style="font-size:1.2rem; color:#d97706;"></i>
+        <div>
+          <strong>Minimum order ₹99</strong>
+          <div id="minOrderText" style="margin-top:2px; font-weight:600;"></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- WHY CHOOSE US -->
-<section class="section why with-video">
-  <video autoplay loop muted playsinline class="bg-video">
-    <source src="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/site-assets/why-bg.mp4.mp4" type="video/mp4">
-  </video>
-  <div class="section-overlay"></div>
-  <div class="section-content">
-    <div class="section-head light reveal">
-      <span class="kicker">Why Us</span>
-      <h2>Why Choose SparkCircuit</h2>
-    </div>
-    <div class="cards-grid glass-cards">
-      <div class="card glass reveal">
-        <div class="card-icon"><i class="fas fa-microchip"></i></div>
-        <h3>100% Genuine</h3>
-        <p>Every component tested before shipping. No fakes, no duplicates — guaranteed genuine parts only.</p>
-      </div>
-      <div class="card glass reveal">
-        <div class="card-icon"><i class="fas fa-truck-fast"></i></div>
-        <h3>24h Fast Dispatch</h3>
-        <p>Order before 6 PM — we ship same day. Delivery across India in 3-5 business days.</p>
-      </div>
-      <div class="card glass reveal">
-        <div class="card-icon"><i class="fas fa-headset"></i></div>
-        <h3>Expert Support</h3>
-        <p>Need help choosing a component? WhatsApp us — we reply within 10 minutes during business hours.</p>
-      </div>
-      <div class="card glass reveal">
-        <div class="card-icon"><i class="fas fa-rotate-left"></i></div>
-        <h3>7-Day Returns</h3>
-        <p>Damaged or defective product? Return within 7 days for a replacement or full refund. No questions asked.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PRODUCTS (SEO HEADING) -->
-<section class="section products with-image-products" id="products">
-  <div class="section-overlay"></div>
-  <div class="section-content">
-    <div class="section-head light reveal">
-      <span class="kicker">Shop Components</span>
-      <h2>Buy Genuine Electronics Components Online in India</h2>
-      <p style="color:#cbd5e1; font-size:1rem; margin-top:20px;">ESP32, Arduino, Sensors, IoT Devices & More — Shipped Within 24 Hours</p>
-    </div>
-    <div class="cards-grid glass-cards">
-
-      <a href="category.html?cat=led" class="card product-show glass reveal">
-        <div class="product-img-wrap">
-          <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600&q=80" alt="Smart LED">
-          <div class="hover-overlay"><span>Click to Explore <i class="fas fa-arrow-right"></i></span></div>
-        </div>
-        <h3>Smart LED Solutions</h3>
-        <p>Advanced LED controllers and smart lighting for homes, offices, and commercial use.</p>
-        <span class="explore-link">Explore <i class="fas fa-arrow-right"></i></span>
-      </a>
-
-      <a href="category.html?cat=amplifier" class="card product-show glass reveal">
-        <div class="product-img-wrap">
-          <img src="https://images.unsplash.com/photo-1558537348-c0f8e733989d?w=600&q=80" alt="Amplifier">
-          <div class="hover-overlay"><span>Click to Explore <i class="fas fa-arrow-right"></i></span></div>
-        </div>
-        <h3>Bluetooth Amplifiers</h3>
-        <p>Powerful, high-quality amplifier systems delivering exceptional audio performance.</p>
-        <span class="explore-link">Explore <i class="fas fa-arrow-right"></i></span>
-      </a>
-
-      <a href="category.html?cat=theater" class="card product-show glass reveal">
-        <div class="product-img-wrap">
-          <img src="https://images.unsplash.com/photo-1593784991095-a205069470b6?w=600&q=80" alt="Home Theater">
-          <div class="hover-overlay"><span>Click to Explore <i class="fas fa-arrow-right"></i></span></div>
-        </div>
-        <h3>Home Theater Systems</h3>
-        <p>Immersive audio solutions designed to provide a premium entertainment experience.</p>
-        <span class="explore-link">Explore <i class="fas fa-arrow-right"></i></span>
-      </a>
-
-      <a href="category.html?cat=iot" class="card product-show glass video-card reveal">
-        <div class="product-img-wrap">
-          <video autoplay loop muted playsinline class="card-video">
-            <source src="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/site-assets/products-bg.mp4.mp4" type="video/mp4">
-          </video>
-          <div class="hover-overlay"><span>Click to Explore <i class="fas fa-arrow-right"></i></span></div>
-        </div>
-        <h3>IoT Devices</h3>
-        <p>Smart automation products that connect your home and business with modern tech.</p>
-        <span class="explore-link">Explore <i class="fas fa-arrow-right"></i></span>
-      </a>
-
-      <a href="category.html?cat=embedded" class="card product-show glass reveal">
-        <div class="product-img-wrap">
-          <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&q=80" alt="Embedded">
-          <div class="hover-overlay"><span>Click to Explore <i class="fas fa-arrow-right"></i></span></div>
-        </div>
-        <h3>Embedded Systems</h3>
-        <p>Custom electronic hardware and firmware for industrial and commercial applications.</p>
-        <span class="explore-link">Explore <i class="fas fa-arrow-right"></i></span>
-      </a>
-
-      <a href="category.html?cat=pcb" class="card product-show glass reveal">
-        <div class="product-img-wrap">
-          <img src="https://images.unsplash.com/photo-1608564697071-ddf911d81370?w=600&q=80" alt="PCB">
-          <div class="hover-overlay"><span>Click to Explore <i class="fas fa-arrow-right"></i></span></div>
-        </div>
-        <h3>PCB Design & Prototyping</h3>
-        <p>Professional PCB design, prototype development, and electronic engineering services.</p>
-        <span class="explore-link">Explore <i class="fas fa-arrow-right"></i></span>
-      </a>
-
-    </div>
-    <div class="center-cta reveal">
-      <a href="shop.html" class="btn btn-primary"><i class="fas fa-store"></i> Visit Full Store</a>
-    </div>
-  </div>
-</section>
-
-<!-- SERVICES (SPLIT: For Makers + For Businesses) -->
-<section class="section services with-image" id="services">
-  <div class="section-overlay"></div>
-  <div class="section-content">
-    <div class="section-head light reveal">
-      <span class="kicker">What We Offer</span>
-      <h2>Services for Everyone</h2>
+    <div id="priceSummaryBox" class="price-summary" style="display:none;">
+      <div class="row"><span>Subtotal:</span><strong>₹<span id="subTotalAmt">0</span></strong></div>
+      <div class="row blue"><span>Delivery:</span><strong><span id="shippingAmt">₹50</span></strong></div>
+      <hr>
+      <div class="row total"><span>Grand Total:</span><strong>₹<span id="grandTotalAmt">0</span></strong></div>
     </div>
 
-    <div class="services-split">
-      <!-- For Makers -->
-      <div class="services-column reveal">
-        <h3><i class="fas fa-tools"></i> For Makers & Hobbyists</h3>
-        <p>Everything you need for your next electronics project — from components to custom PCB design.</p>
-        <div class="service-item"><i class="fas fa-check-circle"></i> Buy Electronic Components (Retail)</div>
-        <div class="service-item"><i class="fas fa-check-circle"></i> Custom PCB Design & Prototyping</div>
-        <div class="service-item"><i class="fas fa-check-circle"></i> Arduino / ESP32 Project Help</div>
-        <div class="service-item"><i class="fas fa-check-circle"></i> IoT Device Setup & Consulting</div>
-        <div class="service-item"><i class="fas fa-check-circle"></i> Component Sourcing (Rare Parts)</div>
-      </div>
-
-      <!-- For Businesses -->
-      <div class="services-column reveal">
-        <h3><i class="fas fa-briefcase"></i> For Businesses & Startups</h3>
-        <p>Bulk orders, custom manufacturing, and OEM services for your hardware product needs.</p>
-        <div class="service-item"><i class="fas fa-check-circle"></i> Bulk Component Supply (MOQ 100+)</div>
-        <div class="service-item"><i class="fas fa-check-circle"></i> PCB Assembly & Soldering Work</div>
-        <div class="service-item"><i class="fas fa-check-circle"></i> Small Batch Manufacturing</div>
-        <div class="service-item"><i class="fas fa-check-circle"></i> OEM / White-Label Products</div>
-        <div class="service-item"><i class="fas fa-check-circle"></i> Custom Hardware Development</div>
-      </div>
-    </div>
-
-    <div class="center-cta reveal" style="margin-top:40px;">
-      <a href="https://wa.me/916374017186?text=Hi%20SparkCircuit,%20I%20want%20to%20enquire%20about%20your%20services" target="_blank" class="btn btn-primary"><i class="fab fa-whatsapp"></i> Enquire on WhatsApp</a>
-    </div>
-  </div>
-</section>
-
-<!-- HAVE AN IDEA SECTION -->
-<section class="have-idea-section">
-  <div class="have-idea-inner reveal">
-    <span class="kicker">Have an Idea?</span>
-    <h2>Let's Build <span>Something Amazing</span> Together</h2>
-    <p>Custom development, IoT solutions, automation, PCB design — we work with startups, businesses, and innovators to turn ideas into real products.</p>
-    <div class="have-idea-btns">
-      <a href="https://wa.me/916374017186?text=Hi%20SparkCircuit,%20I%20have%20a%20project%20idea%20to%20discuss" target="_blank" class="btn-wa">
-        <i class="fab fa-whatsapp"></i> Start a Project
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- TRUST SECTION (HONEST - NAYA TEXT) -->
-<section class="trust-modern">
-  <div class="trust-modern-inner">
-    <div class="trust-modern-head reveal">
-      <span class="kicker">Our Commitment</span>
-      <h2>Why Build With SparkCircuit</h2>
-    </div>
-
-    <!-- Trust Statement Block -->
-    <div class="trust-statement reveal">
-      <div class="tagline">Ideas into Intelligent Technology.</div>
-      <p>From genuine electronics components to custom-built hardware and IoT solutions, SparkCircuit is focused on turning ideas into reliable technology.</p>
-      <p>We believe in practical engineering, quality components, transparent communication, and solutions built around real-world needs.</p>
-      <div class="final-line">Your Idea. Our Technology. <span>Built Together.</span></div>
-    </div>
-
-    <!-- Trust Badges Row -->
-    <div class="trust-badges-row">
-      <div class="trust-badge-item reveal">
-        <i class="fas fa-shield-alt"></i>
-        <div class="badge-text">
-          <strong>100% Genuine</strong>
-          <span>Every component tested</span>
+    <div id="checkoutForm" style="display:none;">
+      <h4>Shipping Details</h4>
+      <input type="text" id="custName" placeholder="Full Name *" class="form-input">
+      <input type="tel" id="custPhone" maxlength="10" placeholder="10-digit Mobile Number *" class="form-input">
+      <textarea id="custAddress" placeholder="Full Delivery Address *" class="form-input" rows="2"></textarea>
+      <input type="text" id="custPincode" maxlength="6" placeholder="6-digit Pincode *" class="form-input">
+      <div id="pincodeStatus" style="font-size:0.8rem;margin-top:5px;min-height:18px;"></div>
+      <div class="pay-box">
+        <label>Payment Method:</label>
+        <div class="pay-options">
+          <label><input type="radio" name="payType" value="UPI" checked onclick="togglePayOption('UPI')"> 💳 Online Payment (UPI/Card/NetBanking)</label>
+          <label><input type="radio" name="payType" value="COD" onclick="togglePayOption('COD')"> Cash on Delivery</label>
         </div>
       </div>
-      <div class="trust-badge-item reveal">
-        <i class="fas fa-truck-fast"></i>
-        <div class="badge-text">
-          <strong>Fast Shipping</strong>
-          <span>Dispatched in 24h</span>
-        </div>
+
+      <button onclick="processOrderToPayment()" class="btn-primary full">Place Order →</button>
+    </div>
+
+    <div id="orderSuccessBox" style="display:none;">
+      <div class="success-box">
+        <i class="fas fa-check-circle"></i>
+        <h3>Order Placed Successfully!</h3>
+        <p>Order ID: <strong id="placedOrderId">#SPC-0000</strong></p>
       </div>
-      <div class="trust-badge-item reveal">
-        <i class="fas fa-rotate-left"></i>
-        <div class="badge-text">
-          <strong>7-Day Returns</strong>
-          <span>No questions asked</span>
-        </div>
+
+      <div id="deliveryEstimate"></div>
+
+      <div id="upiBoxContainer" class="upi-box" style="display:none;">
+        <p>Scan & Pay: <strong id="finalPayAmt">₹0</strong></p>
+        <img id="dynamicQrImg" src="" alt="UPI QR" style="width:180px; height:180px;">
+        <p><strong>Account:</strong> Azad Kumar</p>
+        <p class="muted">UPI: <strong>6374017186-2@ybl</strong></p>
       </div>
-      <div class="trust-badge-item reveal">
-        <i class="fas fa-lock"></i>
-        <div class="badge-text">
-          <strong>Secure Payments</strong>
-          <span>Razorpay protected</span>
-        </div>
-      </div>
+
+      <button type="button" onclick="downloadInvoice()" class="btn-primary full" style="margin-top:12px; width:100%; padding:13px; border-radius:8px; border:none; background:linear-gradient(135deg,#0f172a,#1e293b); color:#fff; font-weight:700; cursor:pointer; font-size:0.95rem;">
+        <i class="fas fa-file-pdf"></i> Download Invoice
+      </button>
+
+      <button type="button" id="waConfirmBtn" onclick="confirmOnWhatsApp()" class="btn-success full" style="margin-top:10px; width:100%; padding:13px; border-radius:8px; border:none; background:#22c55e; color:#fff; font-weight:700; cursor:pointer; font-size:0.95rem;">
+        <i class="fab fa-whatsapp"></i> Confirm on WhatsApp
+      </button>
+    </div>
+
+    <div id="cartFooter" class="modal-foot">
+      <button onclick="showCheckout()" id="proceedBtn" class="btn-primary full">Proceed to Shipping →</button>
     </div>
   </div>
-</section>
-
-<!-- VALUES + FOUNDER -->
-<section class="section values">
-  <div class="section-head reveal">
-    <span class="kicker">Brand Blueprint</span>
-    <h2>Our Core Values</h2>
-  </div>
-  <div class="values-pills reveal">
-    <span class="pill"><strong>01.</strong> Innovation</span>
-    <span class="pill"><strong>02.</strong> Integrity</span>
-    <span class="pill"><strong>03.</strong> Excellence</span>
-    <span class="pill"><strong>04.</strong> Continuous Learning</span>
-    <span class="pill"><strong>05.</strong> Customer Satisfaction</span>
-  </div>
-  <div class="founder-box reveal">
-    <i class="fas fa-quote-left quote-icon"></i>
-    <p>SparkCircuit was founded with a simple belief that innovation should be practical, affordable, and accessible to everyone. Every circuit we design, every product we build, and every solution we create is driven by our passion for engineering excellence.</p>
-    <div class="founder-sign">
-      <img src="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg" alt="Founder">
-      <div><strong>Azad Kumar</strong><span>Founder & CEO, SparkCircuit</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA BANNER -->
-<section class="cta-banner">
-  <div class="cta-inner reveal">
-    <h2>Ready to Build Something Amazing?</h2>
-    <p>Browse our premium collection of electronic components, modules, and hardware.</p>
-    <a href="shop.html" class="btn btn-primary big"><i class="fas fa-bolt"></i> Start Shopping</a>
-  </div>
-</section>
+</div>
 
 <!-- FOOTER -->
-<footer class="footer" id="contact">
+<footer class="footer">
   <div class="footer-grid">
     <div class="footer-brand">
       <a href="index.html" class="brand">
@@ -1065,20 +290,12 @@
         <a href="https://www.facebook.com/share/1AKVp7oSve/" target="_blank"><i class="fab fa-facebook"></i></a>
         <a href="https://wa.me/916374017186" target="_blank"><i class="fab fa-whatsapp"></i></a>
       </div>
-      <div class="newsletter">
-        <h5>Subscribe for Updates</h5>
-        <div class="newsletter-box">
-          <input type="email" id="newsletterEmail" placeholder="Your email">
-          <button onclick="subscribeNewsletter()"><i class="fas fa-paper-plane"></i></button>
-        </div>
-      </div>
     </div>
     <div class="footer-col">
       <h4>Quick Links</h4>
       <a href="index.html">Home</a>
       <a href="shop.html">Shop</a>
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
+      <a href="about.html">About</a>
     </div>
     <div class="footer-col">
       <h4>Policies</h4>
@@ -1099,340 +316,11 @@
   </div>
 </footer>
 
-<button id="backToTop" onclick="scrollToTop()" title="Back to Top"><i class="fas fa-arrow-up"></i></button>
 <a href="https://wa.me/916374017186" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>(function(){ emailjs.init("Pn5FLfmBN3qPp5xg7"); })();</script>
 <script src="script.js"></script>
-
-<!-- NEURAL NETWORK ANIMATION -->
-<script>
-(function() {
-  const canvas = document.getElementById('neuralCanvas');
-  if (!canvas) return;
-
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  const ctx = canvas.getContext('2d');
-  let width, height, dpr;
-
-  const LAYERS = 4;
-  const NODES_PER_LAYER_MIN = 3;
-  const NODES_PER_LAYER_MAX = 5;
-  const PACKET_SPAWN_RATE = 0.008;
-  const PACKET_SPEED = 0.005;
-
-  let nodes = [];
-  let connections = [];
-  let packets = [];
-  let mouseX = 0;
-  let mouseY = 0;
-  let mouseActive = false;
-
-  const COLORS = {
-    node: '#f97316',
-    nodeGlow: 'rgba(249, 115, 22, 0.4)',
-    connection: 'rgba(249, 115, 22, 0.08)',
-    connectionActive: 'rgba(251, 191, 36, 0.35)',
-    packet: '#fbbf24',
-    packetGlow: 'rgba(251, 191, 36, 0.7)'
-  };
-
-  function resize() {
-    dpr = window.devicePixelRatio || 1;
-    width = canvas.offsetWidth;
-    height = canvas.offsetHeight;
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-    ctx.scale(dpr, dpr);
-    buildNetwork();
-  }
-
-  function buildNetwork() {
-    nodes = [];
-    connections = [];
-    packets = [];
-
-    const isMobile = width < 700;
-    const layerCount = isMobile ? 3 : LAYERS;
-    const padding = isMobile ? 60 : 100;
-
-    for (let l = 0; l < layerCount; l++) {
-      const xRatio = (l + 1) / (layerCount + 1);
-      const x = padding + (width - padding * 2) * xRatio;
-      
-      const nodeCount = Math.floor(
-        NODES_PER_LAYER_MIN + Math.random() * (NODES_PER_LAYER_MAX - NODES_PER_LAYER_MIN)
-      );
-      
-      for (let n = 0; n < nodeCount; n++) {
-        const yRatio = (n + 1) / (nodeCount + 1);
-        const y = padding + (height - padding * 2) * yRatio;
-        
-        nodes.push({
-          x: x,
-          y: y,
-          baseX: x,
-          baseY: y,
-          layer: l,
-          pulse: 0,
-          radius: isMobile ? 2.5 : 3.5
-        });
-      }
-    }
-
-    for (let l = 0; l < layerCount - 1; l++) {
-      const layerNodes = nodes.filter(n => n.layer === l);
-      const nextLayerNodes = nodes.filter(n => n.layer === l + 1);
-
-      layerNodes.forEach(nodeA => {
-        nextLayerNodes.forEach(nodeB => {
-          if (Math.random() < 0.6) {
-            connections.push({
-              a: nodeA,
-              b: nodeB,
-              active: 0,
-              length: Math.hypot(nodeB.baseX - nodeA.baseX, nodeB.baseY - nodeA.baseY)
-            });
-          }
-        });
-      });
-    }
-  }
-
-  function spawnPacket() {
-    if (connections.length === 0) return;
-    const conn = connections[Math.floor(Math.random() * connections.length)];
-    packets.push({
-      connection: conn,
-      progress: 0,
-      speed: PACKET_SPEED * (0.7 + Math.random() * 0.6)
-    });
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, width, height);
-
-    connections.forEach(conn => {
-      ctx.beginPath();
-      ctx.strokeStyle = conn.active > 0 ? COLORS.connectionActive : COLORS.connection;
-      ctx.lineWidth = conn.active > 0 ? 1.5 : 0.8;
-      ctx.moveTo(conn.a.baseX, conn.a.baseY);
-      ctx.lineTo(conn.b.baseX, conn.b.baseY);
-      ctx.stroke();
-
-      if (conn.active > 0) conn.active -= 0.02;
-    });
-
-    nodes.forEach(node => {
-      if (node.pulse > 0) node.pulse -= 0.03;
-
-      if (node.pulse > 0 || node.pulse > -0.5) {
-        const glowRadius = node.radius + (node.pulse > 0 ? node.pulse * 15 : 0);
-        const gradient = ctx.createRadialGradient(
-          node.x, node.y, 0,
-          node.x, node.y, glowRadius * 3
-        );
-        gradient.addColorStop(0, COLORS.nodeGlow);
-        gradient.addColorStop(1, 'transparent');
-        ctx.beginPath();
-        ctx.fillStyle = gradient;
-        ctx.arc(node.x, node.y, glowRadius * 3, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      ctx.beginPath();
-      ctx.fillStyle = COLORS.node;
-      ctx.arc(node.x, node.y, node.radius + (node.pulse > 0 ? node.pulse * 3 : 0), 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.fillStyle = '#fbbf24';
-      ctx.arc(node.x, node.y, node.radius * 0.5, 0, Math.PI * 2);
-      ctx.fill();
-    });
-
-    packets.forEach((packet, idx) => {
-      const conn = packet.connection;
-      const x = conn.a.baseX + (conn.b.baseX - conn.a.baseX) * packet.progress;
-      const y = conn.a.baseY + (conn.b.baseY - conn.a.baseY) * packet.progress;
-
-      const gradient = ctx.createRadialGradient(x, y, 0, x, y, 15);
-      gradient.addColorStop(0, COLORS.packetGlow);
-      gradient.addColorStop(1, 'transparent');
-      ctx.beginPath();
-      ctx.fillStyle = gradient;
-      ctx.arc(x, y, 15, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.fillStyle = COLORS.packet;
-      ctx.arc(x, y, 3, 0, Math.PI * 2);
-      ctx.fill();
-
-      packet.progress += packet.speed;
-      
-      if (packet.progress >= 1) {
-        conn.active = 1;
-        conn.b.pulse = 1;
-        packets.splice(idx, 1);
-      }
-    });
-
-    if (Math.random() < PACKET_SPAWN_RATE) {
-      spawnPacket();
-    }
-
-    nodes.forEach(node => {
-      if (mouseActive) {
-        const dx = mouseX - node.baseX;
-        const dy = mouseY - node.baseY;
-        const dist = Math.hypot(dx, dy);
-        const influence = Math.max(0, 1 - dist / 200);
-        node.x += (node.baseX + dx * influence * 0.15 - node.x) * 0.1;
-        node.y += (node.baseY + dy * influence * 0.15 - node.y) * 0.1;
-      } else {
-        node.x += (node.baseX - node.x) * 0.05;
-        node.y += (node.baseY - node.y) * 0.05;
-      }
-    });
-
-    requestAnimationFrame(draw);
-  }
-
-  function handleMouseMove(e) {
-    const rect = canvas.getBoundingClientRect();
-    mouseX = e.clientX - rect.left;
-    mouseY = e.clientY - rect.top;
-    mouseActive = true;
-  }
-
-  function handleMouseLeave() {
-    mouseActive = false;
-  }
-
-  function handleTouchMove(e) {
-    if (e.touches.length > 0) {
-      const rect = canvas.getBoundingClientRect();
-      mouseX = e.touches[0].clientX - rect.left;
-      mouseY = e.touches[0].clientY - rect.top;
-      mouseActive = true;
-    }
-  }
-
-  window.addEventListener('resize', () => {
-    clearTimeout(window._neuralResize);
-    window._neuralResize = setTimeout(resize, 200);
-  });
-
-  canvas.addEventListener('mousemove', handleMouseMove);
-  canvas.addEventListener('mouseleave', handleMouseLeave);
-  canvas.addEventListener('touchmove', handleTouchMove, { passive: true });
-  canvas.addEventListener('touchend', handleMouseLeave);
-
-  resize();
-  draw();
-
-  setTimeout(() => {
-    for (let i = 0; i < 5; i++) spawnPacket();
-  }, 500);
-})();
-</script>
-
-<!-- HOMEPAGE SITE ASSETS LOADER -->
-<script>
-(async function() {
-  try {
-    const { createClient } = supabase;
-    const _sb = createClient(
-      'https://mrqvzmtdsohvzsnryogp.supabase.co',
-      'sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z'
-    );
-    
-    const isMobile = window.matchMedia('(max-width: 900px)').matches;
-    
-    const { data, error } = await _sb
-      .from('site_assets')
-      .select('key, value, value_mobile');
-    
-    if (error || !data) {
-      console.warn('Homepage assets load failed');
-      return;
-    }
-    
-    const assets = {};
-    data.forEach(item => {
-      if (isMobile && item.value_mobile) {
-        assets[item.key] = item.value_mobile;
-      } else if (item.value) {
-        assets[item.key] = item.value;
-      }
-    });
-    
-    if (assets.hero_video) {
-      const heroVideo = document.querySelector('.hero-video-bg source');
-      if (heroVideo) heroVideo.src = assets.hero_video;
-      
-      const heroVideoTag = document.querySelector('.hero-video-bg');
-      if (heroVideoTag) heroVideoTag.load();
-    }
-    
-    if (assets.why_video) {
-      const whyVideo = document.querySelector('.with-video .bg-video source');
-      if (whyVideo) whyVideo.src = assets.why_video;
-      
-      const whyVideoTag = document.querySelector('.with-video .bg-video');
-      if (whyVideoTag) whyVideoTag.load();
-    }
-    
-    if (assets.about_image) {
-      const aboutImg = document.querySelector('.about-img img');
-      if (aboutImg) aboutImg.src = assets.about_image;
-    }
-    
-    const productCards = document.querySelectorAll('.cards-grid a.product-show');
-    
-    if (productCards[0] && (assets.led_hero || assets.card_1_image)) {
-      const img = productCards[0].querySelector('img');
-      if (img) img.src = assets.led_hero || assets.card_1_image;
-    }
-    
-    if (productCards[1] && (assets.amplifier_hero || assets.card_2_image)) {
-      const img = productCards[1].querySelector('img');
-      if (img) img.src = assets.amplifier_hero || assets.card_2_image;
-    }
-    
-    if (productCards[2] && (assets.theater_hero || assets.card_3_image)) {
-      const img = productCards[2].querySelector('img');
-      if (img) img.src = assets.theater_hero || assets.card_3_image;
-    }
-    
-    if (productCards[3] && (assets.iot_hero || assets.card_4_video)) {
-      const video = productCards[3].querySelector('video source');
-      if (video && assets.card_4_video) {
-        video.src = assets.card_4_video;
-        const vid = productCards[3].querySelector('video');
-        if (vid) vid.load();
-      }
-    }
-    
-    if (productCards[4] && (assets.embedded_hero || assets.card_5_image)) {
-      const img = productCards[4].querySelector('img');
-      if (img) img.src = assets.embedded_hero || assets.card_5_image;
-    }
-    
-    if (productCards[5] && (assets.pcb_hero || assets.card_6_image)) {
-      const img = productCards[5].querySelector('img');
-      if (img) img.src = assets.pcb_hero || assets.card_6_image;
-    }
-    
-    console.log(`✅ Homepage assets loaded (${isMobile ? 'MOBILE' : 'DESKTOP'} version)`);
-    
-  } catch (err) {
-    console.warn('Homepage assets error:', err);
-  }
-})();
-</script>
-
 </body>
 </html>
