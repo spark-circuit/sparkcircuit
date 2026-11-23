@@ -1,22 +1,21 @@
 export default async function handler(req, res) {
   try {
     let productId = null;
+    let isLegacyUrl = false;
 
     // =====================================================
     // 1. OLD URL
-    // /product.html?id=6
+    // /product.html?id=15
     // =====================================================
 
     if (req.query.id) {
       productId = String(req.query.id);
+      isLegacyUrl = true;
     }
 
     // =====================================================
     // 2. NEW SEO URL
-    // /products/arduino-uno-r3-compatible-board-atmega328p-dip-version-6
-    //
-    // Vercel sends:
-    // path = arduino-uno-r3-compatible-board-atmega328p-dip-version-6
+    // /products/product-name-15
     // =====================================================
 
     if (!productId && req.query.path) {
@@ -73,6 +72,39 @@ export default async function handler(req, res) {
     const response = await fetch(workerUrl);
 
     const html = await response.text();
+
+    // =====================================================
+    // OLD URL → 301 REDIRECT TO SEO URL
+    //
+    // Example:
+    // /product.html?id=15
+    //
+    // →
+    //
+    // /products/color-sensor-tcs230-tcs3200-color-recognition-sensor-detector-module-15
+    // =====================================================
+
+    if (isLegacyUrl && response.ok) {
+      const canonicalMatch = html.match(
+        /<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i
+      );
+
+      if (canonicalMatch && canonicalMatch[1]) {
+        const canonicalUrl = canonicalMatch[1];
+
+        res.setHeader(
+          "Location",
+          canonicalUrl
+        );
+
+        res.setHeader(
+          "Cache-Control",
+          "public, s-maxage=3600, stale-while-revalidate=86400"
+        );
+
+        return res.status(301).end();
+      }
+    }
 
     // =====================================================
     // RETURN HTML
