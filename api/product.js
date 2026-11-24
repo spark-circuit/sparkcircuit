@@ -1,21 +1,34 @@
 export default async function handler(req, res) {
   try {
+    let productId = null;
+    let isLegacyUrl = false;
+
     // =====================================================
-    // 1. GET PRODUCT ID FROM SEO URL
+    // 1. OLD URL SUPPORT
     //
-    // Example:
-    // /products/water-level-depth-sensor-module-45
+    // /product.html?id=15
+    //
+    // product.html file delete ho chuki hai,
+    // lekin purane Google/indexed links ko todna nahi hai.
+    // =====================================================
+
+    if (req.query.id) {
+      productId = String(req.query.id).trim();
+      isLegacyUrl = true;
+    }
+
+    // =====================================================
+    // 2. NEW SEO URL
+    //
+    // /products/product-name-15
     //
     // Vercel rewrite:
-    // /api/product?path=water-level-depth-sensor-module-45
+    // /api/product?path=product-name-15
     // =====================================================
 
-    let productId = null;
-
-    if (req.query.path) {
+    if (!productId && req.query.path) {
       const path = String(req.query.path).trim();
 
-      // Product ID is the final number in the URL
       const match = path.match(/-(\d+)\/?$/);
 
       if (match) {
@@ -24,10 +37,7 @@ export default async function handler(req, res) {
     }
 
     // =====================================================
-    // 2. OPTIONAL DIRECT PRODUCT ID SUPPORT
-    //
-    // This is only for internal/server use.
-    // Customer-facing URL remains /products/slug-ID
+    // 3. OPTIONAL DIRECT PRODUCT ID
     // =====================================================
 
     if (!productId && req.query.product_id) {
@@ -35,7 +45,7 @@ export default async function handler(req, res) {
     }
 
     // =====================================================
-    // 3. PRODUCT ID NOT FOUND
+    // 4. PRODUCT ID MISSING
     // =====================================================
 
     if (!productId) {
@@ -63,7 +73,7 @@ export default async function handler(req, res) {
     }
 
     // =====================================================
-    // 4. SUPABASE DYNAMIC WORKER
+    // 5. SUPABASE DYNAMIC WORKER
     // =====================================================
 
     const workerUrl =
@@ -76,7 +86,39 @@ export default async function handler(req, res) {
     const html = await response.text();
 
     // =====================================================
-    // 5. RETURN PRODUCT HTML
+    // 6. OLD URL → CANONICAL SEO URL
+    //
+    // /product.html?id=15
+    //
+    // →
+    //
+    // /products/product-name-15
+    //
+    // Canonical URL dynamic-worker ke HTML se liya jayega.
+    // =====================================================
+
+    if (isLegacyUrl && response.ok) {
+      const canonicalMatch = html.match(
+        /<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i
+      );
+
+      if (canonicalMatch && canonicalMatch[1]) {
+        res.setHeader(
+          "Location",
+          canonicalMatch[1]
+        );
+
+        res.setHeader(
+          "Cache-Control",
+          "public, s-maxage=3600, stale-while-revalidate=86400"
+        );
+
+        return res.status(301).end();
+      }
+    }
+
+    // =====================================================
+    // 7. RETURN COMPLETE PRODUCT HTML
     // =====================================================
 
     res.setHeader(
@@ -93,7 +135,10 @@ export default async function handler(req, res) {
 
   } catch (error) {
 
-    console.error("Product proxy error:", error);
+    console.error(
+      "Product proxy error:",
+      error
+    );
 
     res.setHeader(
       "Content-Type",
