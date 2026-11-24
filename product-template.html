@@ -1306,7 +1306,7 @@ if (!productId) {
       
       localStorage.setItem('sc_cart', JSON.stringify(cart));
       const totalItems = cart.reduce((a, i) => a + i.qty, 0);
-      alert(`✅ "${p.name}" added to cart!\n\n🛒 Cart me total ${totalItems} item${totalItems > 1 ? 's' : ''} hain.`);
+            showToast(`"${p.name}" added to cart! Total ${totalItems} items.`);
     })
     .catch(err => {
       console.error('Add to cart failed:', err);
