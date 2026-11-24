@@ -967,15 +967,16 @@ body { margin: 0; background: #f8fafc; }
   /* =========================================================
      PRODUCT ID (UUID-safe)
   ========================================================= */
-  function getProductId() {
-    const params = new URLSearchParams(window.location.search);
-    const idParam = params.get("id");
-    if (idParam) return idParam;
+ function getProductId() {
+  const params = new URLSearchParams(window.location.search);
+  const idParam = params.get("id");
+  if (idParam) return idParam;
 
-    // Path से ID निकालो — trailing segment जो slug-<id> हो
-    const match = window.location.pathname.match(/-([^\/]+)\/?$/);
-    return match ? match[1] : null;
-  }
+  const pathSegments = window.location.pathname.split("/").filter(Boolean);
+  const lastSegment = pathSegments[pathSegments.length - 1] || "";
+  const match = lastSegment.match(/-([^-]+)$/);
+  return match ? match[1] : (lastSegment || null);
+}
 
 
   /* =========================================================
