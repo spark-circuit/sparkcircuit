@@ -1326,5 +1326,35 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
     updateWishlistCount();   // ✅ Header badge fix
   });
 </script>
+  <script>
+  // 🔥 Vercel Live Site Fix
+  window.addEventListener('load', function() {
+    // 1. Fix broken links (remove leading slash from javascript:void)
+    document.querySelectorAll('a').forEach(function(link) {
+      if (link.getAttribute('href') && link.getAttribute('href').includes('/javascript:void')) {
+        link.setAttribute('href', 'javascript:void(0)');
+      }
+    });
+
+    // 2. Force Cart to open instead of redirecting
+    const cartBtn = document.querySelector('.cart-btn');
+    if (cartBtn) {
+      cartBtn.onclick = function(e) {
+        e.preventDefault();
+        if (typeof toggleCart === 'function') toggleCart();
+      };
+    }
+
+    // 3. Force Account to open dropdown
+    const userBtn = document.querySelector('#userNavContainer');
+    if (userBtn) {
+      userBtn.onclick = function(e) {
+        e.preventDefault();
+        if (typeof toggleProfileMenu === 'function') toggleProfileMenu();
+      };
+    }
+  });
+</script>
 </body>
 </html>
+  
