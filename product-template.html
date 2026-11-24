@@ -11,12 +11,10 @@
 <link rel="icon" type="image/jpeg" href="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-
-<!-- FontAwesome & Google Fonts -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<!-- MAIN CSS -->
+<!-- CSS FIX: Direct full domain for CSS so it always loads -->
 <link rel="stylesheet" href="https://sparkcircuit.in/style.css">
 
 <!-- Razorpay & PDF -->
@@ -42,11 +40,6 @@
 .pd-main-image { width: 100%; height: 450px; background: #fff; border-radius: 14px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 15px; position: relative; }
 .pd-main-image img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.4s ease; }
 .pd-main-image:hover img { transform: scale(1.08); }
-.pd-thumbnails { display: flex; gap: 10px; flex-wrap: wrap; }
-.pd-thumb { width: 75px; height: 75px; border-radius: 10px; border: 2px solid #e2e8f0; background: #fff; cursor: pointer; overflow: hidden; transition: 0.25s; padding: 0; }
-.pd-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.pd-thumb:hover { border-color: #f97316; transform: translateY(-3px); }
-.pd-thumb.active { border-color: #f97316; box-shadow: 0 0 0 3px rgba(249,115,22,0.2); }
 
 .pd-info { padding: 35px 30px; display: flex; flex-direction: column; }
 .pd-category { display: inline-block; background: #fff7ed; color: #ea580c; font-size: 0.75rem; font-weight: 700; padding: 5px 14px; border-radius: 50px; letter-spacing: 1px; text-transform: uppercase; width: fit-content; margin-bottom: 15px; }
@@ -60,13 +53,7 @@
 
 .pd-stock { padding: 12px 16px; border-radius: 10px; font-size: 0.9rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
 .pd-stock.in { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
-.pd-stock.low { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
 .pd-stock.out { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-
-.pd-delivery { background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 1px solid #bae6fd; border-radius: 12px; padding: 15px 18px; margin-bottom: 25px; display: flex; align-items: center; gap: 14px; }
-.pd-delivery i { font-size: 1.6rem; color: #0284c7; }
-.pd-delivery .title { font-weight: 700; color: #075985; font-size: 0.95rem; }
-.pd-delivery .date { color: #0369a1; font-size: 0.85rem; margin-top: 2px; }
 
 .pd-buttons { display: flex; gap: 12px; margin-bottom: 25px; }
 .pd-btn { flex: 1; padding: 16px; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.25s; font-family: 'Poppins', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -80,54 +67,34 @@
 .pd-trust-item i { font-size: 1.4rem; color: #f97316; display: block; margin-bottom: 6px; }
 .pd-trust-item span { font-size: 0.75rem; color: #64748b; font-weight: 600; }
 
-/* TABS & OTHER SECTIONS */
+/* TABS */
 .pd-tabs-section { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
 .pd-tabs { display: flex; gap: 5px; border-bottom: 2px solid #e2e8f0; margin-bottom: 25px; overflow-x: auto; }
 .pd-tab-btn { padding: 14px 22px; background: transparent; border: none; font-weight: 600; font-size: 0.95rem; color: #64748b; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: 0.2s; white-space: nowrap; font-family: 'Poppins', sans-serif; }
 .pd-tab-btn:hover { color: #f97316; }
 .pd-tab-btn.active { color: #f97316; border-bottom-color: #f97316; }
-.pd-tab-content { display: none; animation: fadeIn 0.4s; }
+.pd-tab-content { display: none; }
 .pd-tab-content.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 .pd-content-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 30px; }
 .pd-content-card h3 { font-family: 'Poppins', sans-serif; font-size: 1.3rem; color: #0f172a; margin-bottom: 15px; }
 .pd-content-card p, .pd-content-card ul { color: #475569; font-size: 0.95rem; line-height: 1.8; }
 
-/* Share Section */
-.pd-share { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; margin-top: 20px; }
-.pd-share-label { font-size: 0.9rem; font-weight: 700; color: #0f172a; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-.pd-share-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
-.pd-share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: 0.25s; color: #fff; font-family: 'Inter', sans-serif; }
-.pd-share-btn.whatsapp { background: #25d366; }
-.pd-share-btn.facebook { background: #1877f2; }
-.pd-share-btn.twitter { background: #000; }
-.pd-share-btn.copy { background: #64748b; }
-
-/* Related Products */
-.related-section, .recently-section, .reviews-section { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-.related-header h3, .recently-header h3 { font-family: 'Poppins', sans-serif; font-size: 1.5rem; color: #0f172a; margin-bottom: 20px; }
-.related-grid, .recently-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-.related-card, .recently-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; text-decoration: none; color: inherit; transition: 0.3s; display: flex; flex-direction: column; position: relative; }
-.related-card:hover, .recently-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(249, 115, 22, 0.15); border-color: #f97316; }
-.related-card img, .recently-card img { width: 100%; height: 150px; object-fit: contain; border-radius: 10px; margin-bottom: 12px; background: #f8fafc; }
-.related-cat, .recently-cat { font-size: 0.7rem; color: #ea580c; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-.related-card h4, .recently-card h4 { font-size: 0.95rem; font-weight: 600; color: #0f172a; margin: 6px 0 10px; min-height: 2.6em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.related-price, .recently-price { display: flex; gap: 8px; align-items: center; margin-top: auto; }
-.related-price .now, .recently-price .now { font-size: 1.1rem; font-weight: 800; color: #0f172a; }
-.related-price .old, .recently-price .old { font-size: 0.8rem; color: #94a3b8; text-decoration: line-through; }
-.recently-badge { position: absolute; top: 8px; right: 8px; background: #f97316; color: #fff; font-size: 0.6rem; font-weight: 700; padding: 3px 7px; border-radius: 50px; }
+/* RELATED PRODUCTS */
+.related-section { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+.related-header h3 { font-family: 'Poppins', sans-serif; font-size: 1.5rem; color: #0f172a; margin-bottom: 20px; }
+.related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+.related-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; text-decoration: none; color: inherit; transition: 0.3s; display: flex; flex-direction: column; }
+.related-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(249, 115, 22, 0.15); border-color: #f97316; }
+.related-card img { width: 100%; height: 150px; object-fit: contain; border-radius: 10px; margin-bottom: 12px; background: #f8fafc; }
+.related-cat { font-size: 0.7rem; color: #ea580c; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.related-card h4 { font-size: 0.95rem; font-weight: 600; color: #0f172a; margin: 6px 0 10px; min-height: 2.6em; }
+.related-price { font-size: 1.1rem; font-weight: 800; color: #0f172a; margin-top: auto; }
 
 @media (max-width: 900px) {
   .pd-grid { grid-template-columns: 1fr; }
   .pd-gallery { border-right: none; border-bottom: 1px solid #e2e8f0; }
   .pd-main-image { height: 320px; }
-  .pd-title { font-size: 1.5rem; }
-  .pd-price { font-size: 1.9rem; }
-}
-@media (max-width: 700px) {
-  .back-nav-bar { top: 60px; padding: 10px 16px; }
-  .breadcrumb { display: none; }
 }
 </style>
 </head>
@@ -208,12 +175,12 @@
   </div>
 </div>
 
-<!-- TABS SECTION -->
+<!-- TABS -->
 <div class="pd-tabs-section" id="pdTabsSection" style="display:none;">
   <div class="pd-tabs">
     <button class="pd-tab-btn active" onclick="switchPdTab('descTab', this)">📄 Description</button>
     <button class="pd-tab-btn" onclick="switchPdTab('specsTab', this)">⚙️ Specifications</button>
-    <button class="pd-tab-btn" onclick="switchPdTab('shippingTab', this)">🚚 Shipping & Returns</button>
+    <button class="pd-tab-btn" onclick="switchPdTab('shippingTab', this)">🚚 Shipping</button>
   </div>
   
   <div id="descTab" class="pd-tab-content active">
@@ -226,33 +193,18 @@
   <div id="specsTab" class="pd-tab-content">
     <div class="pd-content-card">
       <h3>Specifications</h3>
-      <ul id="pdSpecs">
+      <ul>
         <li>Brand: SparkCircuit</li>
         <li>Category: <span id="pdSpecCat">Electronics</span></li>
         <li>Country of Origin: India</li>
-        <li>Warranty: 30 Days Replacement</li>
       </ul>
     </div>
   </div>
-  
+
   <div id="shippingTab" class="pd-tab-content">
     <div class="pd-content-card">
       <h3>Shipping & Returns</h3>
-      <p><strong>🚚 Shipping:</strong> Free shipping on orders above ₹499. Orders dispatched within 24 hours. Delivery in 3-5 business days across India.</p>
-      <p style="margin-top:12px;"><strong>↩️ Returns:</strong> 7-day replacement guarantee on damaged or defective products.</p>
-    </div>
-  </div>
-</div>
-
-<!-- SHARE SECTION -->
-<div class="pd-share" id="shareSection" style="display:none; max-width:1200px; margin: 20px auto; padding: 0 20px;">
-  <div class="pd-content-card" style="padding: 20px;">
-    <div class="pd-share-label"><i class="fas fa-share-alt"></i> Share this product:</div>
-    <div class="pd-share-buttons">
-      <a href="#" onclick="shareOnWhatsApp(event)" class="pd-share-btn whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-      <a href="#" onclick="shareOnFacebook(event)" class="pd-share-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</a>
-      <a href="#" onclick="shareOnTwitter(event)" class="pd-share-btn twitter"><i class="fab fa-twitter"></i> Twitter</a>
-      <button onclick="copyProductLink(event)" class="pd-share-btn copy"><i class="fas fa-link"></i> Copy Link</button>
+      <p>Free shipping on orders above ₹499. Delivery in 3-5 days. 7-day replacement guarantee.</p>
     </div>
   </div>
 </div>
@@ -261,12 +213,6 @@
 <div class="related-section" id="relatedSection">
   <div class="related-header"><h3>🔥 You May Also Like</h3></div>
   <div id="relatedProducts" class="related-grid"></div>
-</div>
-
-<!-- RECENTLY VIEWED -->
-<div class="recently-section" id="recentlySection" style="display:none;">
-  <div class="recently-header"><h3>👀 Recently Viewed</h3></div>
-  <div id="recentlyProducts" class="recently-grid"></div>
 </div>
 
 <!-- CART MODAL -->
@@ -334,28 +280,6 @@
     btn.classList.add('active');
   }
 
-  // Share Functions
-  function getShareData() {
-    const name = document.querySelector('.pd-title')?.innerText || 'SparkCircuit Product';
-    const price = document.querySelector('.pd-price')?.innerText || '';
-    return { name, price, url: window.location.href };
-  }
-  function shareOnWhatsApp(e) {
-    e.preventDefault();
-    const d = getShareData();
-    window.open(`https://wa.me/?text=Check out ${d.name} at ${d.price} on SparkCircuit! ${d.url}`, '_blank');
-  }
-  function shareOnFacebook(e) {
-    e.preventDefault(); window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
-  }
-  function shareOnTwitter(e) {
-    e.preventDefault();
-    const d = getShareData(); window.open(`https://twitter.com/intent/tweet?text=Check out ${d.name}&url=${encodeURIComponent(window.location.href)}`, '_blank');
-  }
-  function copyProductLink(e) {
-    e.preventDefault(); navigator.clipboard.writeText(window.location.href); alert("Link copied!");
-  }
-
   // Main Product Load Logic
   document.addEventListener('DOMContentLoaded', async () => {
     if (typeof updateCartBadge === 'function') updateCartBadge();
@@ -384,7 +308,6 @@
       }
 
       const p = data[0];
-      window.currentProduct = p;
       const img = p.image || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80';
       const discount = p.original_price && p.original_price > p.price ? Math.round(((p.original_price - p.price) / p.original_price) * 100) : 0;
 
@@ -392,7 +315,6 @@
       document.getElementById('pdDescription').innerHTML = p.description || 'High-performance tested electronic component from SparkCircuit.';
       document.getElementById('pdSpecCat').innerText = p.category || 'Electronics';
       document.getElementById('pdTabsSection').style.display = 'block';
-      document.getElementById('shareSection').style.display = 'block';
 
       container.innerHTML = `
         <div class="pd-card">
@@ -434,16 +356,16 @@
         </div>
       `;
 
-      // Load Related
+      // Load Related Products
       fetch(`https://mrqvzmtdsohvzsnryogp.supabase.co/rest/v1/products?category=eq.${p.category}&id=neq.${p.id}&limit=4`, {
         headers: { 'apikey': 'sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z', 'Authorization': 'Bearer sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z' }
       }).then(r=>r.json()).then(products => {
         document.getElementById('relatedProducts').innerHTML = products.map(rp => `
-          <a href="/product.html?id=${rp.id}" class="related-card">
+          <a href="/products/${rp.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${rp.id}" class="related-card">
             <img src="${rp.image || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80'}" alt="${rp.name}">
             <span class="related-cat">${rp.category}</span>
             <h4>${rp.name}</h4>
-            <div class="related-price"><span class="now">₹${rp.price}</span></div>
+            <div class="related-price">₹${rp.price}</div>
           </a>
         `).join('');
       });
