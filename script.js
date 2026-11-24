@@ -438,12 +438,20 @@ function saveCart() {
 }
 
 function updateCartBadge() {
-  const c = cart.reduce((a, i) => a + i.qty, 0);
-  const b = document.getElementById('cartCount');
-  if (b) {
-    b.innerText = c;
-    b.style.display = c > 0 ? 'inline-block' : 'none';
-  }
+  // Always calculate from the current in-memory cart.
+  const count = Array.isArray(cart)
+    ? cart.reduce((total, item) => total + (Number(item.qty) || 0), 0)
+    : 0;
+
+  // Product-detail pages are dynamically rendered, so locate the badge
+  // each time instead of relying on an earlier DOM reference.
+  document.querySelectorAll('#cartCount').forEach(b => {
+    b.textContent = String(count);
+    b.style.display = count > 0 ? 'inline-flex' : 'none';
+    b.style.visibility = count > 0 ? 'visible' : 'hidden';
+  });
+
+  return count;
 }
 
 // ============================================================
