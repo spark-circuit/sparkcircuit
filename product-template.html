@@ -700,17 +700,19 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
 
   // --- Cart Drawer (same style as shop.html) ---
   function toggleCart() {
-    const drawer = document.getElementById('cartDrawer') || document.getElementById('cartPanel');
+    const drawer = document.getElementById('cartDrawer') || document.querySelector('.cart-drawer') || document.querySelector('.cart-panel');
     const overlay = document.getElementById('cartOverlay');
-
-    if (!drawer) {
-      // Agar cart drawer is page me nahi hai, to shop.html par bhej do
-      window.location.href = '/shop.html?openCart=1';
-      return;
+    
+    if (drawer) {
+      // Agar drawer page par hai, toh usko open karo
+      drawer.classList.toggle('open');
+      drawer.classList.toggle('active');
+      if (overlay) overlay.classList.toggle('active');
+    } else {
+      // Agar is page par drawer nahi hai, toh Shop page par bhej do aur wahan cart khol do
+      // (Isse user ko lagega cart khul gaya hai)
+      window.location.href = '/shop.html?openCart=true';
     }
-    drawer.classList.toggle('open');
-    drawer.classList.toggle('active');
-    if (overlay) overlay.classList.toggle('active');
   }
 
   function closeCart() {
@@ -1234,54 +1236,57 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
   // ============================================================
   // 🛒 ADD TO CART / BUY NOW (FIXED — same as shop.html)
   // ============================================================
- function addToCartFromDetail(id) {
-  fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${id}`, {
-    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (!data || data.length === 0) { alert('❌ Product not found'); return; }
-    
-    const p = data[0];
-    let cart = JSON.parse(localStorage.getItem('sc_cart')) || [];
-    const existing = cart.find(item => item.id === p.id);
-    
-    if (existing) {
-      existing.qty += 1;
-    } else {
-      cart.push({ id: p.id, name: p.name, price: p.price, qty: 1, image: p.image || DEFAULT_IMG });
-    }
-    
-    localStorage.setItem('sc_cart', JSON.stringify(cart));
-    
-    // Badge update karo (Cart icon par number)
-    const cartBadge = document.getElementById('cartCount');
-    if (cartBadge) {
-      cartBadge.innerText = cart.reduce((a, i) => a + i.qty, 0);
-    }
+  function addToCartFromDetail(id) {
+    fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${id}`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (!data || data.length === 0) { alert('❌ Product not found'); return; }
+      
+      const p = data[0];
+      let cart = JSON.parse(localStorage.getItem('sc_cart')) || [];
+      const existing = cart.find(item => item.id === p.id);
+      
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ id: p.id, name: p.name, price: p.price, qty: 1, image: p.image || DEFAULT_IMG });
+      }
+      
+      localStorage.setItem('sc_cart', JSON.stringify(cart));
+      
+      // 1. Cart Counter Update karo
+      const totalItems = cart.reduce((a, i) => a + i.qty, 0);
+      const cartBadge = document.getElementById('cartCount');
+      if (cartBadge) cartBadge.innerText = totalItems;
 
-    // Home page jaisa animation/notification dikhao (Agar animation code available hai toh)
-    const btn = document.querySelector('.pd-btn-cart');
-    if (btn) {
+      // 2. Button par Animation (Home page jaisa)
+      const btn = document.querySelector('.pd-btn-cart');
+      if (btn) {
         const originalHTML = btn.innerHTML;
+        const originalBg = btn.style.background;
+        
         btn.innerHTML = '<i class="fas fa-check"></i> Added!';
-        btn.style.background = '#22c55e'; // Green color
+        btn.style.background = '#22c55e'; // Green
+        btn.style.color = '#fff';
+        
         setTimeout(() => {
-            btn.innerHTML = originalHTML;
-            btn.style.background = ''; // Wapas normal color
+          btn.innerHTML = originalHTML;
+          btn.style.background = originalBg;
         }, 1500);
-    }
+      }
 
-    // Cart drawer ko open karo
-    if (typeof toggleCart === 'function') {
-      toggleCart();
-    }
-  })
-  .catch(err => {
-    console.error('Add to cart failed:', err);
-    alert('❌ Failed to add to cart');
-  });
-}
+      // 3. Header ka Cart Drawer open karo (Agar available hai)
+      if (typeof toggleCart === 'function') {
+        toggleCart();
+      }
+    })
+    .catch(err => {
+      console.error('Add to cart failed:', err);
+      alert('❌ Failed to add to cart');
+    });
+  }
   function buyNowFromDetail(id) {
     fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${id}`, {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
