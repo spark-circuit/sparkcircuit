@@ -11,8 +11,6 @@
 <link rel="icon" type="image/jpeg" href="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-
-<!-- FontAwesome & Google Fonts -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -95,7 +93,7 @@
 .pd-content-card p, .pd-content-card ul { color: #475569; font-size: 0.95rem; line-height: 1.8; }
 
 /* Share Section */
-.pd-share { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; margin-top: 20px; }
+.pd-share { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; margin-top: 20px; max-width: 1200px; margin-left: auto; margin-right: auto; }
 .pd-share-label { font-size: 0.9rem; font-weight: 700; color: #0f172a; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
 .pd-share-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
 .pd-share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: 0.25s; color: #fff; font-family: 'Inter', sans-serif; }
@@ -117,6 +115,11 @@
 .related-price .now, .recently-price .now { font-size: 1.1rem; font-weight: 800; color: #0f172a; }
 .related-price .old, .recently-price .old { font-size: 0.8rem; color: #94a3b8; text-decoration: line-through; }
 .recently-badge { position: absolute; top: 8px; right: 8px; background: #f97316; color: #fff; font-size: 0.6rem; font-weight: 700; padding: 3px 7px; border-radius: 50px; }
+
+/* Reviews */
+.reviews-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+.write-review-btn { background: linear-gradient(135deg, #f97316, #fb923c); color: #fff; border: none; padding: 12px 24px; border-radius: 50px; font-weight: 600; cursor: pointer; font-family: 'Poppins', sans-serif; transition: 0.3s; box-shadow: 0 6px 20px rgba(249, 115, 22, 0.3); }
+.write-review-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(249, 115, 22, 0.5); }
 
 @media (max-width: 900px) {
   .pd-grid { grid-template-columns: 1fr; }
@@ -245,15 +248,13 @@
 </div>
 
 <!-- SHARE SECTION -->
-<div class="pd-share" id="shareSection" style="display:none; max-width:1200px; margin: 20px auto; padding: 0 20px;">
-  <div class="pd-content-card" style="padding: 20px;">
-    <div class="pd-share-label"><i class="fas fa-share-alt"></i> Share this product:</div>
-    <div class="pd-share-buttons">
-      <a href="#" onclick="shareOnWhatsApp(event)" class="pd-share-btn whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-      <a href="#" onclick="shareOnFacebook(event)" class="pd-share-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</a>
-      <a href="#" onclick="shareOnTwitter(event)" class="pd-share-btn twitter"><i class="fab fa-twitter"></i> Twitter</a>
-      <button onclick="copyProductLink(event)" class="pd-share-btn copy"><i class="fas fa-link"></i> Copy Link</button>
-    </div>
+<div class="pd-share" id="shareSection" style="display:none;">
+  <div class="pd-share-label"><i class="fas fa-share-alt"></i> Share this product:</div>
+  <div class="pd-share-buttons">
+    <a href="#" onclick="shareOnWhatsApp(event)" class="pd-share-btn whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+    <a href="#" onclick="shareOnFacebook(event)" class="pd-share-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</a>
+    <a href="#" onclick="shareOnTwitter(event)" class="pd-share-btn twitter"><i class="fab fa-twitter"></i> Twitter</a>
+    <button onclick="copyProductLink(event)" class="pd-share-btn copy"><i class="fas fa-link"></i> Copy Link</button>
   </div>
 </div>
 
@@ -267,6 +268,15 @@
 <div class="recently-section" id="recentlySection" style="display:none;">
   <div class="recently-header"><h3>👀 Recently Viewed</h3></div>
   <div id="recentlyProducts" class="recently-grid"></div>
+</div>
+
+<!-- CUSTOMER REVIEWS -->
+<div class="reviews-section" id="reviewsSection">
+  <div class="reviews-header">
+    <h3>⭐ Customer Reviews</h3>
+    <button onclick="openReviewModal()" class="write-review-btn"><i class="fas fa-pen"></i> Write a Review</button>
+  </div>
+  <div id="reviewsList"><p style="color:#64748b;text-align:center;">Loading reviews...</p></div>
 </div>
 
 <!-- CART MODAL -->
@@ -447,6 +457,30 @@
           </a>
         `).join('');
       });
+
+      // 2. Load Reviews (Agar function script.js me hai toh)
+      if (typeof loadReviews === 'function') {
+        loadReviews(p.id);
+      } else {
+        document.getElementById('reviewsList').innerHTML = '<p style="color:#64748b;text-align:center;">No reviews yet. Be the first to review!</p>';
+      }
+
+      // 3. Load Recently Viewed (Agar function script.js me hai toh)
+      if (typeof renderRecentlyViewed === 'function') {
+        document.getElementById('recentlySection').style.display = 'block';
+        renderRecentlyViewed(p.id);
+      }
+
+      // 4. Fix Cart "Loading products..." issue
+      setTimeout(() => {
+        if (window.allProducts && window.allProducts.length === 0) {
+          fetch(`https://mrqvzmtdsohvzsnryogp.supabase.co/rest/v1/products?limit=10`, {
+            headers: { 'apikey': 'sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z', 'Authorization': 'Bearer sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z' }
+          }).then(r=>r.json()).then(prods => {
+            window.allProducts = prods; // Cart ke liye products save karo
+          });
+        }
+      }, 500);
 
     } catch (err) {
       console.error(err);
