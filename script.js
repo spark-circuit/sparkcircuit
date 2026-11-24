@@ -38,7 +38,7 @@ let currentUserSession = null;
 // ============================================================
 // PREMIUM TOAST NOTIFICATION (Replaces alert)
 // ============================================================
-function showToast(message, type = 'success') {
+function showToast(message, type = 'success', actionCallback = null) {
   let container = document.querySelector('.toast-container');
   if (!container) {
     container = document.createElement('div');
@@ -56,6 +56,18 @@ function showToast(message, type = 'success') {
     <div>${message}</div>
   `;
   
+  if (typeof actionCallback === 'function') {
+    const actionButton = document.createElement('button');
+    actionButton.type = 'button';
+    actionButton.textContent = 'VIEW CART';
+    actionButton.style.cssText = 'border:0;background:#f47a1f;color:#fff;border-radius:7px;padding:8px 12px;font-size:11px;font-weight:800;letter-spacing:.4px;cursor:pointer;white-space:nowrap;';
+    actionButton.addEventListener('click', () => {
+      actionCallback();
+      toast.remove();
+    });
+    toast.appendChild(actionButton);
+  }
+
   container.appendChild(toast);
 
   // Show animation
@@ -653,7 +665,15 @@ function changeQty(id, ch) {
   }
 }
 
-function showCheckout() {
+async function showCheckout() {
+  if (!currentUserSession && _supabase) {
+    try {
+      const { data: { session } } = await _supabase.auth.getSession();
+      currentUserSession = session;
+    } catch (error) {
+      console.error('Checkout session check failed:', error);
+    }
+  }
   if (!currentUserSession) {
     // Check if custom modal function exists
     if (typeof showLoginRequiredModal === 'function') {
