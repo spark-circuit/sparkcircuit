@@ -4,11 +4,11 @@
   "rewrites": [
     {
       "source": "/products/:path*",
-      "destination": "/api/product?path=:path*"
+      "destination": "/product-template.html"
     },
     {
       "source": "/product.html",
-      "destination": "/api/product"
+      "destination": "/product-template.html"
     },
     {
       "source": "/sitemap.xml",
