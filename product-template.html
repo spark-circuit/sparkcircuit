@@ -409,5 +409,31 @@
     }
   });
 </script>
+  <script>
+  // Account Dropdown Logic
+  function toggleProfileMenu() {
+    const d = document.getElementById('profileDropdown');
+    if (d) {
+      d.style.display = (d.style.display === 'none' || d.style.display === '') ? 'block' : 'none';
+    }
+  }
+  function closeProfileMenu() {
+    const d = document.getElementById('profileDropdown');
+    if (d) d.style.display = 'none';
+  }
+
+  // Cart Open Logic
+  function toggleCart() {
+    const modal = document.getElementById('cartModal');
+    if (modal) {
+      if (modal.style.display === 'none' || modal.style.display === '') {
+        modal.style.display = 'flex';
+        if(typeof renderCartUI === 'function') renderCartUI();
+      } else {
+        modal.style.display = 'none';
+      }
+    }
+  }
+</script>
 </body>
 </html>
