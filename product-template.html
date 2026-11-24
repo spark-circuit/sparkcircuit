@@ -398,9 +398,9 @@
     </div>
 
        <div class="nav-icons">
-      <a href="/index.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
-      <a href="/index.html" class="nav-item"><i class="fas fa-store"></i><span>Store</span></a>
-      <a href="/about.html" class="nav-item"><i class="fas fa-circle-info"></i><span>About</span></a>
+     <a href="javascript:void(0)" onclick="openMyOrdersModal(); closeProfileMenu(); return false;">...
+<a href="javascript:void(0)" onclick="handleLogout(); closeProfileMenu(); return false;" class="logout">...
+<a href="javascript:void(0)" onclick="openLoginModal(); closeProfileMenu(); return false;">...
       <div class="user-dropdown">
         <div id="userNavContainer" onclick="toggleProfileMenu()" class="nav-item user-btn">
           <i class="fas fa-circle-user"></i>
@@ -684,8 +684,10 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
   document.addEventListener('keydown', escHandler);
 }
 </script>
-
 <script>
+  // ============================================================
+  // GLOBAL CONFIG
+  // ============================================================
   const SUPABASE_URL = 'https://mrqvzmtdsohvzsnryogp.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z';
   const DEFAULT_IMG = 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80';
@@ -693,15 +695,121 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
   const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   // ============================================================
-  // DELIVERY DATE CALCULATOR
+  // 🛒 CART / PROFILE MENU — MISSING FUNCTIONS (FIXED)
+  // ============================================================
+
+  // --- Cart Drawer (same style as shop.html) ---
+  function toggleCart() {
+    const drawer = document.getElementById('cartDrawer') || document.getElementById('cartPanel');
+    const overlay = document.getElementById('cartOverlay');
+
+    if (!drawer) {
+      // Agar cart drawer is page me nahi hai, to shop.html par bhej do
+      window.location.href = '/shop.html?openCart=1';
+      return;
+    }
+    drawer.classList.toggle('open');
+    drawer.classList.toggle('active');
+    if (overlay) overlay.classList.toggle('active');
+  }
+
+  function closeCart() {
+    const drawer = document.getElementById('cartDrawer') || document.getElementById('cartPanel');
+    const overlay = document.getElementById('cartOverlay');
+    if (drawer) { drawer.classList.remove('open', 'active'); }
+    if (overlay) overlay.classList.remove('active');
+  }
+
+  // --- Profile Dropdown ---
+  function toggleProfileMenu() {
+    const dd = document.getElementById('profileDropdown');
+    if (!dd) return;
+    dd.classList.toggle('show');
+    dd.classList.toggle('active');
+  }
+
+  function closeProfileMenu() {
+    const dd = document.getElementById('profileDropdown');
+    if (!dd) return;
+    dd.classList.remove('show', 'active');
+  }
+
+  // Close profile dropdown on outside click
+  document.addEventListener('click', function (e) {
+    const dd = document.getElementById('profileDropdown');
+    const btn = document.getElementById('userNavContainer');
+    if (dd && btn && !btn.contains(e.target) && !dd.contains(e.target)) {
+      dd.classList.remove('show', 'active');
+    }
+  });
+
+  // --- Stubs for functions called from header (avoid console errors) ---
+  function openMyOrdersModal() {
+    // Agar shop.html wala modal yahan nahi hai to simple alert/redirect
+    window.location.href = '/shop.html?openOrders=1';
+  }
+  function openLoginModal() {
+    window.location.href = '/shop.html?openLogin=1';
+  }
+  function handleLogout() {
+    _supabase.auth.signOut().then(() => {
+      localStorage.removeItem('sc_user');
+      window.location.reload();
+    });
+  }
+  function handleSearchInput() {
+    // Basic search: suggestions dropdown (agar shop.html wala JS nahi hai)
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    const box = document.getElementById('searchSuggestions');
+    if (!box) return;
+    if (q.length < 2) { box.innerHTML = ''; box.style.display = 'none'; return; }
+
+    fetch(`${SUPABASE_URL}/rest/v1/products?name=ilike.*${encodeURIComponent(q)}*&limit=5`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    })
+    .then(r => r.json())
+    .then(list => {
+      if (!list || !list.length) { box.innerHTML = ''; box.style.display = 'none'; return; }
+      box.innerHTML = list.map(p => `
+        <a href="/products/${slugifyProductName(p.name)}-${p.id}" class="suggestion-item">
+          <img src="${p.image || DEFAULT_IMG}" onerror="this.src='${DEFAULT_IMG}'">
+          <div><strong>${p.name}</strong><span>₹${p.price}</span></div>
+        </a>
+      `).join('');
+      box.style.display = 'block';
+    }).catch(() => {});
+  }
+  function handleSearchFocus() { /* optional */ }
+  function handleSearchBlur() {
+    setTimeout(() => {
+      const box = document.getElementById('searchSuggestions');
+      if (box) box.style.display = 'none';
+    }, 200);
+  }
+
+  // ============================================================
+  // 🛒 CART COUNT — update header badge (FIXED)
+  // ============================================================
+  function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('sc_cart')) || [];
+    const total = cart.reduce((a, i) => a + (i.qty || 1), 0);
+    const el = document.getElementById('cartCount');
+    if (el) el.textContent = total;
+  }
+
+  function updateWishlistCount() {
+    const w = JSON.parse(localStorage.getItem('sc_wishlist')) || [];
+    const el = document.getElementById('wishlistCount');
+    if (el) el.textContent = w.length;
+  }
+
+  // ============================================================
+  // DELIVERY DATE
   // ============================================================
   function calculateDeliveryDate() {
     const today = new Date();
-    const minDate = new Date(today);
-    minDate.setDate(today.getDate() + 3);
-    const maxDate = new Date(today);
-    maxDate.setDate(today.getDate() + 5);
-    
+    const minDate = new Date(today); minDate.setDate(today.getDate() + 3);
+    const maxDate = new Date(today); maxDate.setDate(today.getDate() + 5);
     const options = { day: 'numeric', month: 'short' };
     return {
       minDate: minDate.toLocaleDateString('en-IN', options),
@@ -720,43 +828,28 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
       let recent = JSON.parse(localStorage.getItem('sc_recently_viewed')) || [];
       recent = recent.filter(p => p.id !== product.id);
       recent.unshift({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        original_price: product.original_price,
-        category: product.category,
-        image: product.image,
-        viewed_at: Date.now()
+        id: product.id, name: product.name, price: product.price,
+        original_price: product.original_price, category: product.category,
+        image: product.image, viewed_at: Date.now()
       });
       recent = recent.slice(0, 8);
       localStorage.setItem('sc_recently_viewed', JSON.stringify(recent));
-    } catch (e) {
-      console.error('Recently viewed save failed:', e);
-    }
+    } catch (e) { console.error('Recently viewed save failed:', e); }
   }
 
   function renderRecentlyViewed(currentProductId) {
     const section = document.getElementById('recentlySection');
     const container = document.getElementById('recentlyProducts');
     if (!section || !container) return;
-    
     try {
       let recent = JSON.parse(localStorage.getItem('sc_recently_viewed')) || [];
-      recent = recent.filter(p => p.id !== currentProductId);
-      recent = recent.slice(0, 4);
-      
-      if (recent.length === 0) {
-        section.style.display = 'none';
-        return;
-      }
-      
+      recent = recent.filter(p => p.id !== currentProductId).slice(0, 4);
+      if (recent.length === 0) { section.style.display = 'none'; return; }
       section.style.display = 'block';
-      
       container.innerHTML = recent.map(p => {
         const img = p.image && p.image.trim() !== '' ? p.image : DEFAULT_IMG;
         const discount = p.original_price && p.original_price > p.price
           ? Math.round(((p.original_price - p.price) / p.original_price) * 100) : 0;
-        
         return `
           <a href="${getProductSEOUrl(p)}" class="recently-card">
             ${discount > 0 ? `<span class="recently-badge">${discount}% OFF</span>` : ''}
@@ -767,315 +860,162 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
               <span class="now">₹${p.price}</span>
               ${p.original_price && p.original_price > p.price ? `<span class="old">₹${p.original_price}</span>` : ''}
             </div>
-          </a>
-        `;
+          </a>`;
       }).join('');
-      
-    } catch (e) {
-      console.error('Recently viewed render failed:', e);
-      section.style.display = 'none';
-    }
+    } catch (e) { section.style.display = 'none'; }
   }
 
-function slugifyProductName(name = "") {
-  return String(name)
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
-
-function getProductSEOUrl(product) {
-
-  if (!product || !product.id) {
-    return "#";
+  // ============================================================
+  // SEO URL HELPERS
+  // ============================================================
+  function slugifyProductName(name = "") {
+    return String(name).toLowerCase().trim()
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  }
+  function getProductSEOUrl(product) {
+    if (!product || !product.id) return "#";
+    return `/products/${slugifyProductName(product.name)}-${product.id}`;
   }
 
-  return `/products/${slugifyProductName(product.name)}-${product.id}`;
-}  
+  // ============================================================
+  // LOAD PRODUCT DETAILS
+  // ============================================================
+  async function loadProductDetails() {
+    const container = document.getElementById('productDetailContent');
+    if (!container) return;
 
-// LOAD PRODUCT DETAILS
-// ============================================================
-async function loadProductDetails() {
+    let p = window.__SPARKCIRCUIT_PRODUCT__ || null;
 
-  const container =
-    document.getElementById('productDetailContent');
-
-  // ==========================================================
-  // 1. FIRST: CHECK SERVER-SIDE PRODUCT DATA
-  // ==========================================================
-
-  let p =
-    window.__SPARKCIRCUIT_PRODUCT__ || null;
-
-
-  // ==========================================================
-  // 2. IF SSR DATA IS NOT AVAILABLE
-  //    THEN USE OLD ?id=123 URL
-  // ==========================================================
-
-  if (!p) {
-
-    const params =
-      new URLSearchParams(
-        window.location.search
-      );
-
-    const productId =
-      params.get('id');
-
-
-    if (!productId) {
-
-      container.innerHTML =
-        `<h3 style="color:#ef4444;text-align:center;">
-          Product Not Found!
-        </h3>`;
-
-      return;
-    }
-
-
-    try {
-
-      const res =
-        await fetch(
-          `${SUPABASE_URL}/rest/v1/products?id=eq.${encodeURIComponent(productId)}`,
-          {
-            headers: {
-              'apikey': SUPABASE_KEY,
-              'Authorization':
-                `Bearer ${SUPABASE_KEY}`
-            }
-          }
-        );
-
-
-      const data =
-        await res.json();
-
-
-      if (
-        !data ||
-        data.length === 0
-      ) {
-
-        container.innerHTML =
-          `<h3 style="color:#ef4444;text-align:center;">
-            Product Not Found!
-          </h3>`;
-
+    if (!p) {
+      const params = new URLSearchParams(window.location.search);
+      const productId = params.get('id');
+      if (!productId) {
+        container.innerHTML = `<h3 style="color:#ef4444;text-align:center;">Product Not Found!</h3>`;
         return;
       }
-
-
-      // OLD URL SE PRODUCT MILA
-      p = data[0];
-
-    } catch (error) {
-
-      console.error(
-        'Product loading error:',
-        error
-      );
-
-      container.innerHTML =
-        `<h3 style="color:#ef4444;text-align:center;">
-          Unable to load product!
-        </h3>`;
-
-      return;
-    }
-  }
-
-
-  // ==========================================================
-  // 3. PRODUCT MIL GAYA
-  //    YAHAN SE TUMHARA PURANA CODE SAME RAHEGA
-  // ==========================================================
-
-  saveRecentlyViewed(p);
-
-  window.currentProduct = p;
-      
-  let allImages = [];
-
-  if (
-    p.image &&
-    p.image.trim() !== ''
-  ) {
-    allImages.push(p.image);
-  }
-
-  if (
-    Array.isArray(p.images)
-  ) {
-
-    p.images.forEach(img => {
-
-      if (
-        img &&
-        img.trim() !== '' &&
-        !allImages.includes(img)
-      ) {
-
-        allImages.push(img);
-
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/products?id=eq.${encodeURIComponent(productId)}`,
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+        );
+        const data = await res.json();
+        if (!data || data.length === 0) {
+          container.innerHTML = `<h3 style="color:#ef4444;text-align:center;">Product Not Found!</h3>`;
+          return;
+        }
+        p = data[0];
+      } catch (error) {
+        console.error('Product loading error:', error);
+        container.innerHTML = `<h3 style="color:#ef4444;text-align:center;">Unable to load product!</h3>`;
+        return;
       }
-
-    });
-  }
-
-  if (
-    allImages.length === 0
-  ) {
-
-    allImages.push(
-      DEFAULT_IMG
-    );
-
-  }
-      
-  const mainImg =
-    allImages[0];
-
-  const discount =
-    p.original_price &&
-    p.original_price > p.price
-      ? Math.round(
-          (
-            (p.original_price - p.price) /
-            p.original_price
-          ) * 100
-        )
-      : 0;
-      
-  let stockClass = 'in';
-  let stockText = '';
-
-  if (
-    p.stock_quantity !== undefined &&
-    p.stock_quantity !== null
-  ) {
-
-    if (
-      p.stock_quantity > 5
-    ) {
-
-      stockClass = 'in';
-
-      stockText =
-        `✅ In Stock — ${p.stock_quantity} available`;
-
-    } else if (
-      p.stock_quantity > 0
-    ) {
-
-      stockClass = 'low';
-
-      stockText =
-        `🔥 Hurry! Only ${p.stock_quantity} left in stock`;
-
-    } else {
-
-      stockClass = 'out';
-
-      stockText =
-        `❌ Out of Stock`;
-
     }
 
-  } else {
+    // --- Debug (optional): console me product dekhne ke liye ---
+    console.log('🛒 Loaded product:', p);
 
-    stockText =
-      p.in_stock
-        ? '✅ In Stock'
-        : '❌ Out of Stock';
+    saveRecentlyViewed(p);
+    window.currentProduct = p;
 
-  }
-      
-      // Update breadcrumbs
-      document.getElementById('bcCurrentPage').innerText = p.name.length > 30 ? p.name.substring(0, 30) + '...' : p.name;
-      
-      // Update tab content
-      document.getElementById('pdDescription').innerText = p.description || 'High-performance tested electronic component from SparkCircuit.';
-      document.getElementById('pdSpecCat').innerText = p.category || 'Electronics';
+    let allImages = [];
+    if (p.image && p.image.trim() !== '') allImages.push(p.image);
+    if (Array.isArray(p.images)) {
+      p.images.forEach(img => {
+        if (img && img.trim() !== '' && !allImages.includes(img)) allImages.push(img);
+      });
+    }
+    if (allImages.length === 0) allImages.push(DEFAULT_IMG);
 
-      // Render main card
-      container.innerHTML = `
-        <div class="pd-card">
-          <div class="pd-grid">
-            
-            <!-- IMAGE GALLERY -->
-            <div class="pd-gallery">
-              <div class="pd-main-image">
-                <img id="mainProductImage" src="${mainImg}" alt="${p.name}" onerror="this.src='${DEFAULT_IMG}'">
-              </div>
-              ${allImages.length > 1 ? `
-                <div class="pd-thumbnails">
-                  ${allImages.map((img, idx) => `
-                    <button class="pd-thumb ${idx === 0 ? 'active' : ''}" onclick="changeMainImage('${img}', this)">
-                      <img src="${img}" alt="View ${idx + 1}" onerror="this.src='${DEFAULT_IMG}'">
-                    </button>
-                  `).join('')}
-                </div>
-              ` : ''}
+    const mainImg = allImages[0];
+    const discount = p.original_price && p.original_price > p.price
+      ? Math.round(((p.original_price - p.price) / p.original_price) * 100) : 0;
+
+    let stockClass = 'in', stockText = '';
+    if (p.stock_quantity !== undefined && p.stock_quantity !== null) {
+      if (p.stock_quantity > 5) {
+        stockClass = 'in'; stockText = `✅ In Stock — ${p.stock_quantity} available`;
+      } else if (p.stock_quantity > 0) {
+        stockClass = 'low'; stockText = `🔥 Hurry! Only ${p.stock_quantity} left in stock`;
+      } else {
+        stockClass = 'out'; stockText = `❌ Out of Stock`;
+      }
+    } else {
+      stockText = p.in_stock ? '✅ In Stock' : '❌ Out of Stock';
+    }
+
+    // Breadcrumb
+    const bc = document.getElementById('bcCurrentPage');
+    if (bc) bc.innerText = p.name.length > 30 ? p.name.substring(0, 30) + '...' : p.name;
+
+    // ✅ FIX #4: Description — proper fallback
+    const descEl = document.getElementById('pdDescription');
+    if (descEl) {
+      descEl.innerText = (p.description && p.description.trim() !== '')
+        ? p.description
+        : 'High-performance tested electronic component from SparkCircuit.';
+    }
+    const specCat = document.getElementById('pdSpecCat');
+    if (specCat) specCat.innerText = p.category || 'Electronics';
+
+    // Render main card
+    container.innerHTML = `
+      <div class="pd-card">
+        <div class="pd-grid">
+          <div class="pd-gallery">
+            <div class="pd-main-image">
+              <img id="mainProductImage" src="${mainImg}" alt="${p.name}" onerror="this.src='${DEFAULT_IMG}'">
             </div>
-            
-            <!-- INFO SECTION -->
-            <div class="pd-info">
-              <span class="pd-category">${p.category || 'Electronics'}</span>
-              
-              <h1 class="pd-title">${p.name}</h1>
-              
-              <div class="pd-rating">
-                <span class="stars">⭐⭐⭐⭐⭐</span>
-                <span>4.8 | Trusted by 500+ customers</span>
+            ${allImages.length > 1 ? `
+              <div class="pd-thumbnails">
+                ${allImages.map((img, idx) => `
+                  <button class="pd-thumb ${idx === 0 ? 'active' : ''}" onclick="changeMainImage('${img}', this)">
+                    <img src="${img}" alt="View ${idx + 1}" onerror="this.src='${DEFAULT_IMG}'">
+                  </button>`).join('')}
+              </div>` : ''}
+          </div>
+          <div class="pd-info">
+            <span class="pd-category">${p.category || 'Electronics'}</span>
+            <h1 class="pd-title">${p.name}</h1>
+            <div class="pd-rating">
+              <span class="stars">⭐⭐⭐⭐⭐</span>
+              <span>4.8 | Trusted by 500+ customers</span>
+            </div>
+            <div class="pd-price-section">
+              <span class="pd-price">₹${p.price}</span>
+              ${p.original_price && p.original_price > p.price ? `<span class="pd-mrp">₹${p.original_price}</span>` : ''}
+              ${discount > 0 ? `<span class="pd-discount">${discount}% OFF</span>` : ''}
+            </div>
+            <div class="pd-stock ${stockClass}">${stockText}</div>
+            <div class="pd-delivery">
+              <i class="fas fa-truck-fast"></i>
+              <div>
+                <div class="title">🚚 Free Delivery Available</div>
+                <div class="date">Order today, get it by <strong>${calculateDeliveryDate().maxDate}</strong></div>
               </div>
-              
-              <div class="pd-price-section">
-                <span class="pd-price">₹${p.price}</span>
-                ${p.original_price && p.original_price > p.price ? `<span class="pd-mrp">₹${p.original_price}</span>` : ''}
-                ${discount > 0 ? `<span class="pd-discount">${discount}% OFF</span>` : ''}
-              </div>
-              
-              <div class="pd-stock ${stockClass}">
-                ${stockText}
-              </div>
-              
-              <div class="pd-delivery">
-                <i class="fas fa-truck-fast"></i>
-                <div>
-                  <div class="title">🚚 Free Delivery Available</div>
-                  <div class="date">Order today, get it by <strong>${calculateDeliveryDate().maxDate}</strong></div>
-                </div>
-              </div>
-              
-              ${p.in_stock
-                ? `<div class="pd-buttons">
-                     <button onclick="addToCartFromDetail(${p.id})" class="pd-btn pd-btn-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
-                     <button onclick="buyNowFromDetail(${p.id})" class="pd-btn pd-btn-buy"><i class="fas fa-bolt"></i> Buy Now</button>
-                   </div>`
-                : `<button disabled style="width:100%;padding:16px;background:#cbd5e1;color:#64748b;border:none;border-radius:12px;font-weight:700;cursor:not-allowed;">❌ Out of Stock</button>`
-              }
-              
-              <div class="pd-trust">
-                <div class="pd-trust-item"><i class="fas fa-shield-alt"></i><span>100% Genuine</span></div>
-                <div class="pd-trust-item"><i class="fas fa-rotate-left"></i><span>7-Day Return</span></div>
-                <div class="pd-trust-item"><i class="fas fa-lock"></i><span>Secure Payment</span></div>
-              </div>
+            </div>
+            ${p.in_stock
+              ? `<div class="pd-buttons">
+                   <button onclick="addToCartFromDetail(${p.id})" class="pd-btn pd-btn-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                   <button onclick="buyNowFromDetail(${p.id})" class="pd-btn pd-btn-buy"><i class="fas fa-bolt"></i> Buy Now</button>
+                 </div>`
+              : `<button disabled style="width:100%;padding:16px;background:#cbd5e1;color:#64748b;border:none;border-radius:12px;font-weight:700;cursor:not-allowed;">❌ Out of Stock</button>`}
+            <div class="pd-trust">
+              <div class="pd-trust-item"><i class="fas fa-shield-alt"></i><span>100% Genuine</span></div>
+              <div class="pd-trust-item"><i class="fas fa-rotate-left"></i><span>7-Day Return</span></div>
+              <div class="pd-trust-item"><i class="fas fa-lock"></i><span>Secure Payment</span></div>
             </div>
           </div>
         </div>
-      `;
+      </div>`;
 
-           document.getElementById('pdTabsSection').style.display = 'block';
-      document.getElementById('shareSection').style.display = 'block';
+    const tabsSection = document.getElementById('pdTabsSection');
+    if (tabsSection) tabsSection.style.display = 'block';
+    const shareSec = document.getElementById('shareSection');
+    if (shareSec) shareSec.style.display = 'block';
 
-      loadReviews(p.id);
-      loadRelatedProducts(p.id, p.category);
-      renderRecentlyViewed(p.id);
+    loadReviews(p.id);
+    loadRelatedProducts(p.id, p.category);
+    renderRecentlyViewed(p.id);
   }
 
   function changeMainImage(imgUrl, btn) {
@@ -1090,30 +1030,26 @@ async function loadProductDetails() {
     document.getElementById(tabId).classList.add('active');
     btn.classList.add('active');
   }
+
+  // ============================================================
+  // REVIEWS
+  // ============================================================
   async function loadReviews(productId) {
     const container = document.getElementById('reviewsList');
     if (!container) return;
-
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews?product_id=eq.${productId}&order=created_at.desc`, {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-      });
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/reviews?product_id=eq.${productId}&order=created_at.desc`,
+        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+      );
       const reviews = await res.json();
-
       if (!reviews || reviews.length === 0) {
         container.innerHTML = '<p style="color:#64748b;text-align:center;padding:20px;">No reviews yet. Be the first to review!</p>';
-         // Update schema without rating
-        if (window.currentProduct) {
-          updateProductSchema(window.currentProduct, 0, 0);
-        }
+        if (window.currentProduct) updateProductSchema(window.currentProduct, 0, 0);
         return;
       }
-
       const avg = reviews.reduce((a, r) => a + r.rating, 0) / reviews.length;
-            // Update schema with rating data
-      if (window.currentProduct) {
-        updateProductSchema(window.currentProduct, avg, reviews.length);
-      }
+      if (window.currentProduct) updateProductSchema(window.currentProduct, avg, reviews.length);
 
       container.innerHTML = `
         <div class="avg-rating-box">
@@ -1131,9 +1067,7 @@ async function loadProductDetails() {
               <span class="review-date">${new Date(r.created_at).toLocaleDateString('en-IN')}</span>
             </div>
             <p class="review-text">${r.review_text}</p>
-          </div>
-        `).join('')}
-      `;
+          </div>`).join('')}`;
     } catch (err) {
       container.innerHTML = '<p style="color:#ef4444;text-align:center;padding:20px;">Failed to load reviews</p>';
     }
@@ -1149,10 +1083,12 @@ async function loadProductDetails() {
     return html;
   }
 
+  // ============================================================
+  // RELATED PRODUCTS
+  // ============================================================
   async function loadRelatedProducts(productId, category) {
     const container = document.getElementById('relatedProducts');
     if (!container) return;
-
     try {
       let products = [];
       if (category) {
@@ -1162,7 +1098,6 @@ async function loadProductDetails() {
         );
         products = await res1.json() || [];
       }
-
       if (products.length < 4) {
         const res2 = await fetch(
           `${SUPABASE_URL}/rest/v1/products?id=neq.${productId}&in_stock=eq.true&limit=8`,
@@ -1172,22 +1107,18 @@ async function loadProductDetails() {
         const existingIds = new Set(products.map(p => p.id));
         for (const fp of fallbackProducts) {
           if (!existingIds.has(fp.id) && products.length < 4) {
-            products.push(fp);
-            existingIds.add(fp.id);
+            products.push(fp); existingIds.add(fp.id);
           }
         }
       }
-
       if (!products || products.length === 0) {
         container.innerHTML = '<p style="color:#64748b;text-align:center;padding:20px;grid-column:1/-1;">No products available right now.</p>';
         return;
       }
-
       container.innerHTML = products.slice(0, 4).map(p => {
         const img = p.image && p.image.trim() !== '' ? p.image : DEFAULT_IMG;
         const discount = p.original_price && p.original_price > p.price
           ? Math.round(((p.original_price - p.price) / p.original_price) * 100) : 0;
-
         return `
           <a href="${getProductSEOUrl(p)}" class="related-card">
             <img src="${img}" alt="${p.name}" onerror="this.src='${DEFAULT_IMG}'">
@@ -1198,35 +1129,30 @@ async function loadProductDetails() {
               ${p.original_price && p.original_price > p.price ? `<span class="old">₹${p.original_price}</span>` : ''}
               ${discount > 0 ? `<span style="color:#15803d;font-size:0.75rem;font-weight:700;">${discount}% OFF</span>` : ''}
             </div>
-          </a>
-        `;
+          </a>`;
       }).join('');
-
     } catch (err) {
       console.error('Related products error:', err);
       container.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:20px;grid-column:1/-1;">Failed to load similar products</p>';
     }
   }
 
+  // ============================================================
+  // REVIEW MODAL
+  // ============================================================
   async function openReviewModal() {
     const { data: { session } } = await _supabase.auth.getSession();
     if (!session?.user?.email) {
-  showLoginRequiredModal('to write a review');
-  return;
-}
+      showLoginRequiredModal('to write a review');
+      return;
+    }
+    const productId = window.currentProduct?.id;
+    if (!productId) { alert('❌ Product information not found'); return; }
 
-   const productId = window.currentProduct?.id;
-
-if (!productId) {
-  alert('❌ Product information not found');
-  return;
-}
     const rating = prompt('Rate this product (1-5 stars):');
     if (!rating || rating < 1 || rating > 5) { alert('Please enter rating between 1-5'); return; }
-
     const reviewText = prompt('Write your review:');
     if (!reviewText || reviewText.trim().length < 5) { alert('Please write at least 5 characters'); return; }
-
     const userName = session.user.email.split('@')[0];
 
     try {
@@ -1246,18 +1172,14 @@ if (!productId) {
           review_text: reviewText.trim()
         })
       });
-
-      if (res.ok) {
-        alert('✅ Thank you for your review!');
-        loadReviews(productId);
-      } else {
-        alert('❌ Failed to submit review');
-      }
-    } catch (err) {
-      alert('Error: ' + err.message);
-    }
+      if (res.ok) { alert('✅ Thank you for your review!'); loadReviews(productId); }
+      else { alert('❌ Failed to submit review'); }
+    } catch (err) { alert('Error: ' + err.message); }
   }
 
+  // ============================================================
+  // SHARE
+  // ============================================================
   function getShareData() {
     const productName = document.querySelector('.pd-title')?.innerText || 'SparkCircuit Product';
     const productPrice = document.querySelector('.pd-price')?.innerText || '';
@@ -1265,25 +1187,21 @@ if (!productId) {
     const shareText = `🔌 Check out this product on SparkCircuit!\n\n📦 ${productName}\n💰 ${productPrice}\n\n🛒 Buy now:`;
     return { productName, productPrice, currentUrl, shareText };
   }
-
   function shareOnWhatsApp(e) {
     e.preventDefault();
     const { currentUrl, shareText } = getShareData();
     window.open(`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + currentUrl)}`, '_blank');
   }
-
   function shareOnFacebook(e) {
     e.preventDefault();
     const { currentUrl } = getShareData();
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`, '_blank', 'width=600,height=400');
   }
-
   function shareOnTwitter(e) {
     e.preventDefault();
     const { currentUrl, shareText } = getShareData();
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(currentUrl)}`, '_blank', 'width=600,height=400');
   }
-
   function copyProductLink(e) {
     e.preventDefault();
     const { currentUrl } = getShareData();
@@ -1292,15 +1210,13 @@ if (!productId) {
       const originalText = btn.innerHTML;
       btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
       btn.style.background = '#22c55e';
-      setTimeout(() => {
-        btn.innerHTML = originalText;
-        btn.style.background = '';
-      }, 2000);
-    }).catch(err => {
-      alert('Failed to copy link');
-    });
+      setTimeout(() => { btn.innerHTML = originalText; btn.style.background = ''; }, 2000);
+    }).catch(() => alert('Failed to copy link'));
   }
 
+  // ============================================================
+  // 🛒 ADD TO CART / BUY NOW (FIXED — same as shop.html)
+  // ============================================================
   function addToCartFromDetail(id) {
     fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${id}`, {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
@@ -1308,7 +1224,6 @@ if (!productId) {
     .then(res => res.json())
     .then(data => {
       if (!data || data.length === 0) { alert('❌ Product not found'); return; }
-      
       const p = data[0];
       let cart = JSON.parse(localStorage.getItem('sc_cart')) || [];
       const existing = cart.find(item => item.id === p.id);
@@ -1317,17 +1232,27 @@ if (!productId) {
         existing.price = p.price;
         existing.name = p.name;
       } else {
-        cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
+        cart.push({
+          id: p.id, name: p.name, price: p.price, qty: 1,
+          image: p.image || DEFAULT_IMG
+        });
       }
-      
       localStorage.setItem('sc_cart', JSON.stringify(cart));
-      const totalItems = cart.reduce((a, i) => a + i.qty, 0);
-      alert(`✅ "${p.name}" added to cart!\n\n🛒 Cart me total ${totalItems} item${totalItems > 1 ? 's' : ''} hain.`);
+
+      // ✅ FIX #6: Update badge immediately
+      updateCartCount();
+
+      // ✅ FIX #5: Try to open drawer, else show toast + redirect option
+      const drawer = document.getElementById('cartDrawer') || document.getElementById('cartPanel');
+      if (drawer) {
+        toggleCart();
+      } else {
+        // Agar page par cart drawer nahi hai to user ko bata do
+        const go = confirm(`✅ "${p.name}" added to cart!\n\n🛒 Cart me total ${cart.reduce((a,i)=>a+i.qty,0)} item hain.\n\nOK = Cart page par jao, Cancel = Yahan raho`);
+        if (go) window.location.href = '/shop.html?openCart=1';
+      }
     })
-    .catch(err => {
-      console.error('Add to cart failed:', err);
-      alert('❌ Failed to add to cart');
-    });
+    .catch(err => { console.error('Add to cart failed:', err); alert('❌ Failed to add to cart'); });
   }
 
   function buyNowFromDetail(id) {
@@ -1337,42 +1262,32 @@ if (!productId) {
     .then(res => res.json())
     .then(data => {
       if (!data || data.length === 0) { alert('❌ Product not found'); return; }
-      
       const p = data[0];
       let cart = JSON.parse(localStorage.getItem('sc_cart')) || [];
       const existing = cart.find(item => item.id === p.id);
-      if (existing) {
-        existing.qty += 1;
-      } else {
-        cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
-      }
-      
+      if (existing) { existing.qty += 1; }
+      else { cart.push({ id: p.id, name: p.name, price: p.price, qty: 1, image: p.image || DEFAULT_IMG }); }
       localStorage.setItem('sc_cart', JSON.stringify(cart));
       localStorage.setItem('sc_pending_cart', JSON.stringify({ id, action: 'buy' }));
-     window.location.href = '/shop.html';
+      updateCartCount();
+      window.location.href = '/shop.html';
     })
-    .catch(err => {
-      console.error('Buy now failed:', err);
-      alert('❌ Failed');
-    });
+    .catch(err => { console.error('Buy now failed:', err); alert('❌ Failed'); });
   }
-    // ============================================================
-  // 🎯 UPDATE SCHEMA WITH REAL PRODUCT DATA (For Google Rich Snippets)
+
+  // ============================================================
+  // SCHEMA UPDATE
   // ============================================================
   function updateProductSchema(product, avgRating, reviewCount) {
     const schemaEl = document.getElementById('productSchema');
     if (!schemaEl) return;
-    
-    
-const productUrl = `https://sparkcircuit.in/products/${slugifyProductName(product.name)}-${product.id}`;
-    const imageUrl = (product.image && product.image.trim() !== '') 
-      ? product.image 
+    const productUrl = `https://sparkcircuit.in/products/${slugifyProductName(product.name)}-${product.id}`;
+    const imageUrl = (product.image && product.image.trim() !== '')
+      ? product.image
       : 'https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg';
-    
     const inStock = (product.stock_quantity !== undefined && product.stock_quantity !== null)
-      ? product.stock_quantity > 0
-      : product.in_stock;
-    
+      ? product.stock_quantity > 0 : product.in_stock;
+
     const schema = {
       "@context": "https://schema.org",
       "@type": "Product",
@@ -1380,41 +1295,36 @@ const productUrl = `https://sparkcircuit.in/products/${slugifyProductName(produc
       "image": imageUrl,
       "description": product.description || `Buy ${product.name} online at SparkCircuit.`,
       "sku": `SPC-${product.id}`,
-      "brand": {
-        "@type": "Brand",
-        "name": "SparkCircuit"
-      },
+      "brand": { "@type": "Brand", "name": "SparkCircuit" },
       "offers": {
         "@type": "Offer",
         "url": productUrl,
         "priceCurrency": "INR",
         "price": product.price.toString(),
-        "availability": inStock 
-          ? "https://schema.org/InStock" 
-          : "https://schema.org/OutOfStock",
-        "seller": {
-          "@type": "Organization",
-          "name": "SparkCircuit"
-        }
+        "availability": inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+        "seller": { "@type": "Organization", "name": "SparkCircuit" }
       }
     };
-    
-    // Add rating ONLY if real reviews exist (Google policy compliant)
     if (avgRating > 0 && reviewCount > 0) {
       schema.aggregateRating = {
         "@type": "AggregateRating",
         "ratingValue": avgRating.toFixed(1),
         "reviewCount": reviewCount.toString(),
-        "bestRating": "5",
-        "worstRating": "1"
+        "bestRating": "5", "worstRating": "1"
       };
     }
-    
     schemaEl.textContent = JSON.stringify(schema, null, 2);
     console.log('✅ Product schema updated:', schema.name);
   }
 
-  document.addEventListener('DOMContentLoaded', loadProductDetails);
+  // ============================================================
+  // INIT
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', () => {
+    loadProductDetails();
+    updateCartCount();       // ✅ Header badge fix
+    updateWishlistCount();   // ✅ Header badge fix
+  });
 </script>
 </body>
 </html>
