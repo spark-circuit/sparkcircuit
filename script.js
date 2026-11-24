@@ -385,6 +385,7 @@ function processCartAddition(p, showNotice, btnElement) {
   }
   
   saveCart();
+  updateCartBadge();
   animateCartIcon(); 
 
   if (btnElement) {
