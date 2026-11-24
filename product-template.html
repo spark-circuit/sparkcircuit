@@ -1234,44 +1234,54 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
   // ============================================================
   // 🛒 ADD TO CART / BUY NOW (FIXED — same as shop.html)
   // ============================================================
-  function addToCartFromDetail(id) {
-    fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${id}`, {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (!data || data.length === 0) { alert('❌ Product not found'); return; }
-      const p = data[0];
-      let cart = JSON.parse(localStorage.getItem('sc_cart')) || [];
-      const existing = cart.find(item => item.id === p.id);
-      if (existing) {
-        existing.qty += 1;
-        existing.price = p.price;
-        existing.name = p.name;
-      } else {
-        cart.push({
-          id: p.id, name: p.name, price: p.price, qty: 1,
-          image: p.image || DEFAULT_IMG
-        });
-      }
-      localStorage.setItem('sc_cart', JSON.stringify(cart));
+ function addToCartFromDetail(id) {
+  fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${id}`, {
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (!data || data.length === 0) { alert('❌ Product not found'); return; }
+    
+    const p = data[0];
+    let cart = JSON.parse(localStorage.getItem('sc_cart')) || [];
+    const existing = cart.find(item => item.id === p.id);
+    
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ id: p.id, name: p.name, price: p.price, qty: 1, image: p.image || DEFAULT_IMG });
+    }
+    
+    localStorage.setItem('sc_cart', JSON.stringify(cart));
+    
+    // Badge update karo (Cart icon par number)
+    const cartBadge = document.getElementById('cartCount');
+    if (cartBadge) {
+      cartBadge.innerText = cart.reduce((a, i) => a + i.qty, 0);
+    }
 
-      // ✅ FIX #6: Update badge immediately
-      updateCartCount();
+    // Home page jaisa animation/notification dikhao (Agar animation code available hai toh)
+    const btn = document.querySelector('.pd-btn-cart');
+    if (btn) {
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Added!';
+        btn.style.background = '#22c55e'; // Green color
+        setTimeout(() => {
+            btn.innerHTML = originalHTML;
+            btn.style.background = ''; // Wapas normal color
+        }, 1500);
+    }
 
-      // ✅ FIX #5: Try to open drawer, else show toast + redirect option
-      const drawer = document.getElementById('cartDrawer') || document.getElementById('cartPanel');
-      if (drawer) {
-        toggleCart();
-      } else {
-        // Agar page par cart drawer nahi hai to user ko bata do
-        const go = confirm(`✅ "${p.name}" added to cart!\n\n🛒 Cart me total ${cart.reduce((a,i)=>a+i.qty,0)} item hain.\n\nOK = Cart page par jao, Cancel = Yahan raho`);
-        if (go) window.location.href = '/shop.html?openCart=1';
-      }
-    })
-    .catch(err => { console.error('Add to cart failed:', err); alert('❌ Failed to add to cart'); });
-  }
-
+    // Cart drawer ko open karo
+    if (typeof toggleCart === 'function') {
+      toggleCart();
+    }
+  })
+  .catch(err => {
+    console.error('Add to cart failed:', err);
+    alert('❌ Failed to add to cart');
+  });
+}
   function buyNowFromDetail(id) {
     fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${id}`, {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
@@ -1371,6 +1381,44 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
       };
     }
   });
+</script>
+  <script>
+// Home page jaisa Cart Drawer aur Account Dropdown Fix
+document.addEventListener('DOMContentLoaded', function() {
+  
+  // 1. Cart Drawer Function (Home page style)
+  window.toggleCart = function() {
+    const drawer = document.getElementById('cartDrawer') || document.querySelector('.cart-drawer');
+    const overlay = document.getElementById('cartOverlay');
+    
+    if (drawer) {
+      drawer.classList.toggle('active');
+      if (overlay) overlay.classList.toggle('active');
+      // Agar cart items render karne ka function hai toh use call karo
+      if (typeof renderCartItems === 'function') renderCartItems();
+    } else {
+      // Agar is page par drawer ka HTML hi nahi hai, toh shop page par bhej do cart ke saath
+      window.location.href = '/shop.html?openCart=true';
+    }
+  };
+
+  // 2. Account Dropdown Function
+  window.toggleProfileMenu = function() {
+    const dropdown = document.getElementById('profileDropdown');
+    if (dropdown) {
+      dropdown.classList.toggle('show'); // Ya jo bhi class aapke CSS mein use hoti hai
+      dropdown.classList.toggle('active');
+    }
+  };
+  
+  window.closeProfileMenu = function() {
+    const dropdown = document.getElementById('profileDropdown');
+    if (dropdown) {
+      dropdown.classList.remove('show');
+      dropdown.classList.remove('active');
+    }
+  };
+});
 </script>
 </body>
 </html>
