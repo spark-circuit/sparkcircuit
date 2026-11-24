@@ -449,7 +449,7 @@
         headers: { 'apikey': 'sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z', 'Authorization': 'Bearer sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z' }
       }).then(r=>r.json()).then(products => {
         document.getElementById('relatedProducts').innerHTML = products.map(rp => `
-          <a href="/product.html?id=${rp.id}" class="related-card">
+          <a href="/products/${rp.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${rp.id}" class="related-card">
             <img src="${rp.image || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80'}" alt="${rp.name}">
             <span class="related-cat">${rp.category}</span>
             <h4>${rp.name}</h4>
