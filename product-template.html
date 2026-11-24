@@ -11,24 +11,124 @@
 <link rel="icon" type="image/jpeg" href="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+<!-- FontAwesome & Google Fonts -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<!-- CSS -->
+<!-- MAIN CSS -->
 <link rel="stylesheet" href="https://sparkcircuit.in/style.css">
 
-<!-- RAZORPAY & PDF LIBRARIES -->
+<!-- Razorpay & PDF -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-/* --- CUSTOM CSS FOR TABS --- */
+/* ============ PRODUCT DETAIL PAGE STYLES ============ */
+.back-nav-bar { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 12px 20px; position: sticky; top: 70px; z-index: 50; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+.back-nav-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
+.back-btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 20px; background: linear-gradient(135deg, #f97316, #fb923c); color: #fff; text-decoration: none; border-radius: 50px; font-size: 0.85rem; font-weight: 600; font-family: 'Inter', sans-serif; transition: all 0.3s; box-shadow: 0 4px 14px rgba(249,115,22,0.3); }
+.back-btn:hover { transform: translateX(-4px); box-shadow: 0 8px 22px rgba(249,115,22,0.5); }
+.breadcrumb { display: flex; align-items: center; gap: 8px; color: #94a3b8; font-size: 0.82rem; font-weight: 500; }
+.breadcrumb a { color: #475569; text-decoration: none; transition: 0.2s; }
+.breadcrumb a:hover { color: #f97316; }
+.breadcrumb i { font-size: 0.6rem; color: #cbd5e1; }
+.breadcrumb-current { color: #f97316; font-weight: 700; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.pd-container { max-width: 1200px; margin: 40px auto 60px; padding: 0 20px; }
+.pd-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.06); }
+.pd-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 0; }
+.pd-gallery { padding: 30px; background: #f8fafc; border-right: 1px solid #e2e8f0; }
+.pd-main-image { width: 100%; height: 450px; background: #fff; border-radius: 14px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 15px; position: relative; }
+.pd-main-image img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.4s ease; }
+.pd-main-image:hover img { transform: scale(1.08); }
+.pd-thumbnails { display: flex; gap: 10px; flex-wrap: wrap; }
+.pd-thumb { width: 75px; height: 75px; border-radius: 10px; border: 2px solid #e2e8f0; background: #fff; cursor: pointer; overflow: hidden; transition: 0.25s; padding: 0; }
+.pd-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.pd-thumb:hover { border-color: #f97316; transform: translateY(-3px); }
+.pd-thumb.active { border-color: #f97316; box-shadow: 0 0 0 3px rgba(249,115,22,0.2); }
+
+.pd-info { padding: 35px 30px; display: flex; flex-direction: column; }
+.pd-category { display: inline-block; background: #fff7ed; color: #ea580c; font-size: 0.75rem; font-weight: 700; padding: 5px 14px; border-radius: 50px; letter-spacing: 1px; text-transform: uppercase; width: fit-content; margin-bottom: 15px; }
+.pd-title { font-family: 'Poppins', sans-serif; font-size: 1.9rem; font-weight: 700; color: #0f172a; line-height: 1.3; margin-bottom: 15px; }
+.pd-rating { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 0.9rem; color: #64748b; }
+.pd-rating .stars { color: #fbbf24; letter-spacing: 2px; }
+.pd-price-section { display: flex; align-items: baseline; gap: 14px; margin-bottom: 25px; flex-wrap: wrap; }
+.pd-price { font-size: 2.4rem; font-weight: 800; color: #0f172a; font-family: 'Poppins', sans-serif; line-height: 1; }
+.pd-mrp { font-size: 1.3rem; color: #94a3b8; text-decoration: line-through; }
+.pd-discount { background: #dcfce7; color: #15803d; font-size: 0.85rem; padding: 5px 12px; border-radius: 6px; font-weight: 700; }
+
+.pd-stock { padding: 12px 16px; border-radius: 10px; font-size: 0.9rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+.pd-stock.in { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+.pd-stock.low { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+.pd-stock.out { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+.pd-delivery { background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 1px solid #bae6fd; border-radius: 12px; padding: 15px 18px; margin-bottom: 25px; display: flex; align-items: center; gap: 14px; }
+.pd-delivery i { font-size: 1.6rem; color: #0284c7; }
+.pd-delivery .title { font-weight: 700; color: #075985; font-size: 0.95rem; }
+.pd-delivery .date { color: #0369a1; font-size: 0.85rem; margin-top: 2px; }
+
+.pd-buttons { display: flex; gap: 12px; margin-bottom: 25px; }
+.pd-btn { flex: 1; padding: 16px; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.25s; font-family: 'Poppins', sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.pd-btn-cart { background: #0f172a; color: #fff; }
+.pd-btn-cart:hover { background: #1e293b; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(15,23,42,0.25); }
+.pd-btn-buy { background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; box-shadow: 0 6px 20px rgba(249,115,22,0.35); }
+.pd-btn-buy:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(249,115,22,0.5); }
+
+.pd-trust { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding-top: 20px; border-top: 1px solid #e2e8f0; }
+.pd-trust-item { text-align: center; }
+.pd-trust-item i { font-size: 1.4rem; color: #f97316; display: block; margin-bottom: 6px; }
+.pd-trust-item span { font-size: 0.75rem; color: #64748b; font-weight: 600; }
+
+/* TABS & OTHER SECTIONS */
 .pd-tabs-section { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
 .pd-tabs { display: flex; gap: 5px; border-bottom: 2px solid #e2e8f0; margin-bottom: 25px; overflow-x: auto; }
-.pd-tab-btn { padding: 14px 22px; background: transparent; border: none; font-weight: 600; font-size: 0.95rem; color: #64748b; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: 0.2s; }
+.pd-tab-btn { padding: 14px 22px; background: transparent; border: none; font-weight: 600; font-size: 0.95rem; color: #64748b; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: 0.2s; white-space: nowrap; font-family: 'Poppins', sans-serif; }
+.pd-tab-btn:hover { color: #f97316; }
 .pd-tab-btn.active { color: #f97316; border-bottom-color: #f97316; }
-.pd-tab-content { display: none; background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 30px; }
+.pd-tab-content { display: none; animation: fadeIn 0.4s; }
 .pd-tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.pd-content-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 30px; }
+.pd-content-card h3 { font-family: 'Poppins', sans-serif; font-size: 1.3rem; color: #0f172a; margin-bottom: 15px; }
+.pd-content-card p, .pd-content-card ul { color: #475569; font-size: 0.95rem; line-height: 1.8; }
+
+/* Share Section */
+.pd-share { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; margin-top: 20px; }
+.pd-share-label { font-size: 0.9rem; font-weight: 700; color: #0f172a; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.pd-share-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+.pd-share-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: 0.25s; color: #fff; font-family: 'Inter', sans-serif; }
+.pd-share-btn.whatsapp { background: #25d366; }
+.pd-share-btn.facebook { background: #1877f2; }
+.pd-share-btn.twitter { background: #000; }
+.pd-share-btn.copy { background: #64748b; }
+
+/* Related Products */
+.related-section, .recently-section, .reviews-section { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+.related-header h3, .recently-header h3 { font-family: 'Poppins', sans-serif; font-size: 1.5rem; color: #0f172a; margin-bottom: 20px; }
+.related-grid, .recently-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+.related-card, .recently-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; text-decoration: none; color: inherit; transition: 0.3s; display: flex; flex-direction: column; position: relative; }
+.related-card:hover, .recently-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(249, 115, 22, 0.15); border-color: #f97316; }
+.related-card img, .recently-card img { width: 100%; height: 150px; object-fit: contain; border-radius: 10px; margin-bottom: 12px; background: #f8fafc; }
+.related-cat, .recently-cat { font-size: 0.7rem; color: #ea580c; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.related-card h4, .recently-card h4 { font-size: 0.95rem; font-weight: 600; color: #0f172a; margin: 6px 0 10px; min-height: 2.6em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.related-price, .recently-price { display: flex; gap: 8px; align-items: center; margin-top: auto; }
+.related-price .now, .recently-price .now { font-size: 1.1rem; font-weight: 800; color: #0f172a; }
+.related-price .old, .recently-price .old { font-size: 0.8rem; color: #94a3b8; text-decoration: line-through; }
+.recently-badge { position: absolute; top: 8px; right: 8px; background: #f97316; color: #fff; font-size: 0.6rem; font-weight: 700; padding: 3px 7px; border-radius: 50px; }
+
+@media (max-width: 900px) {
+  .pd-grid { grid-template-columns: 1fr; }
+  .pd-gallery { border-right: none; border-bottom: 1px solid #e2e8f0; }
+  .pd-main-image { height: 320px; }
+  .pd-title { font-size: 1.5rem; }
+  .pd-price { font-size: 1.9rem; }
+}
+@media (max-width: 700px) {
+  .back-nav-bar { top: 60px; padding: 10px 16px; }
+  .breadcrumb { display: none; }
+}
 </style>
 </head>
 <body>
@@ -85,39 +185,88 @@
   </div>
 </header>
 
-<!-- PRODUCT DETAILS -->
-<div class="pd-container" style="max-width:1200px; margin:40px auto; padding:0 20px;">
-  <div id="productDetailContent" style="text-align:center; padding:40px; color:#64748b;">
-    Loading product details...
+<!-- BACK NAVIGATION -->
+<div class="back-nav-bar">
+  <div class="back-nav-inner">
+    <a href="https://sparkcircuit.in/shop.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Back to Shop
+    </a>
+    <div class="breadcrumb">
+      <a href="https://sparkcircuit.in/index.html"><i class="fas fa-home"></i> Home</a>
+      <i class="fas fa-chevron-right"></i>
+      <a href="https://sparkcircuit.in/shop.html">Shop</a>
+      <i class="fas fa-chevron-right"></i>
+      <span class="breadcrumb-current" id="bcCurrentPage">Product</span>
+    </div>
   </div>
 </div>
 
-<!-- TABS (Description & Specs) -->
+<!-- PRODUCT DETAIL CONTAINER -->
+<div class="pd-container">
+  <div id="productDetailContent">
+    <p style="text-align:center; color:#64748b; padding:40px;">Loading product details...</p>
+  </div>
+</div>
+
+<!-- TABS SECTION -->
 <div class="pd-tabs-section" id="pdTabsSection" style="display:none;">
   <div class="pd-tabs">
     <button class="pd-tab-btn active" onclick="switchPdTab('descTab', this)">📄 Description</button>
     <button class="pd-tab-btn" onclick="switchPdTab('specsTab', this)">⚙️ Specifications</button>
-    <button class="pd-tab-btn" onclick="switchPdTab('shippingTab', this)">🚚 Shipping</button>
+    <button class="pd-tab-btn" onclick="switchPdTab('shippingTab', this)">🚚 Shipping & Returns</button>
   </div>
   
   <div id="descTab" class="pd-tab-content active">
-    <h3>Product Description</h3>
-    <p id="pdDescription" style="color:#475569; line-height:1.8;">Loading...</p>
+    <div class="pd-content-card">
+      <h3>Product Description</h3>
+      <p id="pdDescription">Loading...</p>
+    </div>
   </div>
   
   <div id="specsTab" class="pd-tab-content">
-    <h3>Specifications</h3>
-    <ul style="color:#475569; line-height:2;">
-      <li>Brand: SparkCircuit</li>
-      <li>Category: <span id="pdSpecCat">Electronics</span></li>
-      <li>Country of Origin: India</li>
-    </ul>
+    <div class="pd-content-card">
+      <h3>Specifications</h3>
+      <ul id="pdSpecs">
+        <li>Brand: SparkCircuit</li>
+        <li>Category: <span id="pdSpecCat">Electronics</span></li>
+        <li>Country of Origin: India</li>
+        <li>Warranty: 30 Days Replacement</li>
+      </ul>
+    </div>
   </div>
-
+  
   <div id="shippingTab" class="pd-tab-content">
-    <h3>Shipping & Returns</h3>
-    <p style="color:#475569;">Free shipping on orders above ₹499. Delivery in 3-5 days. 7-day return guarantee.</p>
+    <div class="pd-content-card">
+      <h3>Shipping & Returns</h3>
+      <p><strong>🚚 Shipping:</strong> Free shipping on orders above ₹499. Orders dispatched within 24 hours. Delivery in 3-5 business days across India.</p>
+      <p style="margin-top:12px;"><strong>↩️ Returns:</strong> 7-day replacement guarantee on damaged or defective products.</p>
+    </div>
   </div>
+</div>
+
+<!-- SHARE SECTION -->
+<div class="pd-share" id="shareSection" style="display:none; max-width:1200px; margin: 20px auto; padding: 0 20px;">
+  <div class="pd-content-card" style="padding: 20px;">
+    <div class="pd-share-label"><i class="fas fa-share-alt"></i> Share this product:</div>
+    <div class="pd-share-buttons">
+      <a href="#" onclick="shareOnWhatsApp(event)" class="pd-share-btn whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+      <a href="#" onclick="shareOnFacebook(event)" class="pd-share-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</a>
+      <a href="#" onclick="shareOnTwitter(event)" class="pd-share-btn twitter"><i class="fab fa-twitter"></i> Twitter</a>
+      <button onclick="copyProductLink(event)" class="pd-share-btn copy"><i class="fas fa-link"></i> Copy Link</button>
+    </div>
+  </div>
+</div>
+
+<!-- RELATED PRODUCTS -->
+<div class="related-section" id="relatedSection">
+  <div class="related-header"><h3>🔥 You May Also Like</h3></div>
+  <div id="relatedProducts" class="related-grid"></div>
+</div>
+
+<!-- RECENTLY VIEWED -->
+<div class="recently-section" id="recentlySection" style="display:none;">
+  <div class="recently-header"><h3>👀 Recently Viewed</h3></div>
+  <div id="recentlyProducts" class="recently-grid"></div>
 </div>
 
 <!-- CART MODAL -->
@@ -148,7 +297,7 @@
   </div>
 </div>
 
-<!-- Login Modal -->
+<!-- LOGIN MODAL -->
 <div id="loginModal" class="modal-overlay" style="display:none;">
   <div class="modal-dark">
     <h3>🔐 Login</h3>
@@ -173,24 +322,41 @@
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>(function(){ emailjs.init("Pn5FLfmBN3qPp5xg7"); })();</script>
 
-<!-- LOAD MAIN SCRIPT -->
+<!-- MAIN SCRIPT.JS -->
 <script src="https://sparkcircuit.in/script.js"></script>
 
 <script>
-  // Tab Switch
+  // Tab Function
   function switchPdTab(tabId, btn) {
-    document.querySelectorAll('.pd-tab-content').forEach(t => t.style.display = 'none');
-    document.querySelectorAll('.pd-tab-btn').forEach(b => {
-      b.style.background = 'transparent';
-      b.style.color = '#64748b';
-      b.style.borderBottomColor = 'transparent';
-    });
-    document.getElementById(tabId).style.display = 'block';
-    btn.style.color = '#f97316';
-    btn.style.borderBottomColor = '#f97316';
+    document.querySelectorAll('.pd-tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.pd-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    btn.classList.add('active');
   }
 
-  // Product Load
+  // Share Functions
+  function getShareData() {
+    const name = document.querySelector('.pd-title')?.innerText || 'SparkCircuit Product';
+    const price = document.querySelector('.pd-price')?.innerText || '';
+    return { name, price, url: window.location.href };
+  }
+  function shareOnWhatsApp(e) {
+    e.preventDefault();
+    const d = getShareData();
+    window.open(`https://wa.me/?text=Check out ${d.name} at ${d.price} on SparkCircuit! ${d.url}`, '_blank');
+  }
+  function shareOnFacebook(e) {
+    e.preventDefault(); window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
+  }
+  function shareOnTwitter(e) {
+    e.preventDefault();
+    const d = getShareData(); window.open(`https://twitter.com/intent/tweet?text=Check out ${d.name}&url=${encodeURIComponent(window.location.href)}`, '_blank');
+  }
+  function copyProductLink(e) {
+    e.preventDefault(); navigator.clipboard.writeText(window.location.href); alert("Link copied!");
+  }
+
+  // Main Product Load Logic
   document.addEventListener('DOMContentLoaded', async () => {
     if (typeof updateCartBadge === 'function') updateCartBadge();
 
@@ -202,7 +368,7 @@
 
     const container = document.getElementById('productDetailContent');
     if (!productId) {
-      container.innerHTML = `<h3 style="color:#ef4444;">Product Not Found!</h3>`;
+      container.innerHTML = `<h3 style="color:#ef4444;text-align:center;">Product Not Found!</h3>`;
       return;
     }
 
@@ -213,55 +379,78 @@
       const data = await res.json();
 
       if (!data || data.length === 0) {
-        container.innerHTML = `<h3 style="color:#ef4444;">Product Not Found!</h3>`;
+        container.innerHTML = `<h3 style="color:#ef4444;text-align:center;">Product Not Found!</h3>`;
         return;
       }
 
       const p = data[0];
       window.currentProduct = p;
       const img = p.image || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80';
+      const discount = p.original_price && p.original_price > p.price ? Math.round(((p.original_price - p.price) / p.original_price) * 100) : 0;
 
-      // Update Tabs Content
-      document.getElementById('pdDescription').innerText = p.description || 'High-performance tested electronic component.';
+      document.getElementById('bcCurrentPage').innerText = p.name;
+      document.getElementById('pdDescription').innerHTML = p.description || 'High-performance tested electronic component from SparkCircuit.';
       document.getElementById('pdSpecCat').innerText = p.category || 'Electronics';
       document.getElementById('pdTabsSection').style.display = 'block';
+      document.getElementById('shareSection').style.display = 'block';
 
-      // Render Product Card
       container.innerHTML = `
-        <div style="background:#fff; border:1px solid #e2e8f0; border-radius:20px; padding:30px; display:flex; gap:30px; flex-wrap:wrap; box-shadow:0 10px 30px rgba(0,0,0,0.05); text-align:left;">
-          
-          <div style="flex:1; min-width:300px; text-align:center; background:#f8fafc; border-radius:12px; padding:20px;">
-            <img src="${img}" style="max-width:100%; height:350px; object-fit:contain;" alt="${p.name}">
-          </div>
-
-          <div style="flex:1; min-width:300px; display:flex; flex-direction:column; justify-content:center;">
-            <span style="color:#ea580c; font-weight:bold; font-size:0.8rem; text-transform:uppercase;">${p.category || 'Electronics'}</span>
-            <h1 style="font-family:'Poppins', sans-serif; color:#0f172a; font-size:2rem; margin:10px 0;">${p.name}</h1>
-            
-            <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:20px;">
-              <span style="font-size:2rem; font-weight:bold; color:#0f172a;">₹${p.price}</span>
-              ${p.original_price ? `<span style="font-size:1.2rem; color:#94a3b8; text-decoration:line-through;">₹${p.original_price}</span>` : ''}
+        <div class="pd-card">
+          <div class="pd-grid">
+            <div class="pd-gallery">
+              <div class="pd-main-image">
+                <img src="${img}" alt="${p.name}" onerror="this.src='https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80'">
+              </div>
             </div>
-
-            <div style="background:#dcfce7; color:#15803d; padding:10px; border-radius:8px; font-weight:bold; margin-bottom:20px; display:inline-block; width:max-content;">
-              ${p.in_stock ? '✅ In Stock' : '❌ Out of Stock'}
-            </div>
-
-            <div style="display:flex; gap:10px;">
-              <button onclick="addToCart(${p.id}, false, this)" style="flex:1; background:#0f172a; color:#fff; border:none; padding:15px; border-radius:10px; font-weight:bold; cursor:pointer;">
-                <i class="fas fa-cart-plus"></i> Add to Cart
-              </button>
-              <button onclick="buyNow(${p.id})" style="flex:1; background:#f97316; color:#fff; border:none; padding:15px; border-radius:10px; font-weight:bold; cursor:pointer;">
-                <i class="fas fa-bolt"></i> Buy Now
-              </button>
+            <div class="pd-info">
+              <span class="pd-category">${p.category || 'Electronics'}</span>
+              <h1 class="pd-title">${p.name}</h1>
+              <div class="pd-rating">
+                <span class="stars">⭐⭐⭐⭐⭐</span>
+                <span>4.8 | Trusted by 500+ customers</span>
+              </div>
+              <div class="pd-price-section">
+                <span class="pd-price">₹${p.price}</span>
+                ${p.original_price && p.original_price > p.price ? `<span class="pd-mrp">₹${p.original_price}</span>` : ''}
+                ${discount > 0 ? `<span class="pd-discount">${discount}% OFF</span>` : ''}
+              </div>
+              <div class="pd-stock ${p.in_stock ? 'in' : 'out'}">${p.in_stock ? '✅ In Stock' : '❌ Out of Stock'}</div>
+              
+              ${p.in_stock
+                ? `<div class="pd-buttons">
+                     <button onclick="addToCart(${p.id}, false, this)" class="pd-btn pd-btn-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                     <button onclick="buyNow(${p.id})" class="pd-btn pd-btn-buy"><i class="fas fa-bolt"></i> Buy Now</button>
+                   </div>`
+                : `<button disabled style="width:100%;padding:16px;background:#cbd5e1;color:#64748b;border:none;border-radius:12px;font-weight:700;cursor:not-allowed;">❌ Out of Stock</button>`
+              }
+              
+              <div class="pd-trust">
+                <div class="pd-trust-item"><i class="fas fa-shield-alt"></i><span>100% Genuine</span></div>
+                <div class="pd-trust-item"><i class="fas fa-rotate-left"></i><span>7-Day Return</span></div>
+                <div class="pd-trust-item"><i class="fas fa-lock"></i><span>Secure Payment</span></div>
+              </div>
             </div>
           </div>
         </div>
       `;
 
+      // Load Related
+      fetch(`https://mrqvzmtdsohvzsnryogp.supabase.co/rest/v1/products?category=eq.${p.category}&id=neq.${p.id}&limit=4`, {
+        headers: { 'apikey': 'sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z', 'Authorization': 'Bearer sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z' }
+      }).then(r=>r.json()).then(products => {
+        document.getElementById('relatedProducts').innerHTML = products.map(rp => `
+          <a href="/product.html?id=${rp.id}" class="related-card">
+            <img src="${rp.image || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80'}" alt="${rp.name}">
+            <span class="related-cat">${rp.category}</span>
+            <h4>${rp.name}</h4>
+            <div class="related-price"><span class="now">₹${rp.price}</span></div>
+          </a>
+        `).join('');
+      });
+
     } catch (err) {
       console.error(err);
-      container.innerHTML = `<h3 style="color:#ef4444;">Error loading product!</h3>`;
+      container.innerHTML = `<h3 style="color:#ef4444;text-align:center;">Error loading product!</h3>`;
     }
   });
 </script>
