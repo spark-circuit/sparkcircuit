@@ -1433,34 +1433,217 @@ if (!productId) {
   }
 
   
+
 function showToast(message, type = 'success') {
-  let container = document.querySelector('.toast-container');
+  let container = document.getElementById('sc-toast-container');
 
   if (!container) {
     container = document.createElement('div');
-    container.className = 'toast-container';
+    container.id = 'sc-toast-container';
     document.body.appendChild(container);
   }
 
+  if (!document.getElementById('sc-toast-styles')) {
+    const style = document.createElement('style');
+    style.id = 'sc-toast-styles';
+    style.textContent = `
+      #sc-toast-container {
+        position: fixed;
+        top: 22px;
+        right: 22px;
+        z-index: 999999;
+        width: min(390px, calc(100vw - 28px));
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        pointer-events: none;
+      }
+
+      .sc-toast {
+        position: relative;
+        display: flex;
+        gap: 13px;
+        align-items: flex-start;
+        padding: 17px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        box-shadow: 0 12px 38px rgba(15,23,42,.16);
+        font-family: Inter, Arial, sans-serif;
+        pointer-events: auto;
+        animation: scToastIn .35s ease forwards;
+        overflow: hidden;
+      }
+
+      .sc-toast.error .sc-toast-icon {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+
+      .sc-toast-icon {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #dcfce7;
+        color: #16a34a;
+        font-size: 19px;
+      }
+
+      .sc-toast-content {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .sc-toast-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #111827;
+        margin: 1px 22px 5px 0;
+      }
+
+      .sc-toast-message {
+        font-size: 13px;
+        color: #64748b;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .sc-toast-action {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 9px 15px;
+        border: none;
+        border-radius: 7px;
+        background: #f47a1f;
+        color: white;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .5px;
+        cursor: pointer;
+      }
+
+      .sc-toast-action:hover {
+        background: #dd6815;
+      }
+
+      .sc-toast-close {
+        position: absolute;
+        top: 12px;
+        right: 13px;
+        border: none;
+        background: transparent;
+        color: #94a3b8;
+        font-size: 21px;
+        cursor: pointer;
+      }
+
+      .sc-toast-progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        background: #22c55e;
+        animation: scToastProgress 3.5s linear forwards;
+      }
+
+      .sc-toast.error .sc-toast-progress {
+        background: #ef4444;
+      }
+
+      .sc-toast.sc-toast-out {
+        animation: scToastOut .25s ease forwards;
+      }
+
+      @keyframes scToastIn {
+        from { opacity: 0; transform: translateX(35px); }
+        to { opacity: 1; transform: translateX(0); }
+      }
+
+      @keyframes scToastOut {
+        to { opacity: 0; transform: translateX(35px); }
+      }
+
+      @keyframes scToastProgress {
+        from { width: 100%; }
+        to { width: 0%; }
+      }
+
+      @media(max-width: 480px) {
+        #sc-toast-container {
+          top: 12px;
+          right: 10px;
+          width: calc(100vw - 20px);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   const toast = document.createElement('div');
-  toast.className = `toast-msg ${type}`;
+  toast.className = 'sc-toast' + (type === 'error' ? ' error' : '');
 
-  const icon = type === 'error' ? 'fa-circle-xmark' : 'fa-check';
+  const icon = document.createElement('div');
+  icon.className = 'sc-toast-icon';
+  icon.innerHTML = type === 'error'
+    ? '<i class="fas fa-circle-exclamation"></i>'
+    : '<i class="fas fa-check"></i>';
 
-  toast.innerHTML = `
-    <i class="fas ${icon}"></i>
-    <div>${message}</div>
-  `;
+  const content = document.createElement('div');
+  content.className = 'sc-toast-content';
 
+  const title = document.createElement('div');
+  title.className = 'sc-toast-title';
+  title.textContent = type === 'error'
+    ? 'Something went wrong'
+    : 'Added to Cart Successfully!';
+
+  const msg = document.createElement('div');
+  msg.className = 'sc-toast-message';
+  msg.textContent = message;
+
+  content.appendChild(title);
+  content.appendChild(msg);
+
+  if (type !== 'error') {
+    const action = document.createElement('button');
+    action.className = 'sc-toast-action';
+    action.textContent = 'VIEW CART';
+    action.onclick = () => {
+      window.location.href = '/index.html?open_cart=true';
+    };
+    content.appendChild(action);
+  }
+
+  const close = document.createElement('button');
+  close.className = 'sc-toast-close';
+  close.innerHTML = '&times;';
+  close.setAttribute('aria-label', 'Close notification');
+
+  const progress = document.createElement('div');
+  progress.className = 'sc-toast-progress';
+
+  toast.append(icon, content, close, progress);
   container.appendChild(toast);
 
-  setTimeout(() => toast.classList.add('show'), 10);
+  let timer;
 
-  setTimeout(() => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 400);
-  }, 3000);
+  function removeToast() {
+    clearTimeout(timer);
+    toast.classList.add('sc-toast-out');
+    setTimeout(() => toast.remove(), 260);
+  }
+
+  close.onclick = removeToast;
+  timer = setTimeout(removeToast, 3500);
 }
+
 
 
   document.addEventListener('DOMContentLoaded', loadProductDetails);
