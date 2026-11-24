@@ -1343,12 +1343,11 @@ if (!productId) {
     // ============================================================
   // 🎯 UPDATE SCHEMA WITH REAL PRODUCT DATA (For Google Rich Snippets)
   // ============================================================
-  function updateProductSchema(product, avgRating, reviewCount) {
+   function updateProductSchema(product, avgRating, reviewCount) {
     const schemaEl = document.getElementById('productSchema');
     if (!schemaEl) return;
     
-    
-const productUrl = `https://sparkcircuit.in/products/${slugifyProductName(product.name)}-${product.id}`;
+    const productUrl = `https://www.sparkcircuit.in/product.html?id=${product.id}`;
     const imageUrl = (product.image && product.image.trim() !== '') 
       ? product.image 
       : 'https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg';
@@ -1379,6 +1378,41 @@ const productUrl = `https://sparkcircuit.in/products/${slugifyProductName(produc
         "seller": {
           "@type": "Organization",
           "name": "SparkCircuit"
+        },
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "applicableCountry": "IN",
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays": 7,
+          "returnMethod": "https://schema.org/ReturnByMail",
+          "returnFees": "https://schema.org/FreeReturn"
+        },
+        "shippingDetails": {
+          "@type": "OfferShippingDetails",
+          "shippingRate": {
+            "@type": "MonetaryAmount",
+            "value": 50,
+            "currency": "INR"
+          },
+          "shippingDestination": {
+            "@type": "DefinedRegion",
+            "addressCountry": "IN"
+          },
+          "deliveryTime": {
+            "@type": "ShippingDeliveryTime",
+            "handlingTime": {
+              "@type": "QuantitativeValue",
+              "minValue": 0,
+              "maxValue": 1,
+              "unitCode": "DAY"
+            },
+            "transitTime": {
+              "@type": "QuantitativeValue",
+              "minValue": 3,
+              "maxValue": 5,
+              "unitCode": "DAY"
+            }
+          }
         }
       }
     };
