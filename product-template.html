@@ -8,462 +8,244 @@
 <title>Product Details | SparkCircuit</title>
 <meta name="description" content="View detailed product information, specifications, pricing and availability at SparkCircuit.">
 <meta name="robots" content="index,follow">
-<link rel="canonical" href="https://sparkcircuit.in/product.html">
+<link rel="canonical" id="canonicalLink" href="https://sparkcircuit.in/product.html">
 
-<!-- Open Graph (dynamic update होगा) -->
 <meta property="og:type" content="product">
 <meta property="og:site_name" content="SparkCircuit">
 <meta property="og:title" id="ogTitle" content="Product Details | SparkCircuit">
-<meta property="og:description" id="ogDesc" content="View detailed product information, specifications, pricing and availability at SparkCircuit.">
+<meta property="og:description" id="ogDesc" content="View detailed product information at SparkCircuit.">
 <meta property="og:image" id="ogImage" content="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg">
 <meta property="og:url" id="ogUrl" content="https://sparkcircuit.in/product.html">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" type="image/jpeg"
-href="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg">
-
+<link rel="icon" type="image/jpeg" href="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
-rel="stylesheet">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://sparkcircuit.in/style.css">
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <style>
-/* =========================================================
-   PRODUCT PAGE
-========================================================= */
-
 * { box-sizing: border-box; }
 body { margin: 0; background: #f8fafc; }
 
-/* ---------- BACK NAV ---------- */
 .back-nav-bar {
-  background: #fff;
-  border-bottom: 1px solid #e2e8f0;
-  padding: 12px 20px;
-  position: sticky;
-  top: 70px;
-  z-index: 50;
+  background: #fff; border-bottom: 1px solid #e2e8f0;
+  padding: 12px 20px; position: sticky; top: 70px; z-index: 50;
   box-shadow: 0 2px 10px rgba(0,0,0,.03);
 }
 .back-nav-inner {
-  max-width: 1200px;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
+  max-width: 1200px; margin: auto; display: flex;
+  align-items: center; justify-content: space-between; gap: 15px;
 }
 .back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 20px;
-  background: linear-gradient(135deg,#f97316,#fb923c);
-  color: #fff;
-  text-decoration: none;
-  border-radius: 50px;
-  font-size: .85rem;
-  font-weight: 600;
-  font-family: Inter,sans-serif;
-  transition: .3s;
-  box-shadow: 0 4px 14px rgba(249,115,22,.3);
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 20px; background: linear-gradient(135deg,#f97316,#fb923c);
+  color: #fff; text-decoration: none; border-radius: 50px;
+  font-size: .85rem; font-weight: 600; font-family: Inter,sans-serif;
+  transition: .3s; box-shadow: 0 4px 14px rgba(249,115,22,.3);
 }
 .back-btn:hover { transform: translateX(-4px); }
 .breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #94a3b8;
-  font-size: .82rem;
-  font-weight: 500;
+  display: flex; align-items: center; gap: 8px;
+  color: #94a3b8; font-size: .82rem; font-weight: 500;
 }
 .breadcrumb a { color: #475569; text-decoration: none; }
 .breadcrumb a:hover { color: #f97316; }
 .breadcrumb i { font-size: .6rem; color: #cbd5e1; }
 .breadcrumb-current {
-  color: #f97316;
-  font-weight: 700;
-  max-width: 250px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: #f97316; font-weight: 700; max-width: 250px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
-/* ---------- MAIN PRODUCT ---------- */
-.pd-container {
-  max-width: 1200px;
-  margin: 40px auto 60px;
-  padding: 0 20px;
-}
+.pd-container { max-width: 1200px; margin: 40px auto 60px; padding: 0 20px; }
 .pd-card {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0,0,0,.06);
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 20px;
+  overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,.06);
 }
-.pd-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-}
+.pd-grid { display: grid; grid-template-columns: 1.1fr 1fr; }
 .pd-gallery {
-  padding: 30px;
-  background: #f8fafc;
+  padding: 30px; background: #f8fafc;
   border-right: 1px solid #e2e8f0;
 }
 .pd-main-image {
-  width: 100%;
-  height: 450px;
-  background: #fff;
-  border-radius: 14px;
-  border: 1px solid #e2e8f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  margin-bottom: 15px;
+  width: 100%; height: 450px; background: #fff; border-radius: 14px;
+  border: 1px solid #e2e8f0; display: flex; align-items: center;
+  justify-content: center; overflow: hidden; margin-bottom: 15px;
 }
 .pd-main-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  transition: transform .4s ease;
+  width: 100%; height: 100%; object-fit: contain; transition: transform .4s ease;
 }
 .pd-main-image:hover img { transform: scale(1.05); }
 .pd-thumbnails { display: flex; gap: 10px; flex-wrap: wrap; }
 .pd-thumb {
-  width: 75px;
-  height: 75px;
-  border-radius: 10px;
-  border: 2px solid #e2e8f0;
-  background: #fff;
-  cursor: pointer;
-  overflow: hidden;
-  padding: 0;
+  width: 75px; height: 75px; border-radius: 10px;
+  border: 2px solid #e2e8f0; background: #fff; cursor: pointer;
+  overflow: hidden; padding: 0;
 }
 .pd-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.pd-thumb.active {
-  border-color: #f97316;
-  box-shadow: 0 0 0 3px rgba(249,115,22,.2);
-}
+.pd-thumb.active { border-color: #f97316; box-shadow: 0 0 0 3px rgba(249,115,22,.2); }
 
-/* ---------- INFO ---------- */
-.pd-info {
-  padding: 35px 30px;
-  display: flex;
-  flex-direction: column;
-}
+.pd-info { padding: 35px 30px; display: flex; flex-direction: column; }
 .pd-category {
-  display: inline-block;
-  background: #fff7ed;
-  color: #ea580c;
-  font-size: .75rem;
-  font-weight: 700;
-  padding: 5px 14px;
-  border-radius: 50px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  width: fit-content;
-  margin-bottom: 15px;
+  display: inline-block; background: #fff7ed; color: #ea580c;
+  font-size: .75rem; font-weight: 700; padding: 5px 14px;
+  border-radius: 50px; letter-spacing: 1px; text-transform: uppercase;
+  width: fit-content; margin-bottom: 15px;
 }
 .pd-title {
-  font-family: Poppins,sans-serif;
-  font-size: 1.9rem;
-  font-weight: 700;
-  color: #0f172a;
-  line-height: 1.3;
-  margin: 0 0 15px;
+  font-family: Poppins,sans-serif; font-size: 1.9rem; font-weight: 700;
+  color: #0f172a; line-height: 1.3; margin: 0 0 15px;
 }
-.pd-rating {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  font-size: .9rem;
-  color: #64748b;
-}
-.pd-rating .stars { color: #fbbf24; letter-spacing: 2px; }
 .pd-price-section {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  margin-bottom: 25px;
-  flex-wrap: wrap;
+  display: flex; align-items: baseline; gap: 14px;
+  margin-bottom: 25px; flex-wrap: wrap;
 }
 .pd-price {
-  font-size: 2.4rem;
-  font-weight: 800;
-  color: #0f172a;
+  font-size: 2.4rem; font-weight: 800; color: #0f172a;
   font-family: Poppins,sans-serif;
 }
-.pd-mrp {
-  font-size: 1.3rem;
-  color: #94a3b8;
-  text-decoration: line-through;
-}
+.pd-mrp { font-size: 1.3rem; color: #94a3b8; text-decoration: line-through; }
 .pd-discount {
-  background: #dcfce7;
-  color: #15803d;
-  font-size: .85rem;
-  padding: 5px 12px;
-  border-radius: 6px;
-  font-weight: 700;
+  background: #dcfce7; color: #15803d; font-size: .85rem;
+  padding: 5px 12px; border-radius: 6px; font-weight: 700;
 }
 
-/* ---------- STOCK ---------- */
 .pd-stock {
-  padding: 12px 16px;
-  border-radius: 10px;
-  font-size: .9rem;
-  font-weight: 700;
-  margin-bottom: 20px;
+  padding: 12px 16px; border-radius: 10px;
+  font-size: .9rem; font-weight: 700; margin-bottom: 20px;
 }
 .pd-stock.in { background:#dcfce7; color:#15803d; border:1px solid #86efac; }
-.pd-stock.low { background:#fef3c7; color:#92400e; border:1px solid #fcd34d; }
 .pd-stock.out { background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; }
 
-/* ---------- BUTTONS ---------- */
 .pd-buttons { display: flex; gap: 12px; margin-bottom: 25px; }
 .pd-btn {
-  flex: 1;
-  padding: 16px;
-  border: none;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: .25s;
-  font-family: Poppins,sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+  flex: 1; padding: 16px; border: none; border-radius: 12px;
+  font-weight: 700; font-size: 1rem; cursor: pointer; transition: .25s;
+  font-family: Poppins,sans-serif; display: flex; align-items: center;
+  justify-content: center; gap: 8px;
 }
 .pd-btn-cart { background: #0f172a; color: #fff; }
 .pd-btn-cart:hover { background: #1e293b; transform: translateY(-3px); }
 .pd-btn-buy {
   background: linear-gradient(135deg,#f97316,#ea580c);
-  color: #fff;
-  box-shadow: 0 6px 20px rgba(249,115,22,.35);
+  color: #fff; box-shadow: 0 6px 20px rgba(249,115,22,.35);
 }
 .pd-btn-buy:hover { transform: translateY(-3px); }
 
-/* ---------- TRUST ---------- */
 .pd-trust {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 12px;
-  padding-top: 20px;
-  border-top: 1px solid #e2e8f0;
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 12px;
+  padding-top: 20px; border-top: 1px solid #e2e8f0;
 }
 .pd-trust-item { text-align: center; }
 .pd-trust-item i {
-  font-size: 1.4rem;
-  color: #f97316;
-  display: block;
-  margin-bottom: 6px;
+  font-size: 1.4rem; color: #f97316; display: block; margin-bottom: 6px;
 }
 .pd-trust-item span { font-size: .75rem; color: #64748b; font-weight: 600; }
 
-/* ---------- TABS ---------- */
 .pd-tabs-section { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
 .pd-tabs {
-  display: flex;
-  gap: 5px;
-  border-bottom: 2px solid #e2e8f0;
-  margin-bottom: 25px;
-  overflow-x: auto;
+  display: flex; gap: 5px; border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 25px; overflow-x: auto;
 }
 .pd-tab-btn {
-  padding: 14px 22px;
-  background: transparent;
-  border: none;
-  font-weight: 600;
-  font-size: .95rem;
-  color: #64748b;
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  margin-bottom: -2px;
-  white-space: nowrap;
-  font-family: Poppins,sans-serif;
+  padding: 14px 22px; background: transparent; border: none;
+  font-weight: 600; font-size: .95rem; color: #64748b; cursor: pointer;
+  border-bottom: 3px solid transparent; margin-bottom: -2px;
+  white-space: nowrap; font-family: Poppins,sans-serif;
 }
 .pd-tab-btn.active { color: #f97316; border-bottom-color: #f97316; }
 .pd-tab-content { display: none; }
 .pd-tab-content.active { display: block; }
 .pd-content-card {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 30px;
+  background: #fff; border: 1px solid #e2e8f0;
+  border-radius: 16px; padding: 30px;
 }
 .pd-content-card h3 {
-  font-family: Poppins,sans-serif;
-  color: #0f172a;
-  margin: 0 0 15px;
+  font-family: Poppins,sans-serif; color: #0f172a; margin: 0 0 15px;
 }
-.pd-content-card p,
-.pd-content-card li {
-  color: #475569;
-  font-size: .95rem;
-  line-height: 1.8;
+.pd-content-card p, .pd-content-card li {
+  color: #475569; font-size: .95rem; line-height: 1.8;
   white-space: pre-line;
 }
 
-/* ---------- SHARE ---------- */
 .pd-share { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
 .pd-share-inner {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 20px;
+  background: #fff; border: 1px solid #e2e8f0;
+  border-radius: 16px; padding: 20px;
 }
 .pd-share-label {
-  font-size: .9rem;
-  font-weight: 700;
-  margin-bottom: 12px;
-  color: #0f172a;
+  font-size: .9rem; font-weight: 700; margin-bottom: 12px; color: #0f172a;
 }
 .pd-share-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
 .pd-share-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 18px;
-  border-radius: 50px;
-  font-size: .85rem;
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-  border: none;
-  color: #fff;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 18px; border-radius: 50px; font-size: .85rem;
+  font-weight: 600; text-decoration: none; cursor: pointer;
+  border: none; color: #fff;
 }
 .whatsapp { background: #25d366; }
 .facebook { background: #1877f2; }
 .twitter { background: #000; }
 .copy { background: #64748b; }
 
-/* ---------- RELATED / RECENT ---------- */
-.related-section,
-.recently-section,
-.reviews-section {
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 0 20px;
+.related-section, .recently-section, .reviews-section {
+  max-width: 1200px; margin: 40px auto; padding: 0 20px;
 }
-.related-header h3,
-.recently-header h3,
-.reviews-header h3 {
-  font-family: Poppins,sans-serif;
-  font-size: 1.5rem;
-  color: #0f172a;
+.related-header h3, .recently-header h3, .reviews-header h3 {
+  font-family: Poppins,sans-serif; font-size: 1.5rem; color: #0f172a;
 }
-.related-grid,
-.recently-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+.related-grid, .recently-grid {
+  display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
   gap: 20px;
 }
-.related-card,
-.recently-card {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 16px;
-  text-decoration: none;
-  color: inherit;
-  transition: .3s;
-  display: flex;
-  flex-direction: column;
+.related-card, .recently-card {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+  padding: 16px; text-decoration: none; color: inherit;
+  transition: .3s; display: flex; flex-direction: column;
 }
-.related-card:hover,
-.recently-card:hover {
-  transform: translateY(-5px);
-  border-color: #f97316;
+.related-card:hover, .recently-card:hover {
+  transform: translateY(-5px); border-color: #f97316;
   box-shadow: 0 12px 30px rgba(249,115,22,.15);
 }
-.related-card img,
-.recently-card img {
-  width: 100%;
-  height: 150px;
-  object-fit: contain;
-  border-radius: 10px;
-  background: #f8fafc;
-  margin-bottom: 12px;
+.related-card img, .recently-card img {
+  width: 100%; height: 150px; object-fit: contain; border-radius: 10px;
+  background: #f8fafc; margin-bottom: 12px;
 }
-.related-cat,
-.recently-cat {
-  font-size: .7rem;
-  color: #ea580c;
-  font-weight: 700;
-  text-transform: uppercase;
+.related-cat, .recently-cat {
+  font-size: .7rem; color: #ea580c; font-weight: 700; text-transform: uppercase;
 }
-.related-card h4,
-.recently-card h4 {
-  font-size: .95rem;
-  color: #0f172a;
-  margin: 6px 0 10px;
-  min-height: 2.6em;
+.related-card h4, .recently-card h4 {
+  font-size: .95rem; color: #0f172a; margin: 6px 0 10px; min-height: 2.6em;
 }
 .related-price { margin-top: auto; }
 .related-price .now { font-size: 1.1rem; font-weight: 800; }
 
-/* ---------- REVIEWS ---------- */
 .reviews-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  flex-wrap: wrap;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 15px; flex-wrap: wrap;
 }
 .write-review-btn {
   background: linear-gradient(135deg,#f97316,#fb923c);
-  color: #fff;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
+  color: #fff; border: none; padding: 12px 24px;
+  border-radius: 50px; font-weight: 600; cursor: pointer;
 }
 
-/* ---------- TOAST ---------- */
 #pdToast {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
+  position: fixed; bottom: 24px; left: 50%;
   transform: translateX(-50%) translateY(80px);
-  background: #0f172a;
-  color: #fff;
-  padding: 12px 22px;
-  border-radius: 50px;
-  font-size: .9rem;
-  font-weight: 600;
-  box-shadow: 0 8px 25px rgba(0,0,0,.2);
-  opacity: 0;
-  transition: .3s;
-  z-index: 9999;
-  pointer-events: none;
-  max-width: 90vw;
+  background: #0f172a; color: #fff; padding: 12px 22px;
+  border-radius: 50px; font-size: .9rem; font-weight: 600;
+  box-shadow: 0 8px 25px rgba(0,0,0,.2); opacity: 0;
+  transition: .3s; z-index: 9999; pointer-events: none; max-width: 90vw;
 }
-#pdToast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
+#pdToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-/* ---------- RESPONSIVE ---------- */
 @media(max-width:900px) {
   .pd-grid { grid-template-columns: 1fr; }
-  .pd-gallery {
-    border-right: none;
-    border-bottom: 1px solid #e2e8f0;
-  }
+  .pd-gallery { border-right: none; border-bottom: 1px solid #e2e8f0; }
   .pd-main-image { height: 350px; }
 }
 @media(max-width:700px) {
@@ -483,170 +265,89 @@ body { margin: 0; background: #f8fafc; }
 
 <body>
 
-<!-- =========================================================
-     HEADER
-========================================================= -->
 <header class="header">
   <div class="header-inner">
     <a href="https://sparkcircuit.in/index.html" class="brand">
-      <img
-        src="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg"
-        alt="SparkCircuit"
-        class="brand-logo">
+      <img src="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg" alt="SparkCircuit" class="brand-logo">
       <div class="brand-text">
-        <span class="brand-name">
-          <span class="orange">Spark</span>Circuit
-        </span>
+        <span class="brand-name"><span class="orange">Spark</span>Circuit</span>
         <span class="brand-tag">TECH / R&D STUDIO</span>
       </div>
     </a>
-
     <div class="search-box-wrapper">
       <div class="search-box">
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Search Parts..."
-          autocomplete="off"
-          aria-label="Search products">
-        <i class="fas fa-search" aria-hidden="true"></i>
+        <input type="text" id="searchInput" placeholder="Search Parts..." autocomplete="off">
+        <i class="fas fa-search"></i>
       </div>
     </div>
-
     <div class="nav-icons">
-      <a href="https://sparkcircuit.in/index.html" class="nav-item">
-        <i class="fas fa-home" aria-hidden="true"></i>
-        <span>Home</span>
-      </a>
-      <a href="https://sparkcircuit.in/shop.html" class="nav-item">
-        <i class="fas fa-store" aria-hidden="true"></i>
-        <span>Shop</span>
-      </a>
-      <a href="https://sparkcircuit.in/about.html" class="nav-item">
-        <i class="fas fa-circle-info" aria-hidden="true"></i>
-        <span>About</span>
-      </a>
-
+      <a href="https://sparkcircuit.in/index.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+      <a href="https://sparkcircuit.in/shop.html" class="nav-item"><i class="fas fa-store"></i><span>Shop</span></a>
+      <a href="https://sparkcircuit.in/about.html" class="nav-item"><i class="fas fa-circle-info"></i><span>About</span></a>
       <div class="user-dropdown">
-        <button
-          id="userNavContainer"
-          type="button"
-          onclick="toggleProfileMenu()"
-          class="nav-item user-btn"
-          aria-haspopup="true"
-          aria-expanded="false">
-          <i class="fas fa-circle-user" aria-hidden="true"></i>
-          <span id="navUserText">Account</span>
-          <i class="fas fa-chevron-down mini" aria-hidden="true"></i>
-        </button>
-
-        <div id="profileDropdown" class="dropdown" role="menu">
+        <div id="userNavContainer" onclick="toggleProfileMenu()" class="nav-item user-btn">
+          <i class="fas fa-circle-user"></i><span id="navUserText">Account</span>
+          <i class="fas fa-chevron-down mini"></i>
+        </div>
+        <div id="profileDropdown" class="dropdown">
           <div id="loggedInOptions" style="display:none;">
-            <a href="javascript:void(0)"
-               onclick="openMyOrdersModal(); closeProfileMenu();"
-               role="menuitem">
-              <i class="fas fa-box" aria-hidden="true"></i>
-              My Orders
-            </a>
-            <a href="javascript:void(0)"
-               onclick="handleLogout(); closeProfileMenu();"
-               class="logout" role="menuitem">
-              <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-              Logout
-            </a>
+            <a href="javascript:void(0)" onclick="openMyOrdersModal(); closeProfileMenu();"><i class="fas fa-box"></i> My Orders</a>
+            <a href="javascript:void(0)" onclick="handleLogout(); closeProfileMenu();" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
           </div>
           <div id="loggedOutOptions">
-            <a href="javascript:void(0)"
-               onclick="openLoginModal(); closeProfileMenu();"
-               role="menuitem">
-              <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
-              Login / Register
-            </a>
+            <a href="javascript:void(0)" onclick="openLoginModal(); closeProfileMenu();"><i class="fas fa-sign-in-alt"></i> Login / Register</a>
           </div>
         </div>
       </div>
-
-      <a href="https://sparkcircuit.in/wishlist.html"
-         class="nav-item wishlist-btn"
-         style="text-decoration:none;">
-        <i class="fas fa-heart" aria-hidden="true"></i>
-        <span>Wishlist</span>
+      <a href="https://sparkcircuit.in/wishlist.html" class="nav-item wishlist-btn" style="text-decoration:none;">
+        <i class="fas fa-heart"></i><span>Wishlist</span>
         <span id="wishlistCount" class="cart-badge">0</span>
       </a>
-
-      <button type="button"
-              class="nav-item cart-btn"
-              onclick="toggleCart()"
-              aria-label="Open shopping cart">
-        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
-        <span>Cart</span>
+      <div class="nav-item cart-btn" onclick="toggleCart()">
+        <i class="fas fa-shopping-cart"></i><span>Cart</span>
         <span id="cartCount" class="cart-badge" style="display:none;">0</span>
-      </button>
+      </div>
     </div>
   </div>
 </header>
 
-<!-- =========================================================
-     BACK NAV
-========================================================= -->
 <div class="back-nav-bar">
   <div class="back-nav-inner">
     <a href="https://sparkcircuit.in/shop.html" class="back-btn">
-      <i class="fas fa-arrow-left" aria-hidden="true"></i>
-      Back to Shop
+      <i class="fas fa-arrow-left"></i> Back to Shop
     </a>
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a href="https://sparkcircuit.in/index.html">
-        <i class="fas fa-home" aria-hidden="true"></i>
-        Home
-      </a>
-      <i class="fas fa-chevron-right" aria-hidden="true"></i>
+    <div class="breadcrumb">
+      <a href="https://sparkcircuit.in/index.html"><i class="fas fa-home"></i> Home</a>
+      <i class="fas fa-chevron-right"></i>
       <a href="https://sparkcircuit.in/shop.html">Shop</a>
-      <i class="fas fa-chevron-right" aria-hidden="true"></i>
+      <i class="fas fa-chevron-right"></i>
       <span class="breadcrumb-current" id="bcCurrentPage">Product</span>
-    </nav>
+    </div>
   </div>
 </div>
 
-<!-- =========================================================
-     PRODUCT
-========================================================= -->
 <div class="pd-container">
-  <div id="productDetailContent" aria-live="polite">
+  <div id="productDetailContent">
     <div style="text-align:center;padding:60px 20px;color:#64748b;">
-      <i class="fas fa-spinner fa-spin" style="font-size:30px;color:#f97316;" aria-hidden="true"></i>
+      <i class="fas fa-spinner fa-spin" style="font-size:30px;color:#f97316;"></i>
       <p>Loading product details...</p>
     </div>
   </div>
 </div>
 
-<!-- =========================================================
-     TABS
-========================================================= -->
 <div class="pd-tabs-section" id="pdTabsSection" style="display:none;">
-  <div class="pd-tabs" role="tablist">
-    <button class="pd-tab-btn active" role="tab"
-            onclick="switchPdTab('descTab',this)">
-      📄 Description
-    </button>
-    <button class="pd-tab-btn" role="tab"
-            onclick="switchPdTab('specsTab',this)">
-      ⚙️ Specifications
-    </button>
-    <button class="pd-tab-btn" role="tab"
-            onclick="switchPdTab('shippingTab',this)">
-      🚚 Shipping & Returns
-    </button>
+  <div class="pd-tabs">
+    <button class="pd-tab-btn active" onclick="switchPdTab('descTab',this)">📄 Description</button>
+    <button class="pd-tab-btn" onclick="switchPdTab('specsTab',this)">⚙️ Specifications</button>
+    <button class="pd-tab-btn" onclick="switchPdTab('shippingTab',this)">🚚 Shipping & Returns</button>
   </div>
-
-  <div id="descTab" class="pd-tab-content active" role="tabpanel">
+  <div id="descTab" class="pd-tab-content active">
     <div class="pd-content-card">
       <h3>Product Description</h3>
       <p id="pdDescription">Loading...</p>
     </div>
   </div>
-
-  <div id="specsTab" class="pd-tab-content" role="tabpanel">
+  <div id="specsTab" class="pd-tab-content">
     <div class="pd-content-card">
       <h3>Specifications</h3>
       <ul id="pdSpecs">
@@ -657,84 +358,44 @@ body { margin: 0; background: #f8fafc; }
       </ul>
     </div>
   </div>
-
-  <div id="shippingTab" class="pd-tab-content" role="tabpanel">
+  <div id="shippingTab" class="pd-tab-content">
     <div class="pd-content-card">
       <h3>Shipping & Returns</h3>
-      <p>
-        <strong>🚚 Shipping:</strong>
-        Free shipping on orders above ₹499.
-        Orders dispatched within 24 hours.
-        Delivery in 3–5 business days across India.
-      </p>
-      <p>
-        <strong>↩️ Returns:</strong>
-        7-day replacement guarantee on damaged or defective products.
-      </p>
+      <p><strong>🚚 Shipping:</strong> Free shipping on orders above ₹499. Orders dispatched within 24 hours. Delivery in 3–5 business days across India.</p>
+      <p><strong>↩️ Returns:</strong> 7-day replacement guarantee on damaged or defective products.</p>
     </div>
   </div>
 </div>
 
-<!-- =========================================================
-     SHARE
-========================================================= -->
 <div class="pd-share" id="shareSection" style="display:none;">
   <div class="pd-share-inner">
-    <div class="pd-share-label">
-      <i class="fas fa-share-alt" aria-hidden="true"></i>
-      Share this product:
-    </div>
+    <div class="pd-share-label"><i class="fas fa-share-alt"></i> Share this product:</div>
     <div class="pd-share-buttons">
-      <a href="#" onclick="shareOnWhatsApp(event)" class="pd-share-btn whatsapp">
-        <i class="fab fa-whatsapp" aria-hidden="true"></i> WhatsApp
-      </a>
-      <a href="#" onclick="shareOnFacebook(event)" class="pd-share-btn facebook">
-        <i class="fab fa-facebook-f" aria-hidden="true"></i> Facebook
-      </a>
-      <a href="#" onclick="shareOnTwitter(event)" class="pd-share-btn twitter">
-        <i class="fab fa-twitter" aria-hidden="true"></i> Twitter
-      </a>
-      <button type="button"
-              onclick="copyProductLink(event)"
-              class="pd-share-btn copy">
-        <i class="fas fa-link" aria-hidden="true"></i> Copy Link
-      </button>
+      <a href="#" onclick="shareOnWhatsApp(event)" class="pd-share-btn whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+      <a href="#" onclick="shareOnFacebook(event)" class="pd-share-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</a>
+      <a href="#" onclick="shareOnTwitter(event)" class="pd-share-btn twitter"><i class="fab fa-twitter"></i> Twitter</a>
+      <button onclick="copyProductLink(event)" class="pd-share-btn copy"><i class="fas fa-link"></i> Copy Link</button>
     </div>
   </div>
 </div>
 
-<!-- =========================================================
-     RELATED PRODUCTS
-========================================================= -->
 <div class="related-section" id="relatedSection">
-  <div class="related-header">
-    <h3>🔥 You May Also Like</h3>
-  </div>
+  <div class="related-header"><h3>🔥 You May Also Like</h3></div>
   <div id="relatedProducts" class="related-grid">
     <p style="color:#64748b;">Loading related products...</p>
   </div>
 </div>
 
-<!-- =========================================================
-     RECENTLY VIEWED
-========================================================= -->
 <div class="recently-section" id="recentlySection" style="display:none;">
-  <div class="recently-header">
-    <h3>👀 Recently Viewed</h3>
-  </div>
+  <div class="recently-header"><h3>👀 Recently Viewed</h3></div>
   <div id="recentlyProducts" class="recently-grid"></div>
 </div>
 
-<!-- =========================================================
-     REVIEWS
-========================================================= -->
 <div class="reviews-section" id="reviewsSection">
   <div class="reviews-header">
     <h3>⭐ Customer Reviews</h3>
-    <button type="button"
-            onclick="openReviewModal()"
-            class="write-review-btn">
-      <i class="fas fa-pen" aria-hidden="true"></i> Write a Review
+    <button onclick="openReviewModal()" class="write-review-btn">
+      <i class="fas fa-pen"></i> Write a Review
     </button>
   </div>
   <div id="reviewsList">
@@ -742,146 +403,55 @@ body { margin: 0; background: #f8fafc; }
   </div>
 </div>
 
-<!-- =========================================================
-     CART MODAL
-========================================================= -->
-<div id="cartModal" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Shopping cart">
+<div id="cartModal" class="modal-overlay">
   <div class="modal-light">
     <div class="modal-head">
       <h3 id="modalTitle">🛒 Shopping Cart</h3>
-      <button type="button"
-              class="close-x"
-              onclick="toggleCart()"
-              aria-label="Close cart">&times;</button>
+      <span class="close-x" onclick="toggleCart()">&times;</span>
     </div>
-
-    <div id="cartItemsContainer">
-      <p class="muted center">Your cart is empty.</p>
-    </div>
-
+    <div id="cartItemsContainer"><p class="muted center">Your cart is empty.</p></div>
     <div id="priceSummaryBox" class="price-summary" style="display:none;">
-      <div class="row">
-        <span>Subtotal:</span>
-        <strong>₹<span id="subTotalAmt">0</span></strong>
-      </div>
-      <div class="row blue">
-        <span>Delivery:</span>
-        <strong><span id="shippingAmt">₹50</span></strong>
-      </div>
+      <div class="row"><span>Subtotal:</span><strong>₹<span id="subTotalAmt">0</span></strong></div>
+      <div class="row blue"><span>Delivery:</span><strong><span id="shippingAmt">₹50</span></strong></div>
       <hr>
-      <div class="row total">
-        <span>Grand Total:</span>
-        <strong>₹<span id="grandTotalAmt">0</span></strong>
-      </div>
+      <div class="row total"><span>Grand Total:</span><strong>₹<span id="grandTotalAmt">0</span></strong></div>
     </div>
-
     <div id="cartFooter" class="modal-foot">
-      <button type="button"
-              onclick="showCheckout()"
-              id="proceedBtn"
-              class="btn-primary full">
-        Proceed to Shipping →
-      </button>
+      <button onclick="showCheckout()" id="proceedBtn" class="btn-primary full">Proceed to Shipping →</button>
     </div>
-
     <div id="checkoutForm" style="display:none;padding:20px;">
       <h4>Shipping Details</h4>
-
-      <input type="text" id="custName"
-             placeholder="Full Name *"
-             class="form-input"
-             style="width:100%;margin-bottom:10px;padding:8px;"
-             aria-label="Full name">
-
-      <input type="tel" id="custPhone"
-             placeholder="Phone (10 digits) *"
-             class="form-input"
-             style="width:100%;margin-bottom:10px;padding:8px;"
-             maxlength="10"
-             inputmode="numeric"
-             aria-label="Phone number">
-
-      <textarea id="custAddress"
-                placeholder="Address *"
-                class="form-input"
-                style="width:100%;margin-bottom:10px;padding:8px;"
-                aria-label="Delivery address"></textarea>
-
-      <input type="text" id="custPincode"
-             placeholder="Pincode (6 digits) *"
-             class="form-input"
-             style="width:100%;margin-bottom:10px;padding:8px;"
-             maxlength="6"
-             inputmode="numeric"
-             aria-label="Pincode">
-
-      <button type="button"
-              onclick="processOrderToPayment()"
-              class="btn-primary full"
-              style="width:100%;padding:12px;">
-        Place Order →
-      </button>
+      <input type="text" id="custName" placeholder="Full Name *" class="form-input" style="width:100%;margin-bottom:10px;padding:8px;">
+      <input type="tel" id="custPhone" placeholder="Phone *" class="form-input" style="width:100%;margin-bottom:10px;padding:8px;">
+      <textarea id="custAddress" placeholder="Address *" class="form-input" style="width:100%;margin-bottom:10px;padding:8px;"></textarea>
+      <input type="text" id="custPincode" placeholder="Pincode *" class="form-input" style="width:100%;margin-bottom:10px;padding:8px;">
+      <button onclick="processOrderToPayment()" class="btn-primary full" style="width:100%;padding:12px;">Place Order →</button>
     </div>
   </div>
 </div>
 
-<!-- =========================================================
-     LOGIN MODAL
-========================================================= -->
-<div id="loginModal" class="modal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-label="Login">
+<div id="loginModal" class="modal-overlay" style="display:none;">
   <div class="modal-dark">
     <h3>🔐 Login</h3>
-
-    <input type="email" id="authEmail"
-           placeholder="Email"
-           class="input-dark"
-           style="width:100%;margin-bottom:10px;padding:8px;"
-           aria-label="Email address">
-
-    <button type="button"
-            onclick="sendEmailOTP()"
-            class="btn-primary full"
-            style="width:100%;padding:10px;">
-      Send OTP
-    </button>
-
+    <input type="email" id="authEmail" placeholder="Email" class="input-dark" style="width:100%;margin-bottom:10px;padding:8px;">
+    <button onclick="sendEmailOTP()" class="btn-primary full" style="width:100%;padding:10px;">Send OTP</button>
     <div id="otpStep2" style="display:none;margin-top:10px;">
-      <input type="text" id="otpCode"
-             placeholder="OTP"
-             class="input-dark"
-             style="width:100%;margin-bottom:10px;padding:8px;"
-             inputmode="numeric"
-             aria-label="OTP code">
-      <button type="button"
-              onclick="verifyEmailOTP()"
-              class="btn-success full"
-              style="width:100%;padding:10px;">
-        Verify
-      </button>
+      <input type="text" id="otpCode" placeholder="OTP" class="input-dark" style="width:100%;margin-bottom:10px;padding:8px;">
+      <button onclick="verifyEmailOTP()" class="btn-success full" style="width:100%;padding:10px;">Verify</button>
     </div>
   </div>
 </div>
 
-<!-- =========================================================
-     TOAST
-========================================================= -->
-<div id="pdToast" role="status" aria-live="polite"></div>
+<div id="pdToast"></div>
 
-<!-- =========================================================
-     FOOTER
-========================================================= -->
 <footer class="footer" style="margin-top:50px;">
   <div class="footer-bottom" style="border:none;padding-top:0;">
     <p>&copy; 2026 SparkCircuit | All Rights Reserved</p>
   </div>
 </footer>
 
-<!-- =========================================================
-     LIBRARIES
-========================================================= -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-
 <script>
 (function () {
   if (typeof emailjs !== "undefined") {
@@ -890,564 +460,333 @@ body { margin: 0; background: #f8fafc; }
 })();
 </script>
 
-<!-- =========================================================
-     MAIN SCRIPT (cart, login, reviews, wishlist)
-========================================================= -->
 <script src="https://sparkcircuit.in/script.js"></script>
 
-<!-- =========================================================
-     PRODUCT PAGE SCRIPT (scoped in IIFE to avoid redeclare)
-========================================================= -->
 <script>
 (function () {
   "use strict";
 
-  /* ---------- CONSTANTS (script.js के globals का नाम clash नहीं होगा) ---------- */
   const PD_SUPABASE_URL = "https://mrqvzmtdsohvzsnryogp.supabase.co";
   const PD_SUPABASE_KEY = "sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z";
+  const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&q=80";
 
-  const FALLBACK_IMAGE =
-    "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&q=80";
-
-
-  /* =========================================================
-     TOAST (alert() की जगह)
-  ========================================================= */
   let toastTimer = null;
-  function showToast(message) {
+  function showToast(msg) {
     const el = document.getElementById("pdToast");
-    if (!el) return;
-    el.textContent = message;
+    if (!el) { console.log(msg); return; }
+    el.textContent = msg;
     el.classList.add("show");
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () {
-      el.classList.remove("show");
-    }, 2500);
+    toastTimer = setTimeout(function () { el.classList.remove("show"); }, 2500);
   }
   window.pdToast = showToast;
 
-
-  /* =========================================================
-     SUPABASE FETCH HELPER
-  ========================================================= */
   async function supabaseFetch(path) {
-    const res = await fetch(PD_SUPABASE_URL + "/rest/v1/" + path, {
+    const url = PD_SUPABASE_URL + "/rest/v1/" + path;
+    console.log("[Supabase] GET", url);
+    const res = await fetch(url, {
       headers: {
         "apikey": PD_SUPABASE_KEY,
         "Authorization": "Bearer " + PD_SUPABASE_KEY
       }
     });
     if (!res.ok) {
-      throw new Error("Supabase request failed: " + res.status);
+      const errText = await res.text();
+      console.error("[Supabase] Error:", res.status, errText);
+      throw new Error("Supabase " + res.status + ": " + errText);
     }
     return res.json();
   }
 
+  function getProductId() {
+    const params = new URLSearchParams(window.location.search);
+    const qId = params.get("id");
+    if (qId) { console.log("[ID] query:", qId); return qId; }
+    const segs = window.location.pathname.split("/").filter(Boolean);
+    const last = segs[segs.length - 1] || "";
+    const m = last.match(/-([^-]+)$/);
+    if (m) { console.log("[ID] slug:", m[1]); return m[1]; }
+    if (last) { console.log("[ID] fallback:", last); return last; }
+    return null;
+  }
 
-  /* =========================================================
-     TAB
-  ========================================================= */
+  function escapeHTML(v) {
+    if (v === null || v === undefined) return "";
+    return String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+  }
+
+  function createProductSlug(name) {
+    return String(name || "product").toLowerCase().trim()
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  }
+  function productURL(p) {
+    return "/products/" + createProductSlug(p.name) + "-" + p.id;
+  }
+
   window.switchPdTab = function (tabId, btn) {
-    document.querySelectorAll(".pd-tab-content").forEach(function (t) {
-      t.classList.remove("active");
-    });
-    document.querySelectorAll(".pd-tab-btn").forEach(function (b) {
-      b.classList.remove("active");
-      b.setAttribute("aria-selected", "false");
-    });
-    const target = document.getElementById(tabId);
-    if (target) target.classList.add("active");
-    if (btn) {
-      btn.classList.add("active");
-      btn.setAttribute("aria-selected", "true");
-    }
+    document.querySelectorAll(".pd-tab-content").forEach(function (t) { t.classList.remove("active"); });
+    document.querySelectorAll(".pd-tab-btn").forEach(function (b) { b.classList.remove("active"); });
+    const t = document.getElementById(tabId);
+    if (t) t.classList.add("active");
+    if (btn) btn.classList.add("active");
   };
 
+  window.changeMainImage = function (image, btn) {
+    const main = document.getElementById("mainProductImage");
+    if (main) main.src = image || FALLBACK_IMAGE;
+    document.querySelectorAll(".pd-thumb").forEach(function (t) { t.classList.remove("active"); });
+    if (btn) btn.classList.add("active");
+  };
 
-  /* =========================================================
-     PRODUCT ID (UUID-safe)
-  ========================================================= */
- function getProductId() {
-  const params = new URLSearchParams(window.location.search);
-  const idParam = params.get("id");
-  if (idParam) return idParam;
-
-  const pathSegments = window.location.pathname.split("/").filter(Boolean);
-  const lastSegment = pathSegments[pathSegments.length - 1] || "";
-  const match = lastSegment.match(/-([^-]+)$/);
-  return match ? match[1] : (lastSegment || null);
-}
-
-
-  /* =========================================================
-     HTML ESCAPE
-  ========================================================= */
-  function escapeHTML(value) {
-    if (value === null || value === undefined) return "";
-    return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-
-  /* =========================================================
-     SLUG / URL
-  ========================================================= */
-  function createProductSlug(name) {
-    return String(name || "product")
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-  }
-
-  function productURL(product) {
-    return "/products/" + createProductSlug(product.name) + "-" + product.id;
-  }
-
-
-  /* =========================================================
-     SHARE
-  ========================================================= */
   function getShareData() {
-    const title =
-      document.querySelector(".pd-title")?.innerText || "SparkCircuit Product";
-    const price =
-      document.querySelector(".pd-price")?.innerText || "";
-    return { name: title, price: price, url: window.location.href };
+    return {
+      name: document.querySelector(".pd-title")?.innerText || "SparkCircuit Product",
+      price: document.querySelector(".pd-price")?.innerText || "",
+      url: window.location.href
+    };
   }
-
   window.shareOnWhatsApp = function (e) {
     if (e) e.preventDefault();
     const d = getShareData();
-    const text = "Check out " + d.name + " at " + d.price +
-                 " on SparkCircuit! " + d.url;
-    window.open("https://wa.me/?text=" + encodeURIComponent(text), "_blank");
+    window.open("https://wa.me/?text=" + encodeURIComponent("Check out " + d.name + " at " + d.price + " - " + d.url), "_blank");
   };
-
   window.shareOnFacebook = function (e) {
     if (e) e.preventDefault();
-    window.open(
-      "https://www.facebook.com/sharer/sharer.php?u=" +
-      encodeURIComponent(window.location.href),
-      "_blank"
-    );
+    window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(window.location.href), "_blank");
   };
-
   window.shareOnTwitter = function (e) {
     if (e) e.preventDefault();
     const d = getShareData();
-    window.open(
-      "https://twitter.com/intent/tweet?text=" +
-      encodeURIComponent("Check out " + d.name) +
-      "&url=" + encodeURIComponent(d.url),
-      "_blank"
-    );
+    window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent("Check out " + d.name) + "&url=" + encodeURIComponent(d.url), "_blank");
   };
-
   window.copyProductLink = function (e) {
     if (e) e.preventDefault();
     const url = window.location.href;
-
-    function fallbackCopy() {
-      const input = document.createElement("input");
-      input.value = url;
-      document.body.appendChild(input);
-      input.select();
+    function fallback() {
+      const i = document.createElement("input");
+      i.value = url; document.body.appendChild(i); i.select();
       try { document.execCommand("copy"); } catch (_) {}
-      input.remove();
-      showToast("✅ Product link copied!");
+      i.remove(); showToast("✅ Link copied!");
     }
-
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(url)
-        .then(function () { showToast("✅ Product link copied!"); })
-        .catch(fallbackCopy);
-    } else {
-      fallbackCopy();
-    }
+      navigator.clipboard.writeText(url).then(function () { showToast("✅ Link copied!"); }).catch(fallback);
+    } else fallback();
   };
 
-
-  /* =========================================================
-     IMAGE CHANGE
-  ========================================================= */
-  window.changeMainImage = function (image, button) {
-    const main = document.getElementById("mainProductImage");
-    if (main) main.src = image || FALLBACK_IMAGE;
-    document.querySelectorAll(".pd-thumb").forEach(function (t) {
-      t.classList.remove("active");
-    });
-    if (button) button.classList.add("active");
-  };
-
-
-  /* =========================================================
-     JSON-LD STRUCTURED DATA
-  ========================================================= */
-  function injectJsonLd(product, imageUrl, price) {
-    const existing = document.getElementById("productJsonLd");
-    if (existing) existing.remove();
-
+  function injectJsonLd(p, imageUrl, price) {
+    const old = document.getElementById("productJsonLd");
+    if (old) old.remove();
     const data = {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": product.name || "Product",
-      "image": imageUrl,
-      "description": product.description || "",
-      "sku": String(product.id),
+      "@context": "https://schema.org", "@type": "Product",
+      "name": p.name || "Product", "image": imageUrl,
+      "description": p.description || "", "sku": String(p.id),
       "brand": { "@type": "Brand", "name": "SparkCircuit" },
       "offers": {
-        "@type": "Offer",
-        "priceCurrency": "INR",
-        "price": price,
-        "availability": product.in_stock
-          ? "https://schema.org/InStock"
-          : "https://schema.org/OutOfStock",
+        "@type": "Offer", "priceCurrency": "INR", "price": price,
+        "availability": p.in_stock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
         "url": window.location.href
       }
     };
-
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.id = "productJsonLd";
-    script.textContent = JSON.stringify(data);
-    document.head.appendChild(script);
+    const s = document.createElement("script");
+    s.type = "application/ld+json";
+    s.id = "productJsonLd";
+    s.textContent = JSON.stringify(data);
+    document.head.appendChild(s);
   }
 
-
-  /* =========================================================
-     META UPDATE (OG / Twitter / Canonical)
-  ========================================================= */
-  function updateMeta(product, imageUrl, price) {
-    const name = product.name || "Product";
-    const desc = (product.description || "").substring(0, 160);
-    const url = window.location.href;
-
-    document.title = name + " | SparkCircuit";
-
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.setAttribute("content",
-        "Buy " + name + " at ₹" + price +
-        " from SparkCircuit. Genuine components, fast delivery across India.");
-    }
-
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) canonical.setAttribute("href", url);
-
-    setMeta('property', 'og:title', name + " | SparkCircuit");
-    setMeta('property', 'og:description', desc);
-    setMeta('property', 'og:image', imageUrl);
-    setMeta('property', 'og:url', url);
-    setMeta('property', 'product:price:amount', String(price));
-    setMeta('property', 'product:price:currency', 'INR');
-    setMeta('name', 'twitter:title', name + " | SparkCircuit");
-    setMeta('name', 'twitter:description', desc);
-    setMeta('name', 'twitter:image', imageUrl);
-  }
-
-  function setMeta(attrName, attrValue, content) {
-    const el = document.querySelector('meta[' + attrName + '="' + attrValue + '"]');
+  function setMeta(attr, val, content) {
+    const el = document.querySelector('meta[' + attr + '="' + val + '"]');
     if (el) el.setAttribute("content", content);
   }
+  function updateMeta(p, imageUrl, price) {
+    const name = p.name || "Product";
+    const desc = (p.description || "").substring(0, 160);
+    const url = window.location.href;
+    document.title = name + " | SparkCircuit";
+    const md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute("content", "Buy " + name + " at ₹" + price + " from SparkCircuit.");
+    const can = document.getElementById("canonicalLink");
+    if (can) can.setAttribute("href", url);
+    setMeta("property", "og:title", name + " | SparkCircuit");
+    setMeta("property", "og:description", desc);
+    setMeta("property", "og:image", imageUrl);
+    setMeta("property", "og:url", url);
+    setMeta("name", "twitter:title", name);
+    setMeta("name", "twitter:description", desc);
+    setMeta("name", "twitter:image", imageUrl);
+  }
 
-
-  /* =========================================================
-     MAIN PRODUCT LOAD
-  ========================================================= */
   document.addEventListener("DOMContentLoaded", async function () {
+    const container = document.getElementById("productDetailContent");
+    if (!container) return;
 
     try {
       if (typeof window.updateCartBadge === "function") {
-        window.updateCartBadge();
+        try { window.updateCartBadge(); } catch (_) {}
       }
 
       const productId = getProductId();
-      const container = document.getElementById("productDetailContent");
-
       if (!productId) {
-        container.innerHTML = `
-          <div style="text-align:center;padding:60px 20px;">
-            <h2 style="color:#ef4444;">Product Not Found</h2>
-            <p style="color:#64748b;">No product ID found in this URL.</p>
-            <a href="/shop.html" class="back-btn"
-               style="display:inline-flex;margin-top:15px;">
-              ← Back to Shop
-            </a>
-          </div>`;
+        container.innerHTML = errorHTML("Product Not Found", "No product ID in URL.");
         return;
       }
 
-      /* ---------- FETCH PRODUCT ---------- */
-      const products = await supabaseFetch(
-        "products?id=eq." + encodeURIComponent(productId)
-      );
+      let products;
+      try {
+        products = await supabaseFetch("products?id=eq." + encodeURIComponent(productId));
+      } catch (err) {
+        container.innerHTML = errorHTML("Product Not Found", "Could not load. ID: " + productId);
+        return;
+      }
 
       if (!Array.isArray(products) || products.length === 0) {
-        container.innerHTML = `
-          <div style="text-align:center;padding:60px 20px;">
-            <h2 style="color:#ef4444;">Product Not Found!</h2>
-            <p style="color:#64748b;">
-              This product may have been removed or is no longer available.
-            </p>
-            <a href="/shop.html" class="back-btn"
-               style="display:inline-flex;margin-top:15px;">
-              ← Back to Shop
-            </a>
-          </div>`;
+        container.innerHTML = errorHTML("Product Not Found!", "This product may have been removed.");
         return;
       }
 
       const p = products[0];
       window.currentProduct = p;
 
-      const productName = p.name || "SparkCircuit Product";
-      const category = p.category || "Electronics";
+      const name = p.name || "SparkCircuit Product";
+      const cat = p.category || "Electronics";
       const image = p.image || FALLBACK_IMAGE;
       const price = Number(p.price || 0);
-      const originalPrice = Number(p.original_price || 0);
-      const discount = originalPrice > price
-        ? Math.round(((originalPrice - price) / originalPrice) * 100)
-        : 0;
+      const orig = Number(p.original_price || 0);
+      const disc = orig > price ? Math.round(((orig - price) / orig) * 100) : 0;
 
-      /* ---------- SEO ---------- */
       updateMeta(p, image, price);
       injectJsonLd(p, image, price);
 
-      /* ---------- BREADCRUMB ---------- */
-      const breadcrumb = document.getElementById("bcCurrentPage");
-      if (breadcrumb) breadcrumb.textContent = productName;
+      const bc = document.getElementById("bcCurrentPage");
+      if (bc) bc.textContent = name;
 
-      /* ---------- DESCRIPTION (XSS-safe) ---------- */
-      const description = document.getElementById("pdDescription");
-      if (description) {
-        // textContent use करो — HTML inject नहीं होगा
-        description.textContent =
-          p.description || "High-performance tested electronic component from SparkCircuit.";
-      }
+      const descEl = document.getElementById("pdDescription");
+      if (descEl) descEl.textContent = p.description || "High-performance tested electronic component from SparkCircuit.";
 
-      /* ---------- SPEC CATEGORY ---------- */
-      const specCategory = document.getElementById("pdSpecCat");
-      if (specCategory) specCategory.textContent = category;
+      const sc = document.getElementById("pdSpecCat");
+      if (sc) sc.textContent = cat;
 
-      /* ---------- SHOW SECTIONS ---------- */
-      document.getElementById("pdTabsSection").style.display = "block";
-      document.getElementById("shareSection").style.display = "block";
+      const tabsSec = document.getElementById("pdTabsSection");
+      if (tabsSec) tabsSec.style.display = "block";
+      const shareSec = document.getElementById("shareSection");
+      if (shareSec) shareSec.style.display = "block";
 
-      /* ---------- STOCK ---------- */
       const stockHTML = p.in_stock
-        ? `<div class="pd-stock in">
-             <i class="fas fa-circle-check" aria-hidden="true"></i> In Stock
-           </div>`
-        : `<div class="pd-stock out">
-             <i class="fas fa-circle-xmark" aria-hidden="true"></i> Out of Stock
-           </div>`;
+        ? '<div class="pd-stock in"><i class="fas fa-circle-check"></i> In Stock</div>'
+        : '<div class="pd-stock out"><i class="fas fa-circle-xmark"></i> Out of Stock</div>';
 
-      /* ---------- PRICE ---------- */
-      let priceHTML = `<span class="pd-price">₹${price}</span>`;
-      if (originalPrice > price) {
-        priceHTML += `
-          <span class="pd-mrp">₹${originalPrice}</span>
-          <span class="pd-discount">${discount}% OFF</span>`;
+      let priceHTML = '<span class="pd-price">₹' + price + '</span>';
+      if (orig > price) {
+        priceHTML += '<span class="pd-mrp">₹' + orig + '</span><span class="pd-discount">' + disc + '% OFF</span>';
       }
 
-      /* ---------- ACTIONS ---------- */
       const actionHTML = p.in_stock
-        ? `<div class="pd-buttons">
-             <button type="button"
-                     onclick="addToCart(${p.id}, false, this)"
-                     class="pd-btn pd-btn-cart">
-               <i class="fas fa-cart-plus" aria-hidden="true"></i>
-               Add to Cart
-             </button>
-             <button type="button"
-                     onclick="buyNow(${p.id})"
-                     class="pd-btn pd-btn-buy">
-               <i class="fas fa-bolt" aria-hidden="true"></i>
-               Buy Now
-             </button>
-           </div>`
-        : `<button type="button" disabled
-             style="width:100%;padding:16px;background:#cbd5e1;
-                    color:#64748b;border:none;border-radius:12px;
-                    font-weight:700;cursor:not-allowed;margin-bottom:25px;">
-             ❌ Out of Stock
-           </button>`;
+        ? '<div class="pd-buttons">' +
+          '<button type="button" onclick="handleAddToCart(' + p.id + ', this)" class="pd-btn pd-btn-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button>' +
+          '<button type="button" onclick="handleBuyNow(' + p.id + ')" class="pd-btn pd-btn-buy"><i class="fas fa-bolt"></i> Buy Now</button>' +
+          '</div>'
+        : '<button type="button" disabled style="width:100%;padding:16px;background:#cbd5e1;color:#64748b;border:none;border-radius:12px;font-weight:700;cursor:not-allowed;margin-bottom:25px;">❌ Out of Stock</button>';
 
-      /* ---------- RENDER ---------- */
-      container.innerHTML = `
-        <div class="pd-card">
-          <div class="pd-grid">
-            <div class="pd-gallery">
-              <div class="pd-main-image">
-                <img id="mainProductImage"
-                     src="${escapeHTML(image)}"
-                     alt="${escapeHTML(productName)}"
-                     width="600" height="450"
-                     loading="eager"
-                     onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
-              </div>
-              <div class="pd-thumbnails">
-                <button type="button"
-                        class="pd-thumb active"
-                        onclick="changeMainImage('${escapeHTML(image)}', this)"
-                        aria-label="View image">
-                  <img src="${escapeHTML(image)}"
-                       alt="${escapeHTML(productName)} thumbnail"
-                       loading="lazy">
-                </button>
-              </div>
-            </div>
+      container.innerHTML =
+        '<div class="pd-card"><div class="pd-grid">' +
+        '<div class="pd-gallery">' +
+        '<div class="pd-main-image"><img id="mainProductImage" src="' + escapeHTML(image) + '" alt="' + escapeHTML(name) + '" width="600" height="450" onerror="this.onerror=null;this.src=\'' + FALLBACK_IMAGE + '\'"></div>' +
+        '<div class="pd-thumbnails"><button type="button" class="pd-thumb active" onclick="changeMainImage(\'' + escapeHTML(image) + '\', this)"><img src="' + escapeHTML(image) + '" alt="' + escapeHTML(name) + '"></button></div>' +
+        '</div>' +
+        '<div class="pd-info">' +
+        '<span class="pd-category">' + escapeHTML(cat) + '</span>' +
+        '<h1 class="pd-title">' + escapeHTML(name) + '</h1>' +
+        '<div class="pd-price-section">' + priceHTML + '</div>' +
+        stockHTML + actionHTML +
+        '<div class="pd-trust">' +
+        '<div class="pd-trust-item"><i class="fas fa-shield-halved"></i><span>100% Genuine</span></div>' +
+        '<div class="pd-trust-item"><i class="fas fa-rotate-left"></i><span>7-Day Return</span></div>' +
+        '<div class="pd-trust-item"><i class="fas fa-lock"></i><span>Secure Payment</span></div>' +
+        '</div></div></div></div>';
 
-            <div class="pd-info">
-              <span class="pd-category">${escapeHTML(category)}</span>
-              <h1 class="pd-title">${escapeHTML(productName)}</h1>
+      loadRelatedProducts(p).catch(function (e) { console.error(e); });
 
-              <div class="pd-price-section">${priceHTML}</div>
-              ${stockHTML}
-              ${actionHTML}
-
-              <div class="pd-trust">
-                <div class="pd-trust-item">
-                  <i class="fas fa-shield-halved" aria-hidden="true"></i>
-                  <span>100% Genuine</span>
-                </div>
-                <div class="pd-trust-item">
-                  <i class="fas fa-rotate-left" aria-hidden="true"></i>
-                  <span>7-Day Return</span>
-                </div>
-                <div class="pd-trust-item">
-                  <i class="fas fa-lock" aria-hidden="true"></i>
-                  <span>Secure Payment</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>`;
-
-      /* ---------- RELATED PRODUCTS ---------- */
-      loadRelatedProducts(p);
-
-      /* ---------- REVIEWS ---------- */
-      if (typeof window.loadReviews === "function") {
-        try { await window.loadReviews(p.id); }
-        catch (err) { console.error("Review loading error:", err); }
-      } else {
-        const revEl = document.getElementById("reviewsList");
-        if (revEl) {
-          revEl.innerHTML = `<p style="color:#64748b;text-align:center;">
-            No reviews yet. Be the first to review!
-          </p>`;
+      try {
+        if (typeof window.loadReviews === "function") await window.loadReviews(p.id);
+        else {
+          const rv = document.getElementById("reviewsList");
+          if (rv) rv.innerHTML = '<p style="color:#64748b;text-align:center;">No reviews yet. Be the first to review!</p>';
         }
-      }
+      } catch (e) { console.error("[Reviews]", e); }
 
-      /* ---------- RECENTLY VIEWED ---------- */
-      if (typeof window.renderRecentlyViewed === "function") {
-        document.getElementById("recentlySection").style.display = "block";
-        try { window.renderRecentlyViewed(p.id); }
-        catch (err) { console.error("Recently viewed error:", err); }
-      }
+      try {
+        if (typeof window.renderRecentlyViewed === "function") {
+          const rs = document.getElementById("recentlySection");
+          if (rs) rs.style.display = "block";
+          window.renderRecentlyViewed(p.id);
+        }
+      } catch (e) { console.error("[Recently]", e); }
 
-      /* ---------- ALL PRODUCTS (race-free) ---------- */
-      // पहले से window.allProducts है या नहीं check करो, नहीं तो await करके fetch करो
       if (!window.allProducts || !window.allProducts.length) {
         try {
           const all = await supabaseFetch("products?limit=1000");
           window.allProducts = Array.isArray(all) ? all : [];
-        } catch (err) {
-          console.error("Cart product loading error:", err);
+        } catch (e) {
+          console.error("[AllProducts]", e);
           window.allProducts = window.allProducts || [];
         }
       }
 
-    } catch (error) {
-      console.error("Product loading error:", error);
-      const container = document.getElementById("productDetailContent");
-      if (container) {
-        container.innerHTML = `
-          <div style="text-align:center;padding:60px 20px;">
-            <h2 style="color:#ef4444;">Error Loading Product</h2>
-            <p style="color:#64748b;">Please refresh the page and try again.</p>
-            <a href="/shop.html" class="back-btn"
-               style="display:inline-flex;margin-top:15px;">
-              ← Back to Shop
-            </a>
-          </div>`;
-      }
+    } catch (err) {
+      console.error("[FATAL]", err);
+      container.innerHTML = errorHTML("Error Loading Product", "Please refresh. (" + (err.message || "unknown") + ")");
     }
   });
 
-
-  /* =========================================================
-     RELATED PRODUCTS
-  ========================================================= */
-  async function loadRelatedProducts(product) {
-    const container = document.getElementById("relatedProducts");
-    if (!container) return;
-
-    try {
-      const category = product.category || "Electronics";
-      const products = await supabaseFetch(
-        "products?category=eq." + encodeURIComponent(category) +
-        "&id=neq." + encodeURIComponent(product.id) +
-        "&limit=4"
-      );
-
-      if (!Array.isArray(products) || products.length === 0) {
-        container.innerHTML = `<p style="color:#64748b;">No related products available.</p>`;
-        return;
-      }
-
-      container.innerHTML = products.map(function (rp) {
-        const rpImage = rp.image || FALLBACK_IMAGE;
-        const rpName = rp.name || "Product";
-        return `
-          <a href="${productURL(rp)}" class="related-card">
-            <img src="${escapeHTML(rpImage)}"
-                 alt="${escapeHTML(rpName)}"
-                 width="220" height="150"
-                 loading="lazy"
-                 onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
-            <span class="related-cat">${escapeHTML(rp.category || "Electronics")}</span>
-            <h4>${escapeHTML(rpName)}</h4>
-            <div class="related-price">
-              <span class="now">₹${Number(rp.price || 0)}</span>
-            </div>
-          </a>`;
-      }).join("");
-
-    } catch (error) {
-      console.error("Related products error:", error);
-      container.innerHTML = `<p style="color:#64748b;">Related products unavailable.</p>`;
+  window.handleAddToCart = function (id, btn) {
+    if (typeof window.addToCart === "function") {
+      try { window.addToCart(id, false, btn); return; }
+      catch (e) { console.error("[addToCart]", e); }
     }
+    showToast("⚠️ Cart service load नहीं हुआ। Refresh करें।");
+  };
+  window.handleBuyNow = function (id) {
+    if (typeof window.buyNow === "function") {
+      try { window.buyNow(id); return; }
+      catch (e) { console.error("[buyNow]", e); }
+    }
+    showToast("⚠️ Buy Now service load नहीं हुई। Refresh करें।");
+  };
+
+  function errorHTML(title, msg) {
+    return '<div style="text-align:center;padding:60px 20px;">' +
+      '<h2 style="color:#ef4444;">' + escapeHTML(title) + '</h2>' +
+      '<p style="color:#64748b;">' + escapeHTML(msg) + '</p>' +
+      '<a href="/shop.html" class="back-btn" style="display:inline-flex;margin-top:15px;">← Back to Shop</a>' +
+      '</div>';
   }
 
-
-  /* =========================================================
-     VALIDATION HELPERS (checkout के लिए — script.js से call कर सकते हो)
-  ========================================================= */
-  window.pdValidateCheckout = function () {
-    const name = (document.getElementById("custName")?.value || "").trim();
-    const phone = (document.getElementById("custPhone")?.value || "").trim();
-    const address = (document.getElementById("custAddress")?.value || "").trim();
-    const pincode = (document.getElementById("custPincode")?.value || "").trim();
-
-    if (name.length < 2) { showToast("❌ कृपया पूरा नाम भरें"); return false; }
-    if (!/^[6-9]\d{9}$/.test(phone)) {
-      showToast("❌ सही 10-digit mobile number डालें");
-      return false;
+  async function loadRelatedProducts(p) {
+    const c = document.getElementById("relatedProducts");
+    if (!c) return;
+    try {
+      const cat = p.category || "Electronics";
+      const products = await supabaseFetch("products?category=eq." + encodeURIComponent(cat) + "&id=neq." + encodeURIComponent(p.id) + "&limit=4");
+      if (!Array.isArray(products) || !products.length) {
+        c.innerHTML = '<p style="color:#64748b;">No related products.</p>';
+        return;
+      }
+      c.innerHTML = products.map(function (rp) {
+        const img = rp.image || FALLBACK_IMAGE;
+        const nm = rp.name || "Product";
+        return '<a href="' + productURL(rp) + '" class="related-card">' +
+          '<img src="' + escapeHTML(img) + '" alt="' + escapeHTML(nm) + '" width="220" height="150" loading="lazy" onerror="this.onerror=null;this.src=\'' + FALLBACK_IMAGE + '\'">' +
+          '<span class="related-cat">' + escapeHTML(rp.category || "Electronics") + '</span>' +
+          '<h4>' + escapeHTML(nm) + '</h4>' +
+          '<div class="related-price"><span class="now">₹' + Number(rp.price || 0) + '</span></div>' +
+          '</a>';
+      }).join("");
+    } catch (e) {
+      console.error("[Related]", e);
+      c.innerHTML = '<p style="color:#64748b;">Related products unavailable.</p>';
     }
-    if (address.length < 10) { showToast("❌ पूरा address भरें"); return false; }
-    if (!/^\d{6}$/.test(pincode)) {
-      showToast("❌ सही 6-digit pincode डालें");
-      return false;
-    }
-    return true;
-  };
+  }
 
 })();
 </script>
