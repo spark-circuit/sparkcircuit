@@ -1,26 +1,21 @@
 export default async function handler(req, res) {
   try {
+    // =====================================================
+    // 1. GET PRODUCT ID FROM SEO URL
+    //
+    // Example:
+    // /products/water-level-depth-sensor-module-45
+    //
+    // Vercel rewrite:
+    // /api/product?path=water-level-depth-sensor-module-45
+    // =====================================================
+
     let productId = null;
-    let isLegacyUrl = false;
 
-    // =====================================================
-    // 1. OLD URL
-    // /product.html?id=15
-    // =====================================================
+    if (req.query.path) {
+      const path = String(req.query.path).trim();
 
-    if (req.query.id) {
-      productId = String(req.query.id);
-      isLegacyUrl = true;
-    }
-
-    // =====================================================
-    // 2. NEW SEO URL
-    // /products/product-name-15
-    // =====================================================
-
-    if (!productId && req.query.path) {
-      const path = String(req.query.path);
-
+      // Product ID is the final number in the URL
       const match = path.match(/-(\d+)\/?$/);
 
       if (match) {
@@ -29,15 +24,18 @@ export default async function handler(req, res) {
     }
 
     // =====================================================
-    // 3. OPTIONAL product_id SUPPORT
+    // 2. OPTIONAL DIRECT PRODUCT ID SUPPORT
+    //
+    // This is only for internal/server use.
+    // Customer-facing URL remains /products/slug-ID
     // =====================================================
 
     if (!productId && req.query.product_id) {
-      productId = String(req.query.product_id);
+      productId = String(req.query.product_id).trim();
     }
 
     // =====================================================
-    // NO PRODUCT ID
+    // 3. PRODUCT ID NOT FOUND
     // =====================================================
 
     if (!productId) {
@@ -46,22 +44,26 @@ export default async function handler(req, res) {
         "text/html; charset=utf-8"
       );
 
-      return res.status(400).send(`
+      return res.status(404).send(`
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Product ID Missing | SparkCircuit</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Product Not Found | SparkCircuit</title>
 </head>
+
 <body>
-<h1>Product ID Missing</h1>
+  <h1>Product Not Found</h1>
+  <p>The requested product could not be found.</p>
 </body>
 </html>
-`);
+      `);
     }
 
     // =====================================================
-    // SUPABASE DYNAMIC WORKER
+    // 4. SUPABASE DYNAMIC WORKER
     // =====================================================
 
     const workerUrl =
@@ -74,40 +76,7 @@ export default async function handler(req, res) {
     const html = await response.text();
 
     // =====================================================
-    // OLD URL → 301 REDIRECT TO SEO URL
-    //
-    // Example:
-    // /product.html?id=15
-    //
-    // →
-    //
-    // /products/color-sensor-tcs230-tcs3200-color-recognition-sensor-detector-module-15
-    // =====================================================
-
-    if (isLegacyUrl && response.ok) {
-      const canonicalMatch = html.match(
-        /<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i
-      );
-
-      if (canonicalMatch && canonicalMatch[1]) {
-        const canonicalUrl = canonicalMatch[1];
-
-        res.setHeader(
-          "Location",
-          canonicalUrl
-        );
-
-        res.setHeader(
-          "Cache-Control",
-          "public, s-maxage=3600, stale-while-revalidate=86400"
-        );
-
-        return res.status(301).end();
-      }
-    }
-
-    // =====================================================
-    // RETURN HTML
+    // 5. RETURN PRODUCT HTML
     // =====================================================
 
     res.setHeader(
@@ -124,10 +93,7 @@ export default async function handler(req, res) {
 
   } catch (error) {
 
-    console.error(
-      "Product proxy error:",
-      error
-    );
+    console.error("Product proxy error:", error);
 
     res.setHeader(
       "Content-Type",
@@ -136,16 +102,19 @@ export default async function handler(req, res) {
 
     return res.status(500).send(`
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Server Error | SparkCircuit</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Server Error | SparkCircuit</title>
 </head>
+
 <body>
-<h1>Server Error</h1>
-<p>Unable to load product.</p>
+  <h1>Server Error</h1>
+  <p>Unable to load product.</p>
 </body>
 </html>
-`);
+    `);
   }
 }
