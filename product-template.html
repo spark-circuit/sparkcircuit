@@ -6,7 +6,6 @@
 <meta name="theme-color" content="#f97316">
 
 <title>Product Details | SparkCircuit</title>
-<meta name="description" content="Buy genuine electronic components online from SparkCircuit.">
 <link rel="canonical" href="https://sparkcircuit.in/product.html">
 
 <link rel="icon" type="image/jpeg" href="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg">
@@ -21,7 +20,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-/* ============ PRODUCT DETAIL PAGE CSS ============ */
+/* CSS for Product Page */
 .back-nav-bar { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 12px 20px; position: sticky; top: 70px; z-index: 50; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
 .back-nav-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
 .back-btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 20px; background: linear-gradient(135deg, #f97316, #fb923c); color: #fff; text-decoration: none; border-radius: 50px; font-size: 0.85rem; font-weight: 600; font-family: 'Inter', sans-serif; transition: all 0.3s; box-shadow: 0 4px 14px rgba(249,115,22,0.3); }
@@ -121,7 +120,7 @@
           <span id="navUserText">Account</span>
           <i class="fas fa-chevron-down mini"></i>
         </div>
-        <div id="profileDropdown" class="dropdown">
+        <div id="profileDropdown" class="dropdown" style="display:none;">
           <div id="loggedInOptions" style="display:none;">
             <a href="javascript:void(0)" onclick="openMyOrdersModal(); closeProfileMenu();"><i class="fas fa-box"></i> My Orders</a>
             <a href="javascript:void(0)" onclick="handleLogout(); closeProfileMenu();" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -198,7 +197,7 @@
   </div>
 </div>
 
-<!-- CART MODAL (Home page jaisa exact) -->
+<!-- CART MODAL (Home page jaisa) -->
 <div id="cartModal" class="modal-overlay">
   <div class="modal-light">
     <div class="modal-head">
@@ -269,25 +268,31 @@
 <a href="https://wa.me/916374017186" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
 <!-- ========================================== -->
-<!-- SAARI SCRIPTS (JO MISSING THI) -->
+<!-- SAARI SCRIPTS (SELF-CONTAINED) -->
 <!-- ========================================== -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>(function(){ emailjs.init("Pn5FLfmBN3qPp5xg7"); })();</script>
 
-<!-- Yahan aapki script.js load ho rahi hai jisme saare function hain -->
+<!-- Aapki script.js connect ki gayi hai -->
 <script src="script.js"></script>
 
 <script>
+  // Agar script.js load na ho paye, toh ye basic functions fallback ke liye ready hain
+  if (typeof SUPABASE_URL === 'undefined') {
+    window.SUPABASE_URL = 'https://mrqvzmtdsohvzsnryogp.supabase.co';
+    window.SUPABASE_KEY = 'sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z';
+  }
+
   // ============================================================
-  // PRODUCT LOADING LOGIC (Sirf product dikhane ke liye)
+  // PRODUCT LOADING LOGIC
   // ============================================================
   document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     let productId = params.get('id');
     const container = document.getElementById('productDetailContent');
 
-    // Agar SEO URL hai (jaise /products/soil-moisture-sensor-module-37) toh URL se ID nikaalo
+    // SEO URL se ID nikalne ka jugaad
     if (!productId) {
       const path = window.location.pathname;
       const match = path.match(/-(\d+)\/?$/);
@@ -300,8 +305,8 @@
     }
 
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${productId}`, {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      const res = await fetch(`${window.SUPABASE_URL}/rest/v1/products?id=eq.${productId}`, {
+        headers: { 'apikey': window.SUPABASE_KEY, 'Authorization': `Bearer ${window.SUPABASE_KEY}` }
       });
       const data = await res.json();
 
@@ -374,7 +379,7 @@
                 <i class="fas fa-truck-fast"></i>
                 <div>
                   <div class="title">🚚 Free Delivery Available</div>
-                  <div class="date">Order today, get it by <strong>${calculateDeliveryDate().maxDate}</strong></div>
+                  <div class="date">Order today, get it by <strong>${new Date(Date.now() + 5*24*60*60*1000).toLocaleDateString('en-IN', {day:'numeric', month:'short'})}</strong></div>
                 </div>
               </div>
               
