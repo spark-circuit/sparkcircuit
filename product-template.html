@@ -1432,6 +1432,37 @@ if (!productId) {
     console.log('✅ Product schema updated:', schema.name);
   }
 
+  
+function showToast(message, type = 'success') {
+  let container = document.querySelector('.toast-container');
+
+  if (!container) {
+    container = document.createElement('div');
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = `toast-msg ${type}`;
+
+  const icon = type === 'error' ? 'fa-circle-xmark' : 'fa-check';
+
+  toast.innerHTML = `
+    <i class="fas ${icon}"></i>
+    <div>${message}</div>
+  `;
+
+  container.appendChild(toast);
+
+  setTimeout(() => toast.classList.add('show'), 10);
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 400);
+  }, 3000);
+}
+
+
   document.addEventListener('DOMContentLoaded', loadProductDetails);
 </script>
 </body>
