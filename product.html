@@ -203,62 +203,57 @@ body {
 
 <body>
 
-<!-- HEADER -->
 <header class="header">
-  <div class="container">
-    <a href="/index.html" class="logo">
-      <span>Spark</span><strong>Circuit</strong>
+  <div class="header-inner">
+    <a href="index.html" class="brand">
+      <img src="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg" alt="SparkCircuit" class="brand-logo">
+      <div class="brand-text">
+        <span class="brand-name"><span class="orange">Spark</span>Circuit</span>
+        <span class="brand-tag">TECH / R&D STUDIO</span>
+      </div>
     </a>
-    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Menu">
-      <i class="fas fa-bars"></i>
-    </button>
-    <nav class="nav" id="navMenu">
-      <a href="/index.html">Home</a>
-      <a href="/about.html">About</a>
-      <a href="/shop.html">Products</a>
-      <a href="/index.html#services">Services</a>
-      <a href="/index.html#rd">R&D</a>
-      <a href="/index.html#projects">Projects</a>
-      <a href="/blog.html">Blog</a>
-      <a href="/index.html#contact">Contact</a>
-    </nav>
-    <div class="header-actions">
-      <a href="/wishlist.html" class="icon-btn" title="Wishlist">
-        <i class="far fa-heart"></i>
-        <span id="wishlistCount" class="badge" style="display:none;">0</span>
-      </a>
-      <button class="cart-btn" onclick="toggleCart()" title="Cart">
-        <i class="fas fa-shopping-cart"></i>
-        <span id="cartCount" class="badge" style="display:none;">0</span>
-      </button>
-      <div id="userNavContainer" class="user-nav">
-        <button class="user-btn" onclick="toggleProfileMenu()">
-          <i class="fas fa-user"></i>
+
+    <div class="search-box-wrapper">
+      <div class="search-box">
+        <input type="text" id="searchInput" onkeyup="handleSearchInput()" onfocus="handleSearchFocus()" onblur="handleSearchBlur()" placeholder="Search Parts, Components, SKU..." autocomplete="off">
+        <i class="fas fa-search"></i>
+      </div>
+      <div id="searchSuggestions" class="search-suggestions"></div>
+    </div>
+
+    <div class="nav-icons">
+      <a href="index.html" class="nav-item" style="color:#f97316;"><i class="fas fa-home"></i><span>Home</span></a>
+      <a href="shop.html" class="nav-item"><i class="fas fa-store"></i><span>Shop</span></a>
+      <a href="about.html" class="nav-item"><i class="fas fa-circle-info"></i><span>About</span></a>
+      <div class="user-dropdown">
+        <div id="userNavContainer" onclick="toggleProfileMenu()" class="nav-item user-btn">
+          <i class="fas fa-circle-user"></i>
           <span id="navUserText">Account</span>
-        </button>
-        <div id="profileDropdown" class="profile-dropdown" style="display:none;">
-          <div id="loggedOutOptions">
-            <button onclick="openLoginModal(); closeProfileMenu();">
-              <i class="fas fa-sign-in-alt"></i> Login
-            </button>
-          </div>
+          <i class="fas fa-chevron-down mini"></i>
+        </div>
+        <div id="profileDropdown" class="dropdown">
           <div id="loggedInOptions" style="display:none;">
-            <button onclick="openMyOrdersModal(); closeProfileMenu();">
-              <i class="fas fa-box"></i> My Orders
-            </button>
-            <button onclick="window.location.href='/wishlist.html'">
-              <i class="fas fa-heart"></i> Wishlist
-            </button>
-            <button onclick="handleLogout()">
-              <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
+            <a href="javascript:void(0)" onclick="openMyOrdersModal(); closeProfileMenu();"><i class="fas fa-box"></i> My Orders</a>
+            <a href="javascript:void(0)" onclick="handleLogout(); closeProfileMenu();" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+          <div id="loggedOutOptions">
+            <a href="javascript:void(0)" onclick="openLoginModal(); closeProfileMenu();"><i class="fas fa-sign-in-alt"></i> Login / Register</a>
           </div>
         </div>
+      </div>
+      <a href="wishlist.html" class="nav-item wishlist-btn" style="text-decoration:none;">
+        <i class="fas fa-heart"></i>
+        <span>Wishlist</span>
+        <span id="wishlistCount" class="cart-badge">0</span>
+      </a>
+      <div class="nav-item cart-btn" onclick="toggleCart()">
+        <i class="fas fa-shopping-cart"></i>
+        <span>Cart</span>
+        <span id="cartCount" class="cart-badge">0</span>
       </div>
     </div>
   </div>
 </header>
-
 <!-- PRODUCT AREA -->
 <main class="product-page">
   <div class="product-breadcrumb" id="productBreadcrumb">
