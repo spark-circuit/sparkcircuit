@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://sparkcircuit.in/">
 
 <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="https://sparkcircuit.in/style.css">
+<link rel="stylesheet" href="../style.css">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -835,8 +835,22 @@
     grid-template-columns: 1fr;
   }
 }
-.header { position: sticky !important; top: 0; z-index: 1000; }
-body { padding-top: 0 !important; }
+.header { 
+  position: sticky !important; 
+  top: 0; 
+  z-index: 1000; 
+  background: #fff !important; 
+}
+body { 
+  padding-top: 0 !important; 
+}
+.header .container { 
+  display: flex !important; 
+  align-items: center !important; 
+  justify-content: space-between !important; 
+  max-width: 1280px !important; 
+  margin: 0 auto !important; 
+}
 </style>
 </head>
 
@@ -1470,7 +1484,7 @@ body { padding-top: 0 !important; }
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <!-- Shared SparkCircuit Script -->
-<script src="https://sparkcircuit.in/script.js"></script>
+<script src="../script.js"></script>
 
 
 <!-- =========================================================
