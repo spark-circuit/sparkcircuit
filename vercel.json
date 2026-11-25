@@ -7,7 +7,7 @@
     },
     {
       "source": "/sitemap.xml",
-      "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker"
+      "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker?sitemap=1"
     }
   ]
 }
