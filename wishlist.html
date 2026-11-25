@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f97316">
+<title>My Wishlist | SparkCircuit</title>
+<meta name="robots" content="noindex, follow">
+
+<link rel="icon" type="image/jpeg" href="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="preconnect" href="https://mrqvzmtdsohvzsnryogp.supabase.co">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+<style>
+  .wishlist-page {
+    min-height: 100vh;
+    background: #f4f7f9;
+    padding: 100px 20px 60px;
+  }
+  .wishlist-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .wishlist-head {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .wishlist-head h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 10px;
+  }
+  .wishlist-head h1 i {
+    color: #ef4444;
+  }
+  .wishlist-head p {
+    color: #64748b;
+    font-size: 1rem;
+  }
+  .wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 22px;
+  }
+  .wish-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px;
+    transition: 0.3s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .wish-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  }
+  .wish-card img {
+    width: 100%;
+    height: 170px;
+    object-fit: contain;
+    border-radius: 10px;
+    background: #f8fafc;
+    margin-bottom: 12px;
+  }
+  .wish-cat {
+    font-size: 0.7rem;
+    color: #ea580c;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .wish-card h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 6px 0 10px;
+    min-height: 2.6em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .wish-price {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .wish-price .now {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #0f172a;
+  }
+  .wish-price .old {
+    font-size: 0.82rem;
+    color: #94a3b8;
+    text-decoration: line-through;
+  }
+  .wish-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+  }
+  .wish-add-cart {
+    flex: 1;
+    padding: 10px;
+    background: #0f172a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .wish-add-cart:hover {
+    background: #1e293b;
+    transform: translateY(-2px);
+  }
+  .wish-remove {
+    width: 42px;
+    padding: 10px;
+    background: #fee2e2;
+    color: #ef4444;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 0.95rem;
+  }
+  .wish-remove:hover {
+    background: #ef4444;
+    color: #fff;
+  }
+  .empty-wish {
+    text-align: center;
+    padding: 80px 20px;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+  }
+  .empty-wish i {
+    font-size: 4rem;
+    color: #cbd5e1;
+    margin-bottom: 20px;
+  }
+  .empty-wish h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    color: #0f172a;
+    margin-bottom: 10px;
+  }
+  .empty-wish p {
+    color: #64748b;
+    margin-bottom: 25px;
+  }
+  .empty-wish a {
+    display: inline-block;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 700;
+    transition: 0.3s;
+    box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4);
+  }
+  .empty-wish a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(249, 115, 22, 0.6);
+  }
+  @media (max-width: 600px) {
+    .wishlist-page { padding: 90px 15px 40px; }
+    .wishlist-head h1 { font-size: 1.8rem; }
+    .wishlist-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .wish-card img { height: 130px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="brand">
+      <img src="https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg" alt="SparkCircuit" class="brand-logo">
+      <div class="brand-text">
+        <span class="brand-name"><span class="orange">Spark</span>Circuit</span>
+        <span class="brand-tag">TECH / R&D STUDIO</span>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="shop.html" class="btn-shop"><i class="fas fa-store"></i> Continue Shopping</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wishlist-page">
+  <div class="wishlist-container">
+    <div class="wishlist-head">
+      <h1><i class="fas fa-heart"></i> My Wishlist</h1>
+      <p>Your saved products in one place</p>
+    </div>
+    <div id="wishlistContent">
+      <p style="text-align:center;padding:40px;color:#64748b;">Loading your wishlist...</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://mrqvzmtdsohvzsnryogp.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_YLYkDHgLQvNzCL1UvqvxkQ_EX3oLE9z';
+  const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  let wishlistProducts = [];
+
+  async function loadWishlistPage() {
+    const container = document.getElementById('wishlistContent');
+    const { data: { session } } = await _supabase.auth.getSession();
+
+    if (!session?.user?.email) {
+      container.innerHTML = `
+        <div class="empty-wish">
+          <i class="fas fa-user-lock"></i>
+          <h2>Please Login</h2>
+          <p>Login to view your wishlist</p>
+          <a href="shop.html">Go to Store</a>
+        </div>
+      `;
+      return;
+    }
+
+    try {
+      // Get wishlist product IDs
+      const { data: wishlistData, error } = await _supabase
+        .from('wishlist')
+        .select('product_id, created_at')
+        .eq('user_email', session.user.email)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      if (!wishlistData || wishlistData.length === 0) {
+        container.innerHTML = `
+          <div class="empty-wish">
+            <i class="far fa-heart"></i>
+            <h2>Your Wishlist is Empty</h2>
+            <p>Start adding your favourite products!</p>
+            <a href="shop.html">Browse Products</a>
+          </div>
+        `;
+        return;
+      }
+
+      // Get product details
+      const productIds = wishlistData.map(w => w.product_id);
+      const { data: products } = await _supabase
+        .from('products')
+        .select('*')
+        .in('id', productIds);
+
+      if (!products || products.length === 0) {
+        container.innerHTML = `
+          <div class="empty-wish">
+            <i class="far fa-heart"></i>
+            <h2>Your Wishlist is Empty</h2>
+            <p>Start adding your favourite products!</p>
+            <a href="shop.html">Browse Products</a>
+          </div>
+        `;
+        return;
+      }
+
+      wishlistProducts = products;
+      renderWishlist(products);
+
+    } catch (e) {
+      console.error(e);
+      container.innerHTML = '<p style="color:#ef4444;text-align:center;padding:40px;">Failed to load wishlist</p>';
+    }
+  }
+
+  function renderWishlist(products) {
+    const container = document.getElementById('wishlistContent');
+    const defaultImg = 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80';
+
+    container.innerHTML = `
+      <div class="wishlist-grid">
+        ${products.map(p => {
+          const img = p.image && p.image.trim() !== '' ? p.image : defaultImg;
+          return `
+            <div class="wish-card">
+              <img src="${img}" alt="${p.name}" onerror="this.src='${defaultImg}'">
+              <span class="wish-cat">${p.category || 'Electronics'}</span>
+              <h3>${p.name}</h3>
+              <div class="wish-price">
+                <span class="now">₹${p.price}</span>
+                ${p.original_price && p.original_price > p.price ? `<span class="old">₹${p.original_price}</span>` : ''}
+              </div>
+              <div class="wish-actions">
+                <button class="wish-add-cart" onclick="addToCartFromWish(${p.id})">
+                  <i class="fas fa-cart-plus"></i> Add to Cart
+                </button>
+                <button class="wish-remove" onclick="removeFromWishlist(${p.id})" title="Remove">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  async function removeFromWishlist(productId) {
+    if (!confirm('Remove this item from wishlist?')) return;
+
+    const { data: { session } } = await _supabase.auth.getSession();
+    if (!session?.user?.email) return;
+
+    const { error } = await _supabase
+      .from('wishlist')
+      .delete()
+      .eq('user_email', session.user.email)
+      .eq('product_id', productId);
+
+    if (!error) {
+      loadWishlistPage();
+    } else {
+      alert('Failed to remove: ' + error.message);
+    }
+  }
+
+  function addToCartFromWish(productId) {
+    localStorage.setItem('sc_pending_cart', JSON.stringify({ id: productId, action: 'add' }));
+    window.location.href = 'shop.html';
+  }
+
+  document.addEventListener('DOMContentLoaded', loadWishlistPage);
+</script>
+
+</body>
+</html>
