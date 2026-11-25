@@ -492,13 +492,19 @@ async function loadProduct(id) {
       }
     }
 
-    renderProduct(product);
-    await loadProductReviews(product.id);
-    await loadRelatedProducts(product);
-    await updateProductWishlistState(product.id);
-    saveRecentlyViewed(product);
-    updateSEO(product);
-    showProductContent();
+ renderProduct(product);
+saveRecentlyViewed(product);
+updateSEO(product);
+
+// Main product ko turant show karo
+showProductContent();
+
+// Baaki features background mein load honge
+Promise.allSettled([
+  loadProductReviews(product.id),
+  loadRelatedProducts(product),
+  updateProductWishlistState(product.id)
+]);
 
   } catch (error) {
     console.error('Product loading error:', error);
