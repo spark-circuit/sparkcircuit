@@ -884,8 +884,11 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
   // LOAD PRODUCT DETAILS
   // ============================================================
   async function loadProductDetails() {
-    const params = new URLSearchParams(window.location.search);
-    const productId = params.get('id');
+  const params = new URLSearchParams(window.location.search);
+
+const pathMatch = window.location.pathname.match(/-(\d+)\/?$/);
+
+const productId = params.get('id') || (pathMatch ? pathMatch[1] : null);
     const container = document.getElementById('productDetailContent');
 
     if (!productId) {
@@ -905,6 +908,22 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
       }
 
       const p = data[0];
+      // Redirect old product URL to clean SEO URL
+if (
+  window.location.pathname === '/product.html' &&
+  params.get('id')
+) {
+  const slug = String(p.name)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  const cleanUrl = `/products/${slug}-${p.id}`;
+
+  window.location.replace(cleanUrl);
+  return;
+}
       saveRecentlyViewed(p);
       window.currentProduct = p;
       
