@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker"
+    }
+  ]
+}
