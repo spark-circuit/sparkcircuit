@@ -36,34 +36,6 @@ let cart = JSON.parse(localStorage.getItem('sc_cart')) || [];
 let currentUserSession = null;
 
 // ============================================================
-// 🔗 PRODUCT URL HELPERS (NEW)
-// ============================================================
-function slugifyProductName(name) {
-  return String(name || 'product')
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
-}
-
-function getProductUrl(productOrId) {
-  let product = productOrId;
-
-  if (typeof productOrId === 'number' || typeof productOrId === 'string') {
-    if (allProducts && allProducts.length) {
-      product = allProducts.find(p => String(p.id) === String(productOrId));
-    }
-  }
-
-  if (!product || !product.id) return '/shop.html';
-
-  const slug = slugifyProductName(product.name || 'product');
-  return `/products/${slug}-${product.id}`;
-}
-
-// ============================================================
 // PREMIUM TOAST NOTIFICATION (Replaces alert)
 // ============================================================
 function showToast(message, type = 'success') {
@@ -76,14 +48,14 @@ function showToast(message, type = 'success') {
 
   const toast = document.createElement('div');
   toast.className = `toast-msg ${type}`;
-
+  
   const icon = type === 'error' ? 'fa-circle-xmark' : 'fa-check';
-
+  
   toast.innerHTML = `
     <i class="fas ${icon}"></i>
     <div>${message}</div>
   `;
-
+  
   container.appendChild(toast);
 
   // Show animation
@@ -92,7 +64,7 @@ function showToast(message, type = 'success') {
   // Remove after 3 seconds
   setTimeout(() => {
     toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 400);
+    setTimeout(() => toast.remove(), 400); 
   }, 3000);
 }
 
@@ -106,7 +78,7 @@ function flyToCart(startElement) {
   // 1. Star create karo
   const star = document.createElement('i');
   star.className = 'fas fa-star flying-star';
-
+  
   // 2. Button ki position lo
   const startRect = startElement.getBoundingClientRect();
   const startX = startRect.left + (startRect.width / 2);
@@ -126,14 +98,14 @@ function flyToCart(startElement) {
   setTimeout(() => {
     star.style.left = `${endX}px`;
     star.style.top = `${endY}px`;
-    star.style.transform = 'scale(0.3) rotate(360deg)';
+    star.style.transform = 'scale(0.3) rotate(360deg)'; // Chhota aur ghuma hua
     star.style.opacity = '0.5';
   }, 50);
 
   // 6. Jab star cart me pahuche (0.8s baad), toh use delete karo aur cart ko bounce karao
   setTimeout(() => {
     star.remove();
-
+    
     // Cart Bounce
     cartBtn.classList.add('cart-animate');
     setTimeout(() => cartBtn.classList.remove('cart-animate'), 600);
@@ -146,7 +118,6 @@ function flyToCart(startElement) {
     }
   }, 800);
 }
-
 // ============================================================
 // MOBILE MENU
 // ============================================================
@@ -215,7 +186,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 });
-
 // URL check karo agar cart open karna hai
 document.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -224,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof toggleCart === 'function') {
         toggleCart();
       }
-    }, 500);
+    }, 500); // 0.5 second baad cart khulega taaki products load ho jayein
   }
 });
 
@@ -323,8 +293,8 @@ function renderProducts(products) {
     ⚡ Buy Now
   </button>
 </div>
-             ${p.stock_quantity && p.stock_quantity <= 5 && p.stock_quantity > 0
-               ? `<div class="low-stock-badge">🔥 Only ${p.stock_quantity} left!</div>`
+             ${p.stock_quantity && p.stock_quantity <= 5 && p.stock_quantity > 0 
+               ? `<div class="low-stock-badge">🔥 Only ${p.stock_quantity} left!</div>` 
                : ''}`
           : `<button disabled class="btn-oos">Out of Stock</button>`
         }
@@ -344,13 +314,13 @@ async function loadProductRatings() {
     const { data: allReviews } = await _supabase
       .from('reviews')
       .select('product_id, rating');
-
+    
     if (!allReviews) return;
 
     ratingElements.forEach(el => {
       const pid = parseInt(el.getAttribute('data-product-id'));
       const productReviews = allReviews.filter(r => r.product_id === pid);
-
+      
       if (productReviews.length === 0) {
         el.innerHTML = '<span style="color:#94a3b8;font-size:0.75rem;">No reviews yet</span>';
       } else {
@@ -368,12 +338,16 @@ async function loadProductRatings() {
 }
 
 // ============================================================
+// CART
+// ============================================================
+// ============================================================
 // CART (FINAL FIX - SAB KUCH INCLUDED)
 // ============================================================
 function addToCart(id, showNotice = true, btnElement = null) {
   let p = allProducts.find(x => x.id === id);
-
+  
   if (!p) {
+    // Agar product list me nahi hai, toh Supabase se fetch karo
     fetch(`${SUPABASE_URL}/rest/v1/products?id=eq.${id}`, {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
     }).then(res => res.json()).then(data => {
@@ -383,13 +357,13 @@ function addToCart(id, showNotice = true, btnElement = null) {
     });
     return;
   }
-
+  
   processCartAddition(p, showNotice, btnElement);
 }
 
 function processCartAddition(p, showNotice, btnElement) {
   const ex = cart.find(x => x.id === p.id);
-
+  
   if (ex) {
     ex.qty += 1;
     ex.price = p.price;
@@ -397,16 +371,16 @@ function processCartAddition(p, showNotice, btnElement) {
   } else {
     cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
   }
-
+  
   saveCart();
-  animateCartIcon();
+  animateCartIcon(); 
 
   if (btnElement) {
-    flyToCart(btnElement);
+    flyToCart(btnElement); 
     const originalHTML = btnElement.innerHTML;
     btnElement.classList.add('btn-added');
     btnElement.innerHTML = '<i class="fas fa-check"></i> Added!';
-
+    
     setTimeout(() => {
       btnElement.classList.remove('btn-added');
       btnElement.innerHTML = originalHTML;
@@ -415,8 +389,9 @@ function processCartAddition(p, showNotice, btnElement) {
     showToast(`"${p.name}" added to cart!`);
   }
 
-  const cartModal = document.getElementById('cartModal');
+    const cartModal = document.getElementById('cartModal');
   if (cartModal && cartModal.classList.contains('active')) {
+    // Agar checkout form open nahi hai, tabhi cart items refresh karo
     const checkoutForm = document.getElementById('checkoutForm');
     if (checkoutForm && checkoutForm.style.display === 'none') {
       renderCartUI();
@@ -427,7 +402,7 @@ function processCartAddition(p, showNotice, btnElement) {
 function animateCartIcon() {
   const cartBtn = document.querySelector('.cart-btn');
   const cartBadge = document.getElementById('cartCount');
-
+  
   if (cartBtn) {
     cartBtn.classList.add('cart-animate');
     setTimeout(() => cartBtn.classList.remove('cart-animate'), 600);
@@ -459,7 +434,7 @@ function updateCartBadge() {
 }
 
 // ============================================================
-// WISHLIST
+// WISHLIST (Waisa hi rahega)
 // ============================================================
 async function loadWishlist() {
   const { data: { session } } = await _supabase.auth.getSession();
@@ -502,7 +477,7 @@ async function updateHeartIcons() {
   const wishlistIds = new Set((data || []).map(w => w.product_id));
   document.querySelectorAll('.wishlist-heart').forEach(el => {
     const pid = parseInt(el.getAttribute('data-product-id'));
-    if (wishlistIds.has(pid)) { el.classList.add('active'); el.innerHTML = '<i class="fas fa-heart"></i>'; }
+    if (wishlistIds.has(pid)) { el.classList.add('active'); el.innerHTML = '<i class="fas fa-heart"></i>'; } 
     else { el.classList.remove('active'); el.innerHTML = '<i class="far fa-heart"></i>'; }
   });
 }
@@ -584,13 +559,13 @@ function renderCartUI() {
         </div>
       </div>
     `;
-
+    
     if (box) box.style.display = 'none';
     const pb = document.getElementById('proceedBtn');
     if (pb) pb.style.display = 'none';
     const ct = document.getElementById('cartFooter');
     if (ct) ct.style.display = 'none';
-    return;
+    return; 
   }
 
   // ==========================================
@@ -626,7 +601,7 @@ function renderCartUI() {
   const minOrderWarning = document.getElementById('minOrderWarning');
   const minOrderText = document.getElementById('minOrderText');
   const proceedBtnEl = document.getElementById('proceedBtn');
-
+  
   if (minOrderWarning && minOrderText && proceedBtnEl) {
     if (sub < MIN_ORDER_VALUE && cart.length > 0) {
       const remaining = MIN_ORDER_VALUE - sub;
@@ -643,6 +618,7 @@ function renderCartUI() {
     }
   }
 
+  // 👇 YAHAN SHIPPING AUR GRAND TOTAL CALCULATE HO RAHA HAI (Jo miss ho gaya tha) 👇
   const ship = sub >= FREE_SHIPPING_MIN ? 0 : SHIPPING_CHARGE;
   const grand = sub + ship;
   if (st) st.innerText = sub;
@@ -670,7 +646,7 @@ function changeQty(id, ch) {
   }
   saveCart();
   if (cart.length === 0) {
-    resetCartUI();
+    resetCartUI(); 
     renderCartUI();
   } else {
     renderCartUI();
@@ -679,6 +655,7 @@ function changeQty(id, ch) {
 
 function showCheckout() {
   if (!currentUserSession) {
+    // Check if custom modal function exists
     if (typeof showLoginRequiredModal === 'function') {
       showLoginRequiredModal('to place your order');
     } else {
@@ -762,7 +739,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function showLoginRequiredModal(actionMessage = 'to continue') {
   const existing = document.getElementById('customLoginRequiredModal');
   if (existing) existing.remove();
-
+  
   const modal = document.createElement('div');
   modal.id = 'customLoginRequiredModal';
   modal.style.cssText = `
@@ -778,7 +755,7 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
     padding: 20px;
     animation: fadeInModal 0.3s ease;
   `;
-
+  
   modal.innerHTML = `
     <style>
       @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
@@ -795,11 +772,11 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
       animation: slideUpModal 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
       position: relative;
     ">
-      <button onclick="document.getElementById('customLoginRequiredModal').remove()"
+      <button onclick="document.getElementById('customLoginRequiredModal').remove()" 
         style="position: absolute; top: 14px; right: 14px; background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; color: #64748b; display: flex; align-items: center; justify-content: center;">
         ✕
       </button>
-
+      
       <div style="
         width: 70px;
         height: 70px;
@@ -811,7 +788,7 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
         justify-content: center;
         font-size: 2rem;
       ">🔐</div>
-
+      
       <h3 style="
         font-family: 'Poppins', sans-serif;
         font-size: 1.3rem;
@@ -819,14 +796,14 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
         color: #0f172a;
         margin-bottom: 8px;
       ">Login Required</h3>
-
+      
       <p style="
         color: #64748b;
         font-size: 0.92rem;
         line-height: 1.6;
         margin-bottom: 24px;
       ">Please login ${actionMessage}. It only takes 10 seconds with email OTP.</p>
-
+      
       <button onclick="
         document.getElementById('customLoginRequiredModal').remove();
         openLoginModal();
@@ -845,8 +822,8 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
       ">
         🔓 Login Now
       </button>
-
-      <button onclick="document.getElementById('customLoginRequiredModal').remove()"
+      
+      <button onclick="document.getElementById('customLoginRequiredModal').remove()" 
         style="
           width: 100%;
           padding: 12px;
@@ -862,13 +839,13 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
       </button>
     </div>
   `;
-
+  
   document.body.appendChild(modal);
-
+  
   modal.addEventListener('click', (e) => {
     if (e.target === modal) modal.remove();
   });
-
+  
   const escHandler = (e) => {
     if (e.key === 'Escape') {
       modal.remove();
@@ -989,6 +966,9 @@ ${itemsList}
 }
 
 // ============================================================
+// ADMIN EMAIL ALERT (via EmailJS)
+// ============================================================
+// ============================================================
 // 📧 EMAIL SENDER (via Supabase Edge Function → Resend)
 // ============================================================
 async function sendEmailViaResend(to, subject, html, replyTo) {
@@ -1024,10 +1004,10 @@ async function sendEmailViaResend(to, subject, html, replyTo) {
 // ADMIN EMAIL ALERT
 // ============================================================
 function sendAdminEmailAlert(orderCode, name, phone, address, pincode, items, amount) {
-  const itemsList = Array.isArray(items)
+  const itemsList = Array.isArray(items) 
     ? items.map(i => `${i.name} (Qty: ${i.qty || 1}) - ₹${i.price * (i.qty || 1)}`).join('<br>')
     : 'N/A';
-
+  
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
       <div style="background: linear-gradient(135deg, #f97316, #ea580c); padding: 20px; border-radius: 10px 10px 0 0; text-align: center;">
@@ -1055,10 +1035,13 @@ function sendAdminEmailAlert(orderCode, name, phone, address, pincode, items, am
       </div>
     </div>
   `;
-
+  
   sendEmailViaResend('sparkcircuit.in@gmail.com', `New Order #${orderCode} - ₹${amount}`, html);
 }
 
+// ============================================================
+// CUSTOMER CONFIRMATION EMAIL (via EmailJS)
+// ============================================================
 // ============================================================
 // CUSTOMER CONFIRMATION EMAIL
 // ============================================================
@@ -1067,13 +1050,13 @@ function sendCustomerConfirmationEmail(orderData) {
     console.log('⚠️ No email — skipping customer email');
     return;
   }
-
+  
   const itemsList = Array.isArray(orderData.items)
     ? orderData.items.map(i => `<tr><td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${i.name}</td><td style="padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: center;">${i.qty || 1}</td><td style="padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: right;">₹${i.price * (i.qty || 1)}</td></tr>`).join('')
     : '';
-
+  
   const trackUrl = `https://sparkcircuit.in/track.html?order=${orderData.order_code}`;
-
+  
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f8fafc; padding: 20px;">
       <div style="background: linear-gradient(135deg, #f97316, #ea580c); padding: 30px; border-radius: 12px 12px 0 0; text-align: center;">
@@ -1081,19 +1064,19 @@ function sendCustomerConfirmationEmail(orderData) {
         <h1 style="color: white; margin: 0; font-size: 26px;">SparkCircuit</h1>
         <p style="color: rgba(255,255,255,0.9); margin: 5px 0 0; font-size: 13px;">TECH / R&D STUDIO</p>
       </div>
-
+      
       <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px;">
         <div style="text-align: center; margin-bottom: 25px;">
           <div style="display: inline-block; width: 60px; height: 60px; background: #dcfce7; border-radius: 50%; line-height: 60px; font-size: 30px;">✅</div>
           <h2 style="color: #15803d; margin: 15px 0 5px; font-size: 22px;">Order Confirmed!</h2>
           <p style="color: #64748b; margin: 0; font-size: 14px;">Thank you for your order, ${orderData.name}!</p>
         </div>
-
+        
         <div style="background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px; padding: 15px; text-align: center; margin-bottom: 20px;">
           <p style="color: #92400e; font-size: 12px; margin: 0 0 5px; text-transform: uppercase; letter-spacing: 1px;">Order ID</p>
           <h3 style="color: #ea580c; margin: 0; font-size: 20px;">#${orderData.order_code}</h3>
         </div>
-
+        
         <table style="width: 100%; margin-bottom: 20px;">
           <tr>
             <td style="padding: 8px 0; color: #64748b; font-size: 14px;">📅 Order Date:</td>
@@ -1104,7 +1087,7 @@ function sendCustomerConfirmationEmail(orderData) {
             <td style="padding: 8px 0; color: #0f172a; font-size: 14px; text-align: right;"><strong>${orderData.paymentStatus}</strong></td>
           </tr>
         </table>
-
+        
         <div style="background: #f8fafc; border-radius: 10px; padding: 15px; margin-bottom: 20px;">
           <h3 style="color: #0f172a; margin: 0 0 10px; font-size: 15px;">📦 Order Items</h3>
           <table style="width: 100%; border-collapse: collapse;">
@@ -1118,12 +1101,12 @@ function sendCustomerConfirmationEmail(orderData) {
             <tbody>${itemsList}</tbody>
           </table>
         </div>
-
+        
         <div style="background: linear-gradient(135deg, #f97316, #ea580c); padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
           <p style="color: rgba(255,255,255,0.9); margin: 0 0 5px; font-size: 13px;">TOTAL AMOUNT</p>
           <h2 style="color: white; margin: 0; font-size: 28px;">₹${orderData.grand}</h2>
         </div>
-
+        
         <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; padding: 15px; margin-bottom: 20px;">
           <h3 style="color: #075985; margin: 0 0 8px; font-size: 14px;">📍 Delivery Address</h3>
           <p style="color: #0369a1; margin: 0; font-size: 13px; line-height: 1.6;">
@@ -1132,11 +1115,11 @@ function sendCustomerConfirmationEmail(orderData) {
             ${orderData.city || ''}, ${orderData.state || ''} - ${orderData.pincode}
           </p>
         </div>
-
+        
         <div style="text-align: center; margin: 25px 0;">
           <a href="${trackUrl}" style="display: inline-block; background: linear-gradient(135deg, #22c55e, #16a34a); color: white; padding: 14px 30px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 14px;">🚚 Track Your Order</a>
         </div>
-
+        
         <div style="border-top: 1px solid #e2e8f0; padding-top: 20px; text-align: center;">
           <p style="color: #64748b; font-size: 12px; margin: 0 0 5px;">Need help? Contact us:</p>
           <p style="color: #ea580c; font-size: 13px; margin: 0;">
@@ -1144,13 +1127,13 @@ function sendCustomerConfirmationEmail(orderData) {
           </p>
         </div>
       </div>
-
+      
       <div style="text-align: center; padding: 20px;">
         <p style="color: #94a3b8; font-size: 11px; margin: 0;">© 2026 SparkCircuit | All Rights Reserved</p>
       </div>
     </div>
   `;
-
+  
   sendEmailViaResend(orderData.email, `Order Confirmed - #${orderData.order_code} | SparkCircuit`, html, 'sparkcircuit.in@gmail.com');
 }
 
@@ -1178,7 +1161,7 @@ async function processOrderToPayment() {
     return;
   }
 
-  const MIN_ORDER_VALUE = 99;
+    const MIN_ORDER_VALUE = 99;
   const currentSubtotal = cart.reduce((a, i) => a + i.price * i.qty, 0);
   if (currentSubtotal < MIN_ORDER_VALUE) {
     const remaining = MIN_ORDER_VALUE - currentSubtotal;
@@ -1327,21 +1310,21 @@ function calculateDeliveryDate() {
   const today = new Date();
   const minDays = 3;
   const maxDays = 5;
-
+  
   const minDate = new Date(today);
   minDate.setDate(today.getDate() + minDays);
-
+  
   const maxDate = new Date(today);
   maxDate.setDate(today.getDate() + maxDays);
-
+  
   const options = { day: 'numeric', month: 'short' };
   const minStr = minDate.toLocaleDateString('en-IN', options);
   const maxStr = maxDate.toLocaleDateString('en-IN', options);
-
-  const fullDate = maxDate.toLocaleDateString('en-IN', {
-    day: 'numeric', month: 'long', year: 'numeric'
+  
+  const fullDate = maxDate.toLocaleDateString('en-IN', { 
+    day: 'numeric', month: 'long', year: 'numeric' 
   });
-
+  
   return {
     minDate: minStr,
     maxDate: maxStr,
@@ -1398,7 +1381,7 @@ async function saveOrderToSupabase(orderData) {
           const newQty = Math.max(0, prod.stock_quantity - item.qty);
           await _supabase
             .from('products')
-            .update({
+            .update({ 
               stock_quantity: newQty,
               in_stock: newQty > 0
             })
@@ -1443,7 +1426,7 @@ async function saveOrderToSupabase(orderData) {
     });
 
     sendAdminEmailAlert(orderCode, name, phone, address, pincode, itemsCopy, grand);
-
+    
     sendCustomerConfirmationEmail({
       email: userEmail !== 'Guest' ? userEmail : null,
       order_code: orderCode,
@@ -1456,7 +1439,7 @@ async function saveOrderToSupabase(orderData) {
       grand: grand,
       paymentStatus: paymentStatus
     });
-
+     
     // Show success UI
     document.getElementById('checkoutForm').style.display = 'none';
     document.getElementById('priceSummaryBox').style.display = 'none';
@@ -1500,17 +1483,17 @@ function downloadInvoice() {
     alert('❌ Order data not found!');
     return;
   }
-
+  
   if (typeof window.jspdf === 'undefined') {
     alert('❌ PDF library not loaded. Refresh the page.');
     return;
   }
-
+  
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF('p', 'mm', 'a4');
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
-
+  
   const order = currentOrderData;
   const orange = [249, 115, 22];
   const dark = [15, 23, 42];
@@ -1547,7 +1530,7 @@ function downloadInvoice() {
   doc.text('Chennai, Tamil Nadu, India', 15, y + 12);
   doc.text('sparkcircuit.in@gmail.com', 15, y + 18);
   doc.text('+91 6374017186', 15, y + 24);
-
+  
   // CUSTOMER DETAILS
   doc.setTextColor(...dark);
   doc.setFont('helvetica', 'bold');
@@ -1559,7 +1542,7 @@ function downloadInvoice() {
   const addressText = order.delivery_address || '';
   const splitAddress = doc.splitTextToSize(addressText + ', ' + (order.pincode || ''), 75);
   doc.text(splitAddress, pageWidth / 2 + 10, y + 18);
-
+  
   // ORDER INFO BOX
   y = 90;
   doc.setFillColor(...lightGray);
@@ -1575,8 +1558,8 @@ function downloadInvoice() {
   doc.setTextColor(...orange);
   doc.text(order.order_code || 'N/A', 45, y + 8);
   doc.setTextColor(...gray);
-  doc.text(new Date(order.created_at || Date.now()).toLocaleDateString('en-IN', {
-    day: 'numeric', month: 'short', year: 'numeric'
+  doc.text(new Date(order.created_at || Date.now()).toLocaleDateString('en-IN', { 
+    day: 'numeric', month: 'short', year: 'numeric' 
   }), 45, y + 16);
   doc.setTextColor(...green);
   doc.setFont('helvetica', 'bold');
@@ -1584,7 +1567,7 @@ function downloadInvoice() {
   doc.setTextColor(...gray);
   doc.setFont('helvetica', 'normal');
   doc.text(order.payType || 'Online', pageWidth / 2 + 30, y + 16);
-
+  
   // ITEMS TABLE
   y = 125;
   doc.setFillColor(...dark);
@@ -1598,7 +1581,7 @@ function downloadInvoice() {
   doc.text('PRICE', 150, y + 7, { align: 'right' });
   doc.text('TOTAL', pageWidth - 20, y + 7, { align: 'right' });
   y += 10;
-
+  
   const items = Array.isArray(order.order_items) ? order.order_items : [];
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...dark);
@@ -1624,11 +1607,11 @@ function downloadInvoice() {
     doc.setFont('helvetica', 'normal');
     y += 10;
   });
-
+  
   doc.setDrawColor(...gray);
   doc.setLineWidth(0.2);
   doc.line(15, y, pageWidth - 15, y);
-
+  
   // TOTALS
   y += 8;
   const totalsX = pageWidth - 80;
@@ -1656,7 +1639,7 @@ function downloadInvoice() {
   doc.text('GRAND TOTAL:', totalsX, y + 3);
   doc.setFontSize(12);
   doc.text('Rs. ' + (order.grand_total || 0).toFixed(2), pageWidth - 20, y + 3, { align: 'right' });
-
+  
   // FOOTER
   const footerY = pageHeight - 50;
   doc.setDrawColor(...orange);
@@ -1677,7 +1660,7 @@ function downloadInvoice() {
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(8);
   doc.text('SparkCircuit — Architecture Engineered for Next-Gen Solutions', pageWidth / 2, pageHeight - 5, { align: 'center' });
-
+  
   const fileName = `SparkCircuit-Invoice-${order.order_code || 'Order'}.pdf`;
   doc.save(fileName);
   console.log('✅ Invoice downloaded:', fileName);
@@ -1734,7 +1717,7 @@ function showSuggestions(query) {
   container.innerHTML = matches.map((p, idx) => {
     const img = p.image && p.image.trim() !== '' ? p.image : defaultImg;
     return `
-      <a href="${getProductUrl(p)}" class="suggestion-item" data-index="${idx}">
+      <a href="product.html?id=${p.id}" class="suggestion-item" data-index="${idx}">
         <img src="${img}" alt="${p.name}" class="suggestion-img" onerror="this.src='${defaultImg}'">
         <div class="suggestion-info">
           <div class="suggestion-name">${highlightMatch(p.name, query)}</div>
@@ -1748,7 +1731,7 @@ function showSuggestions(query) {
   container.classList.add('active');
   currentSuggestionIndex = -1;
 
-  renderProducts(allProducts.filter(p =>
+  renderProducts(allProducts.filter(p => 
     p.name.toLowerCase().includes(q) || (p.category && p.category.toLowerCase().includes(q))
   ));
 }
@@ -1829,30 +1812,9 @@ function filterCategory(cat) {
   else renderProducts(allProducts.filter(p => p.category === cat));
 }
 
-// ============================================================
-// ✅ goToProductPage — UPDATED TO NEW URL
-// ============================================================
-function goToProductPage(id) {
+function goToProductPage(id) { 
   console.log('🔵 goToProductPage called with id:', id);
-  const product = allProducts.find(p => String(p.id) === String(id));
-  if (product) {
-    window.location.href = getProductUrl(product);
-  } else {
-    // Fallback: agar product list me nahi mila, toh supabase se fetch karo
-    if (_supabase) {
-      _supabase.from('products').select('*').eq('id', id).single().then(({ data }) => {
-        if (data) {
-          window.location.href = getProductUrl(data);
-        } else {
-          window.location.href = '/shop.html';
-        }
-      }).catch(() => {
-        window.location.href = '/shop.html';
-      });
-    } else {
-      window.location.href = '/shop.html';
-    }
-  }
+  window.location.href = 'product.html?id=' + id; 
 }
 
 // ============================================================
@@ -1862,7 +1824,7 @@ async function openMyOrdersModal() {
   const m = document.getElementById('myOrdersModal');
   const c = document.getElementById('userOrdersList');
   if (m) m.style.display = 'flex';
-
+  
   document.body.style.overflow = 'hidden';
 
   const { data: { session } } = await _supabase.auth.getSession();
@@ -1877,7 +1839,7 @@ async function openMyOrdersModal() {
 
   c.innerHTML = data.map(o => {
     const status = o.order_status || 'Pending';
-
+    
     const statusColors = {
       'Pending': '#f97316',
       'Processing': '#3b82f6',
@@ -1887,38 +1849,38 @@ async function openMyOrdersModal() {
       'Cancelled': '#ef4444'
     };
     const statusColor = statusColors[status] || '#f97316';
-
+    
     const canCancel = (status === 'Pending' || status === 'Processing' || status === 'Confirmed');
-
+    
     const trackUrl = `track.html?order=${o.order_code || 'SPC-' + o.id}&phone=${o.customer_phone}`;
-
+    
     return `
     <div class="order-mini">
       <div style="display:flex;justify-content:space-between;margin-bottom:10px;align-items:center;flex-wrap:wrap;gap:8px;">
         <strong style="color:#ea580c;font-size:1rem;">Order #${o.order_code || 'SPC-' + o.id}</strong>
         <span style="background:${statusColor}20; color:${statusColor}; padding:4px 10px; border-radius:6px; font-size:0.72rem; font-weight:700; letter-spacing:0.5px;">${status.toUpperCase()}</span>
       </div>
-
+      
       <p class="muted small" style="margin-bottom:6px;">📅 ${o.created_at ? new Date(o.created_at).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) : 'N/A'}</p>
       <p class="muted small" style="margin-bottom:6px;">📍 ${o.delivery_address} (${o.pincode})</p>
       <p class="muted small" style="color:#22c55e;font-weight:600;margin-bottom:10px;">🚚 Expected: ${calculateDeliveryDate().fullDate}</p>
-
+      
       <div class="order-items-mini">
         ${Array.isArray(o.order_items) ? o.order_items.map(i => `• ${i.name} (x${i.qty||1}) - ₹${i.price}`).join('<br>') : 'N/A'}
       </div>
-
+      
       <div style="text-align:right;font-weight:800;color:#22c55e;margin-top:10px;font-size:1.05rem;">Total: ₹${o.grand_total}</div>
-
+      
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:8px; margin-top:14px; padding-top:14px; border-top:1px solid #334155;">
-
+        
         <a href="${trackUrl}" style="display:flex; align-items:center; justify-content:center; gap:6px; background:linear-gradient(135deg,#22c55e,#16a34a); color:#fff; border:none; padding:10px 12px; border-radius:8px; cursor:pointer; font-size:0.8rem; font-weight:700; text-decoration:none; transition:0.25s;">
           <i class="fas fa-truck"></i> Track
         </a>
-
+        
         <button onclick='downloadInvoiceFromOrders(${JSON.stringify(o).replace(/'/g, "&apos;")})' style="display:flex; align-items:center; justify-content:center; gap:6px; background:#0f172a; color:#fff; border:1px solid #334155; padding:10px 12px; border-radius:8px; cursor:pointer; font-size:0.8rem; font-weight:700; transition:0.25s;">
           <i class="fas fa-file-pdf"></i> Invoice
         </button>
-
+        
         ${canCancel ? `
           <button onclick="cancelOrder(${o.id})" style="display:flex; align-items:center; justify-content:center; gap:6px; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; border:none; padding:10px 12px; border-radius:8px; cursor:pointer; font-size:0.8rem; font-weight:700; transition:0.25s;">
             <i class="fas fa-times-circle"></i> Cancel
@@ -1928,7 +1890,7 @@ async function openMyOrdersModal() {
             <i class="fas fa-lock"></i> Locked
           </button>
         `}
-
+        
       </div>
     </div>
   `;
@@ -1966,16 +1928,16 @@ async function cancelOrder(orderId) {
   if (!confirm('⚠️ Are you sure you want to cancel this order?\n\nThis action cannot be undone.')) {
     return;
   }
-
+  
   const reason = prompt('Optional: Why are you cancelling this order?\n\n(e.g. Ordered by mistake, Found cheaper elsewhere, Changed my mind)');
   const cancelReason = reason && reason.trim() !== '' ? reason.trim() : 'Customer cancelled';
-
+  
   const { data: { session } } = await _supabase.auth.getSession();
   if (!session?.user?.email) {
     alert('❌ Please login first');
     return;
   }
-
+  
   try {
     const { data: order, error: fetchErr } = await _supabase
       .from('orders')
@@ -1983,18 +1945,18 @@ async function cancelOrder(orderId) {
       .eq('id', orderId)
       .eq('user_email', session.user.email)
       .single();
-
+    
     if (fetchErr || !order) {
       showToast('Order not found', 'error');
       return;
     }
-
+    
     const status = order.order_status || 'Pending';
     if (status === 'Shipped' || status === 'Delivered' || status === 'Cancelled') {
       showToast(`Cannot cancel order. Status is already "${status}".`, 'error');
       return;
     }
-
+    
     const { error: updateErr } = await _supabase
       .from('orders')
       .update({
@@ -2003,9 +1965,9 @@ async function cancelOrder(orderId) {
         cancelled_at: new Date().toISOString()
       })
       .eq('id', orderId);
-
+    
     if (updateErr) throw updateErr;
-
+    
     const items = Array.isArray(order.order_items) ? order.order_items : [];
     for (const item of items) {
       try {
@@ -2014,7 +1976,7 @@ async function cancelOrder(orderId) {
           .select('stock_quantity, name')
           .eq('id', item.id)
           .single();
-
+        
         if (prod && prod.stock_quantity !== null && prod.stock_quantity !== undefined) {
           const newQty = prod.stock_quantity + (item.qty || 1);
           await _supabase
@@ -2030,8 +1992,8 @@ async function cancelOrder(orderId) {
         console.error('Stock restore failed:', e);
       }
     }
-
-    sendTelegramCancelAlert({
+    
+        sendTelegramCancelAlert({
       order_code: order.order_code || 'SPC-' + order.id,
       customer_name: order.customer_name,
       customer_phone: order.customer_phone,
@@ -2040,15 +2002,15 @@ async function cancelOrder(orderId) {
       cancel_reason: cancelReason,
       payment_status: order.payment_status
     });
-
+    
     let cancelMsg = `Order #${order.order_code || 'SPC-' + order.id} cancelled successfully.`;
     if (order.payment_status === 'Paid via Razorpay') {
       cancelMsg += ` Refund will be processed in 5-7 days.`;
     }
-
+    
     showToast(cancelMsg);
     openMyOrdersModal();
-
+    
   } catch (err) {
     console.error('Cancel order error:', err);
     showToast('Failed to cancel order. Please try again.', 'error');
@@ -2060,11 +2022,11 @@ async function cancelOrder(orderId) {
 // ============================================================
 async function sendTelegramCancelAlert(orderData) {
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
-
+  
   const itemsList = Array.isArray(orderData.order_items)
     ? orderData.order_items.map(i => `• ${i.name} (x${i.qty || 1})`).join('\n')
     : 'No items';
-
+  
   const message = `
 ❌ <b>ORDER CANCELLED — SparkCircuit</b>
 
@@ -2086,7 +2048,7 @@ ${orderData.cancel_reason}
 
 📱 <a href="https://wa.me/91${orderData.customer_phone}">WhatsApp Customer</a>
   `.trim();
-
+  
   try {
     await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
       method: 'POST',
@@ -2192,62 +2154,62 @@ async function subscribeNewsletter() {
   if (!_supabase && typeof supabase !== 'undefined') {
     _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   }
-
+  
   if (!_supabase) {
     showToast('Connection error. Please refresh the page.', 'error');
     return;
   }
-
+  
   const emailInput = document.getElementById('newsletterEmail');
   const email = emailInput.value.trim();
-
+  
   if (!email || !email.includes('@') || !email.includes('.')) {
     showToast('Please enter a valid email address!', 'error');
     return;
   }
-
+  
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     showToast('Please enter a valid email address!', 'error');
     return;
   }
-
+  
   const btn = document.querySelector('.newsletter-box button');
   const originalHTML = btn ? btn.innerHTML : '';
   if (btn) {
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     btn.disabled = true;
   }
-
+  
   try {
     const { data: existing } = await _supabase
       .from('newsletter')
       .select('id')
       .eq('email', email.toLowerCase())
       .single();
-
+    
     if (existing) {
       showToast('You are already subscribed to our newsletter!');
       emailInput.value = '';
       if (btn) { btn.innerHTML = originalHTML; btn.disabled = false; }
       return;
     }
-
+    
     const { error } = await _supabase
       .from('newsletter')
-      .insert([{
+      .insert([{ 
         email: email.toLowerCase(),
         source: 'website_footer'
       }]);
-
+    
     if (error) throw error;
-
+    
     showToast('Thank you for subscribing!');
     emailInput.value = '';
-
+    
   } catch (err) {
     console.error('Newsletter error:', err);
-
+    
     if (err.message && err.message.includes('duplicate')) {
       showToast('You are already subscribed!');
     } else {
