@@ -1,5 +1,10 @@
+
 {
   "rewrites": [
+    {
+      "source": "/products/:slug-:id",
+      "destination": "/product.html?id=:id"
+    },
     {
       "source": "/sitemap.xml",
       "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker"
