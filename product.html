@@ -838,6 +838,15 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
     }
   }
 
+  function getCleanProductUrl(product) {
+    const slug = String(product?.name || '')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    return `/products/${slug}-${product.id}`;
+  }
+
   function renderRecentlyViewed(currentProductId) {
     const section = document.getElementById('recentlySection');
     const container = document.getElementById('recentlyProducts');
@@ -861,7 +870,7 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
           ? Math.round(((p.original_price - p.price) / p.original_price) * 100) : 0;
         
         return `
-         <a href="/product.html?id=${p.id}" class="recently-card">
+         <a href="${getCleanProductUrl(p)}" class="recently-card">
             ${discount > 0 ? `<span class="recently-badge">${discount}% OFF</span>` : ''}
             <img src="${img}" alt="${p.name}" onerror="this.src='${DEFAULT_IMG}'">
             <span class="recently-cat">${p.category || 'Electronics'}</span>
@@ -1166,7 +1175,7 @@ if (
           ? Math.round(((p.original_price - p.price) / p.original_price) * 100) : 0;
 
         return `
-         <a href="/product.html?id=${p.id}" class="related-card">
+         <a href="${getCleanProductUrl(p)}" class="related-card">
             <img src="${img}" alt="${p.name}" onerror="this.src='${DEFAULT_IMG}'">
             <span class="related-cat">${p.category || 'Electronics'}</span>
             <h4>${p.name}</h4>
@@ -1358,7 +1367,7 @@ function addToCartFromDetail(id, btnElement) {
     const schemaEl = document.getElementById('productSchema');
     if (!schemaEl) return;
     
-    const productUrl = `https://www.sparkcircuit.in/product.html?id=${product.id}`;
+    const productUrl = `https://sparkcircuit.in${getCleanProductUrl(product)}`;
     const imageUrl = (product.image && product.image.trim() !== '') 
       ? product.image 
       : 'https://mrqvzmtdsohvzsnryogp.supabase.co/storage/v1/object/public/product-images/sparkcircuit-logo.jpeg';
