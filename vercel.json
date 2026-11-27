@@ -1,9 +1,19 @@
-
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
-      "source": "/products/:slug-:id",
-      "destination": "/product.html?id=:id"
+      "source": "/products/:path*",
+      "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker?path=/products/:path*"
+    },
+    {
+      "source": "/product.html",
+      "has": [
+        {
+          "type": "query",
+          "key": "id"
+        }
+      ],
+      "destination": "/api/product"
     },
     {
       "source": "/sitemap.xml",
