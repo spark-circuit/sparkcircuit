@@ -2,8 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
-      "source": "/products/:slug-:id",
-      "destination": "/api/product?id=:id&render=1"
+       "source": "/products/:path*",
+     "destination": "/api/product?path=:path*"
     },
     {
       "source": "/product.html",
