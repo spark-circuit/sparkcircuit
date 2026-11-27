@@ -256,6 +256,23 @@ const id = idMatch ? idMatch[1] : "";
       `$1${getProductContent(product)}$3`
     );
 
+    // Server-render real lower-page product fields for crawlers and users.
+    const serverDescription = escapeHtml(
+      String(product.description || getDescription(product)).replace(/\s+/g, " ").trim()
+    );
+    html = html.replace(
+      /(<p\b[^>]*\bid=["']pdDescription["'][^>]*>)[\s\S]*?(<\/p>)/i,
+      `$1${serverDescription}$2`
+    );
+    html = html.replace(
+      /(<[^>]*\bid=["']bcCurrentPage["'][^>]*>)[\s\S]*?(<\/[^>]+>)/i,
+      `$1${escapeHtml(product.name)}$2`
+    );
+    html = html.replace(
+      /(<div\b[^>]*\bid=["']reviewsList["'][^>]*>)[\s\S]*?(<\/div>)/i,
+      `$1<p style="color:#64748b;text-align:center;padding:20px;">No reviews yet.</p>$2`
+    );
+
     // Product data for frontend JavaScript
     const bootstrap = `
       <script>
