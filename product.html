@@ -419,15 +419,15 @@
 <!-- CATEGORY STRIP -->
 <div class="cat-strip">
   <div class="cat-strip-inner">
-    <a href="shop.html">All Products</a>
-    <a href="shop.html">Microcontrollers</a>
-    <a href="shop.html">Sensors</a>
-    <a href="shop.html">Power Supply</a>
-    <a href="shop.html">Battery/BMS</a>
-    <a href="shop.html">Interface Module</a>
-    <a href="shop.html">Motor</a>
-    <a href="shop.html">Servo & Stepper</a>
-    <a href="shop.html">Display</a>
+    <a href="/shop.html">All Products</a>
+    <a href="/shop.html">Microcontrollers</a>
+    <a href="/shop.html">Sensors</a>
+    <a href="/shop.html">Power Supply</a>
+    <a href="/shop.html">Battery/BMS</a>
+    <a href="/shop.html">Interface Module</a>
+    <a href="/shop.html">Motor</a>
+    <a href="/shop.html">Servo & Stepper</a>
+    <a href="/shop.html">Display</a>
   </div>
 </div>
 
@@ -738,7 +738,7 @@ function showLoginRequiredModal(actionMessage = 'to continue') {
       
       <button onclick="
         document.getElementById('customLoginRequiredModal').remove();
-        window.location.href = 'shop.html';
+        window.location.href = '/shop.html';
       " style="
         width: 100%;
         padding: 14px;
@@ -1353,7 +1353,7 @@ function addToCartFromDetail(id, btnElement) {
       
       localStorage.setItem('sc_cart', JSON.stringify(cart));
       localStorage.setItem('sc_pending_cart', JSON.stringify({ id, action: 'buy' }));
-      window.location.href = 'shop.html';
+      window.location.href = '/shop.html';
     })
     .catch(err => {
       console.error('Buy now failed:', err);
