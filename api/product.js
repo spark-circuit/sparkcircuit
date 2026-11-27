@@ -43,6 +43,13 @@ function getDescription(p) {
     .slice(0, 160);
 }
 
+function getFullDescription(p) {
+  return String(
+    p.description ||
+      `Buy ${p.name} online from SparkCircuit. Genuine electronic components with fast delivery across India.`
+  ).trim();
+}
+
 function getPrice(value) {
   const n = Number(value);
 
@@ -56,16 +63,6 @@ function getPrice(value) {
   }).format(n);
 }
 
-
-/*
- * Replace the contents of an element by ID.
- *
- * Example:
- * <p id="pdDescription">Loading...</p>
- *
- * becomes:
- * <p id="pdDescription">Actual product description</p>
- */
 function replaceElementById(html, id, innerHtml) {
   const openRegex = new RegExp(
     `<([a-z][\\w:-]*)\\b[^>]*\\bid=["']${id}["'][^>]*>`,
@@ -80,15 +77,11 @@ function replaceElementById(html, id, innerHtml) {
 
   const tagName = match[1];
 
-  const start =
-    match.index + match[0].length;
+  const start = match.index + match[0].length;
 
   const rest = html.slice(start);
 
-  const closeRegex = new RegExp(
-    `</${tagName}>`,
-    "i"
-  );
+  const closeRegex = new RegExp(`</${tagName}>`, "i");
 
   const closeMatch = closeRegex.exec(rest);
 
@@ -96,8 +89,7 @@ function replaceElementById(html, id, innerHtml) {
     return html;
   }
 
-  const closeIndex =
-    start + closeMatch.index;
+  const closeIndex = start + closeMatch.index;
 
   return (
     html.slice(0, start) +
@@ -106,36 +98,19 @@ function replaceElementById(html, id, innerHtml) {
   );
 }
 
-
-/*
- * Server-render product information that normally
- * appears only after JavaScript runs.
- *
- * This is important for Google/Merchant Center because
- * Google can read the raw HTML returned by Vercel.
- */
 function renderServerProductTabs(html, product) {
-  const description = String(
-    product.description ||
-      `Buy ${product.name} online from SparkCircuit. Genuine electronic components with fast delivery across India.`
-  ).trim();
-
-  const descriptionHtml = description
-    ? `
-      <div class="server-product-description">
-        ${escapeHtml(description).replace(/\r?\n/g, "<br>")}
-      </div>
-    `
-    : `
-      <p>Product details will be updated soon.</p>
-    `;
+  const fullDescription = getFullDescription(product);
 
   /*
-   * Replace:
-   * <p id="pdDescription">Loading...</p>
-   *
-   * with the actual product description.
+   * IMPORTANT:
+   * pdDescription already exists as a <p> in product.html.
+   * Therefore we put only text + <br> inside it.
+   * We DO NOT put a <div> inside <p>.
    */
+  const descriptionHtml = fullDescription
+    ? escapeHtml(fullDescription).replace(/\r?\n/g, "<br>")
+    : "Product details will be updated soon.";
+
   html = replaceElementById(
     html,
     "pdDescription",
@@ -143,16 +118,47 @@ function renderServerProductTabs(html, product) {
   );
 
   /*
-   * Do not send "Loading reviews..." to Google.
+   * Make the product tabs visible in the server-rendered HTML.
+   * JavaScript can still control them later.
+   */
+  html = html.replace(
+    /(<[^>]*\bid=["']pdTabsSection["'][^>]*?)\sstyle=["'][^"']*["']/i,
+    '$1 style="display:block;"'
+  );
+
+  /*
+   * If the template does not already contain a style attribute,
+   * add one.
+   */
+  if (
+    !/<[^>]*\bid=["']pdTabsSection["'][^>]*\sstyle=["']/i.test(html)
+  ) {
+    html = html.replace(
+      /(<[^>]*\bid=["']pdTabsSection["'][^>]*)(>)/i,
+      '$1 style="display:block;"$2'
+    );
+  }
+
+  /*
+   * Do not leave the server-rendered page with a generic
+   * "Loading reviews..." message.
    */
   html = html.replace(
     /Loading reviews\.\.\./gi,
     "Customer reviews are displayed here when available."
   );
 
+  /*
+   * Keep related products from showing a misleading loading
+   * message in the raw HTML.
+   */
+  html = html.replace(
+    /Loading similar products\.\.\./gi,
+    "Related products will be displayed here when available."
+  );
+
   return html;
 }
-
 
 function getProductContent(p) {
   const name = escapeHtml(p.name);
@@ -184,9 +190,7 @@ function getProductContent(p) {
       <div class="pd-grid">
 
         <div class="pd-gallery">
-
           <div class="pd-main-image">
-
             <img
               id="mainProductImage"
               src="${image}"
@@ -195,11 +199,8 @@ function getProductContent(p) {
               fetchpriority="high"
               style="max-width:100%;height:auto;"
             >
-
           </div>
-
         </div>
-
 
         <div class="pd-info">
 
@@ -217,32 +218,15 @@ function getProductContent(p) {
           </div>
 
           <div class="pd-stock ${
-            inStock
-              ? "in-stock"
-              : "out-of-stock"
+            inStock ? "in-stock" : "out-of-stock"
           }">
-
-            ${
-              inStock
-                ? "In Stock"
-                : "Out of Stock"
-            }
-
+            ${inStock ? "In Stock" : "Out of Stock"}
           </div>
-
 
           <div class="pd-server-description">
-
-            <h2>
-              Product Description
-            </h2>
-
-            <p>
-              ${description}
-            </p>
-
+            <h2>Product Description</h2>
+            <p>${description}</p>
           </div>
-
 
           <p>
             Genuine electronic components from SparkCircuit.
@@ -255,68 +239,41 @@ function getProductContent(p) {
   `;
 }
 
-
 export default async function handler(req, res) {
-
   try {
-
     const requestUrl = new URL(
       req.url,
       "https://sparkcircuit.in"
     );
 
-
     /*
-     * Get product path or ID.
+     * Product path can come from:
      *
-     * Examples:
+     * /products/product-name-45
      *
-     * /products/water-level-depth-sensor-module-45
+     * or:
      *
-     * becomes:
+     * /api/product?id=45
      *
-     * path = water-level-depth-sensor-module-45
-     *
-     * Legacy:
+     * or legacy:
      *
      * /product.html?id=45
-     *
-     * becomes:
-     *
-     * id = 45
      */
     const pathValue =
       requestUrl.searchParams.get("path") ||
       requestUrl.searchParams.get("id") ||
       "";
 
-
     /*
-     * Extract the final numeric product ID.
-     *
-     * Example:
-     *
-     * water-level-depth-sensor-module-45
-     *
-     * => 45
+     * Extract numeric product ID from the end.
      */
-    const idMatch =
-      pathValue.match(/(\d+)\/?$/);
+    const idMatch = pathValue.match(/(\d+)\/?$/);
 
-    const id =
-      idMatch
-        ? idMatch[1]
-        : "";
-
+    const id = idMatch ? idMatch[1] : "";
 
     if (!/^\d+$/.test(id)) {
-
-      return res
-        .status(404)
-        .send("Product not found");
-
+      return res.status(404).send("Product not found");
     }
-
 
     /*
      * Fetch product from Supabase.
@@ -331,9 +288,7 @@ export default async function handler(req, res) {
       }
     );
 
-
     if (!response.ok) {
-
       console.error(
         "Supabase product error:",
         response.status
@@ -342,72 +297,46 @@ export default async function handler(req, res) {
       return res
         .status(502)
         .send("Unable to load product");
-
     }
 
+    const products = await response.json();
 
-    const products =
-      await response.json();
-
-    const product =
-      products?.[0];
-
+    const product = products?.[0];
 
     if (!product) {
-
-      return res
-        .status(404)
-        .send("Product not found");
-
+      return res.status(404).send("Product not found");
     }
 
-
     /*
-     * Generate clean product URL.
-     *
-     * Example:
-     *
-     * /products/water-level-depth-sensor-module-45
+     * Build canonical clean product URL.
      */
     const productUrl =
       `${BASE_URL}/products/${slugify(
         product.name
       )}-${product.id}`;
 
-
     /*
-     * OLD URL:
-     *
-     * /product.html?id=45
-     *
-     * Redirect permanently to:
-     *
-     * /products/product-name-45
+     * Legacy product.html?id=45
+     * permanently redirects to clean URL.
      */
-    if (req.query?.legacy === "1") {
-
-      return res.redirect(
-        301,
-        productUrl
-      );
-
+    if (
+      requestUrl.searchParams.get("legacy") === "1"
+    ) {
+      return res.redirect(301, productUrl);
     }
 
-
     /*
-     * Fetch the existing product page template.
+     * Load the existing product.html template.
      *
-     * This keeps the existing SparkCircuit
-     * product page design and JavaScript.
+     * We are NOT replacing the whole design.
+     * We are using the existing template and injecting
+     * product data into it.
      */
-    const templateResponse =
-      await fetch(
-        `${BASE_URL}/product.html?template=1`
-      );
-
+    const templateResponse = await fetch(
+      `${BASE_URL}/product.html?template=1`
+    );
 
     if (!templateResponse.ok) {
-
       console.error(
         "Product template error:",
         templateResponse.status
@@ -416,38 +345,38 @@ export default async function handler(req, res) {
       return res
         .status(502)
         .send("Product template unavailable");
-
     }
 
-
-    let html =
-      await templateResponse.text();
-
+    let html = await templateResponse.text();
 
     /*
-     * PRODUCT SEO DATA
+     * SEO TITLE
      */
     const title =
       `${product.name} | Buy Online in India | SparkCircuit`;
 
+    /*
+     * META DESCRIPTION
+     */
     const description =
       getDescription(product);
 
+    /*
+     * PRODUCT IMAGE
+     */
     const image =
       getImage(product);
 
-
     /*
-     * SEO TITLE
+     * Replace <title>
      */
     html = html.replace(
       /<title>[\s\S]*?<\/title>/i,
       `<title>${escapeHtml(title)}</title>`
     );
 
-
     /*
-     * META DESCRIPTION
+     * Replace meta description.
      */
     html = html.replace(
       /<meta\s+name=["']description["'][^>]*>/i,
@@ -456,9 +385,8 @@ export default async function handler(req, res) {
       )}">`
     );
 
-
     /*
-     * CANONICAL URL
+     * Replace canonical URL.
      */
     html = html.replace(
       /<link\s+rel=["']canonical["'][^>]*>/i,
@@ -467,122 +395,70 @@ export default async function handler(req, res) {
       )}">`
     );
 
-
     /*
-     * OPEN GRAPH
+     * Open Graph metadata.
      */
     const og = [
-
-      [
-        "og:title",
-        title
-      ],
-
-      [
-        "og:description",
-        description
-      ],
-
-      [
-        "og:image",
-        image
-      ],
-
-      [
-        "og:url",
-        productUrl
-      ],
-
-      [
-        "og:type",
-        "product"
-      ]
-
+      ["og:title", title],
+      ["og:description", description],
+      ["og:image", image],
+      ["og:url", productUrl],
+      ["og:type", "product"]
     ];
 
-
     for (const [key, value] of og) {
-
       const tag =
         `<meta property="${key}" content="${escapeHtml(
           value
         )}">`;
 
-      const regex =
-        new RegExp(
-          `<meta\\s+property=["']${key}["'][^>]*>`,
-          "i"
-        );
-
+      const regex = new RegExp(
+        `<meta\\s+property=["']${key}["'][^>]*>`,
+        "i"
+      );
 
       if (regex.test(html)) {
-
-        html =
-          html.replace(
-            regex,
-            tag
-          );
-
+        html = html.replace(
+          regex,
+          tag
+        );
       } else {
-
-        html =
-          html.replace(
-            /<\/head>/i,
-            `${tag}\n</head>`
-          );
-
+        html = html.replace(
+          /<\/head>/i,
+          `${tag}\n</head>`
+        );
       }
-
     }
 
-
     /*
-     * PRODUCT STRUCTURED DATA
+     * Product JSON-LD schema.
      */
     const schema = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "@id": `${productUrl}#product`,
 
-      "@context":
-        "https://schema.org",
+      name: product.name,
 
-      "@type":
-        "Product",
-
-      "@id":
-        `${productUrl}#product`,
-
-      name:
-        product.name,
-
-      image:
-        [image],
+      image: [image],
 
       description:
         product.description ||
         description,
 
-      sku:
-        `SPC-${product.id}`,
+      sku: `SPC-${product.id}`,
 
       brand: {
-
-        "@type":
-          "Brand",
-
-        name:
-          "SparkCircuit"
-
+        "@type": "Brand",
+        name: "SparkCircuit"
       },
 
       offers: {
+        "@type": "Offer",
 
-        "@type":
-          "Offer",
+        url: productUrl,
 
-        url:
-          productUrl,
-
-        priceCurrency:
-          "INR",
+        priceCurrency: "INR",
 
         price:
           String(
@@ -592,27 +468,18 @@ export default async function handler(req, res) {
         availability:
           (
             product.stock_quantity != null
-              ? Number(
-                  product.stock_quantity
-                ) > 0
+              ? Number(product.stock_quantity) > 0
               : product.in_stock !== false
           )
             ? "https://schema.org/InStock"
             : "https://schema.org/OutOfStock"
-
       }
-
     };
-
 
     const schemaHtml =
       `<script type="application/ld+json" id="productSchema">${JSON.stringify(
         schema
-      ).replace(
-        /</g,
-        "\\u003c"
-      )}</script>`;
-
+      ).replace(/</g, "\\u003c")}</script>`;
 
     /*
      * Replace existing Product schema.
@@ -622,24 +489,13 @@ export default async function handler(req, res) {
       schemaHtml
     );
 
-
     /*
-     * SERVER-RENDER MAIN PRODUCT CONTENT
-     *
-     * This ensures Google can see:
-     *
-     * - Product name
-     * - Price
-     * - Stock
-     * - Image
-     * - Main description
+     * Server-render the main product section.
      */
     const containerRegex =
       /(<([a-z][\w:-]*)\b[^>]*\bid=["']productDetailContent["'][^>]*>)[\s\S]*?(<\/\2>)/i;
 
-
     if (!containerRegex.test(html)) {
-
       console.error(
         "Product detail container missing"
       );
@@ -649,100 +505,68 @@ export default async function handler(req, res) {
         .send(
           "Product template structure invalid"
         );
-
     }
-
 
     html = html.replace(
       containerRegex,
-      `$1${getProductContent(
-        product
-      )}$3`
+      `$1${getProductContent(product)}$3`
     );
 
-
     /*
-     * IMPORTANT:
+     * Server-render description/specification tab content.
      *
-     * Server-render the Description tab.
-     *
-     * The frontend page may initially contain:
-     *
-     * <p id="pdDescription">
-     *   Loading...
-     * </p>
-     *
-     * Google/Merchant Center can read that
-     * before JavaScript finishes.
-     *
-     * This replaces it with the actual
-     * product description.
+     * This is important for crawlers because the
+     * actual product description is now present
+     * directly in the HTML source.
      */
-    html =
-      renderServerProductTabs(
-        html,
-        product
-      );
-
+    html = renderServerProductTabs(
+      html,
+      product
+    );
 
     /*
-     * PRODUCT DATA FOR FRONTEND JAVASCRIPT
-     *
-     * The existing product page JS can continue
-     * using the complete Supabase product object.
+     * Expose complete product data to the existing
+     * frontend JavaScript.
      */
     const bootstrap = `
       <script>
         window.__SPARKCIRCUIT_PRODUCT__ =
-          ${JSON.stringify(
-            product
-          ).replace(
+          ${JSON.stringify(product).replace(
             /</g,
             "\\u003c"
           )};
 
         window.__SPARKCIRCUIT_PRODUCT_URL__ =
-          ${JSON.stringify(
-            productUrl
-          )};
+          ${JSON.stringify(productUrl)};
       </script>
     `;
 
+    html = html.replace(
+      /<\/head>/i,
+      `${bootstrap}</head>`
+    );
 
     /*
-     * Add bootstrap data before </head>.
-     */
-    html =
-      html.replace(
-        /<\/head>/i,
-        `${bootstrap}</head>`
-      );
-
-
-    /*
-     * RESPONSE HEADERS
+     * Response headers.
      */
     res.setHeader(
       "Content-Type",
       "text/html; charset=utf-8"
     );
 
-
     res.setHeader(
       "Cache-Control",
       "public, s-maxage=300, stale-while-revalidate=86400"
     );
 
-
     /*
-     * SEND FINAL SERVER-RENDERED PAGE
+     * Return final server-rendered product page.
      */
     return res
       .status(200)
       .send(html);
 
   } catch (error) {
-
     console.error(
       "Product rendering error:",
       error
@@ -753,7 +577,5 @@ export default async function handler(req, res) {
       .send(
         "Unable to render product page"
       );
-
   }
-
 }
