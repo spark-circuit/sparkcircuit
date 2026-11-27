@@ -2,8 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
-       "source": "/products/:path*",
-     "destination": "/api/product?path=:path*"
+      "source": "/products/:path*",
+      "destination": "/api/product?path=:path*"
     },
     {
       "source": "/product.html",
@@ -18,6 +18,10 @@
     {
       "source": "/sitemap.xml",
       "destination": "https://mrqvzmtdsohvzsnryogp.supabase.co/functions/v1/dynamic-worker?sitemap=1"
+    },
+    {
+      "source": "/api/google-feed.xml",
+      "destination": "/api/google-feed"
     }
   ]
 }
