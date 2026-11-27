@@ -9,4 +9,4 @@ Disallow: /admin.html
 Disallow: /wishlist.html
 
 # Sitemap location
-Sitemap: https://www.sparkcircuit.in/sitemap.xml
+Sitemap: https://sparkcircuit.in/sitemap.xml
