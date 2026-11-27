@@ -104,7 +104,15 @@ function getProductContent(p) {
 
 export default async function handler(req, res) {
   try {
-    const id = String(req.query?.id || "").trim();
+ const requestUrl = new URL(req.url, "https://sparkcircuit.in");
+
+const pathValue =
+  requestUrl.searchParams.get("path") ||
+  requestUrl.searchParams.get("id") ||
+  "";
+
+const idMatch = pathValue.match(/(\d+)\/?$/);
+const id = idMatch ? idMatch[1] : "";
 
     if (!/^\d+$/.test(id)) {
       return res.status(404).send("Product not found");
